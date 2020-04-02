@@ -1,0 +1,97 @@
+#
+# spec file for package kiwi-boxed-plugin
+#
+# Copyright (c) 2020 SUSE Software Solutions Germany GmbH, Nuernberg, Germany.
+#
+# All modifications and additions to the file contributed by third parties
+# remain the property of their copyright owners, unless otherwise agreed
+# upon. The license for this file, and modifications and additions to the
+# file, is the same license as for the pristine package itself (unless the
+# license for the pristine package is not an Open Source License, in which
+# case the license is the MIT License). An "Open Source License" is a
+# license that conforms to the Open Source Definition (Version 1.9)
+# published by the Open Source Initiative.
+#
+# Please submit bugfixes or comments via:
+#
+#       https://github.com/OSInside/kiwi-boxed-plugin/issues
+#
+
+# If they aren't provided by a system installed macro, define them
+%{!?_defaultdocdir: %global _defaultdocdir %{_datadir}/doc}
+%{!?__python3: %global __python3 /usr/bin/python3}
+
+%if %{undefined python3_sitelib}
+%global python3_sitelib %(%{__python3} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
+%endif
+
+%if 0%{?el7}
+%global python3_pkgversion 36
+%else
+%{!?python3_pkgversion:%global python3_pkgversion 3}
+%endif
+
+%if 0%{?debian} || 0%{?ubuntu}
+%global is_deb 1
+%global pygroup python
+%global sysgroup admin
+%global develsuffix dev
+%else
+%global pygroup Development/Languages/Python
+%global sysgroup System/Management
+%global develsuffix devel
+%endif
+
+Name:           python-kiwi-boxed-plugin
+Version:        %%VERSION
+Release:        0
+Url:            https://github.com/OSInside/kiwi-boxed-plugin
+Summary:        KIWI - Boxed Build Plugin
+License:        GPL-3.0-or-later
+%if %{_vendor} == "debbuild"
+# Needed to set Maintainer in output debs
+Packager:       Marcus Schaefer <ms@suse.de>
+%endif
+Group:          %{pygroup}
+Source:         %{name}.tar.gz
+Source1:        %{name}-rpmlintrc
+BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+BuildRequires:  gcc
+BuildRequires:  python%{python3_pkgversion}-%{develsuffix}
+BuildRequires:  python%{python3_pkgversion}-setuptools
+BuildRequires:  fdupes
+
+%description
+The KIWI boxed plugin provides support for self contained building
+of images based on fast booting VM images
+
+# python3-kiwi-boxed-plugin
+%package -n python%{python3_pkgversion}-kiwi-boxed-plugin
+Summary:        KIWI - Boxed Build Plugin
+Group:          Development/Languages/Python
+Requires:       python%{python3_pkgversion}-docopt
+Requires:       python%{python3_pkgversion}-requests
+Requires:       python%{python3_pkgversion}-setuptools
+
+%description -n python%{python3_pkgversion}-kiwi-boxed-plugin
+The KIWI boxed plugin provides support for self contained building
+of images based on fast booting VM images
+
+%prep
+%setup -q -n kiwi-boxed-plugin-%{version}
+
+%build
+# Build Python 3 version
+python3 setup.py build --cflags="${RPM_OPT_FLAGS}"
+
+%install
+# Install Python 3 version
+python3 setup.py install --prefix=%{_prefix} --root=%{buildroot} %{?is_deb:--install-layout=deb}
+
+%files -n python%{python3_pkgversion}-kiwi-boxed-plugin
+%{python3_sitelib}/kiwi_boxed_plugin*
+%{_defaultdocdir}/python-kiwi-boxed-plugin/LICENSE
+%{_defaultdocdir}/python-kiwi-boxed-plugin/README
+%doc %{_mandir}/man8/*
+
+%changelog

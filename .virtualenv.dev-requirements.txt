@@ -32,3 +32,7 @@ wheel
 
 # Python style guide checker
 flake8
+
+# for building documentation
+sphinx
+sphinx_rtd_theme

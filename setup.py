@@ -2,8 +2,13 @@
 # -*- encoding: utf-8 -*-
 
 from setuptools import setup
+from setuptools.command import sdist as setuptools_sdist
 
-from kiwi.version import __version__
+from distutils.command import build as distutils_build
+from distutils.command import install as distutils_install
+from distutils.command import clean as distutils_clean
+
+from kiwi_boxed_plugin.version import __version__
 
 config = {
     'name': 'kiwi_boxed_plugin',
@@ -17,7 +22,7 @@ config = {
     'version': __version__,
     'license' : 'GPLv3+',
     'install_requires': [
-        'docopt>=0.6.2',
+        'docopt',
         'kiwi',
         'requests'
     ],

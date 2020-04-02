@@ -11,7 +11,7 @@ options:
     --boxname=<name>
         Name of the virtual machine that should be used for
         the build process. Available machines can be looked
-        up at: https://download.opensuse.org/repositories/Virtualization:/Appliances:/SelfContained/images
+        up at: https://build.opensuse.org/project/show/Virtualization:Appliances:SelfContained
 
     --buildparams=<params>
         List of command parameters as supported by the kiwi-ng

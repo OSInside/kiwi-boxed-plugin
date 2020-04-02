@@ -1,0 +1,83 @@
+# completion
+completion/kiwi-ng.sh
+
+# Schema formats
+kiwi/schema/kiwi.xsd
+kiwi/schema/xsi.xsd
+kiwi/schema/kiwi.revision
+doc/source/development/schema/xsdDocHtml.css
+
+# C tool binaries
+tools/dcounter
+tools/driveready
+tools/isconsole
+tools/setctsid
+tools/startshell
+tools/utimer
+
+# Byte-compiled / optimized / DLL files
+.pytest_cache/
+__pycache__/
+*.py[cod]
+
+# Backup files
+*~
+*.kate-swp
+*.~
+
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+.env/
+.env2/
+.env3/
+build/
+build_travis/
+develop-eggs/
+dist/
+downloads/
+eggs/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+
+# Translations
+*.mo
+
+# Django stuff:
+*.log
+
+# Sphinx documentation
+docs/_build/
+doc/xml/
+
+# PyBuilder
+target/
+
+# man pages
+*.1.gz

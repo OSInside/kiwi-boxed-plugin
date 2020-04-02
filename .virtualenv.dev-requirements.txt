@@ -1,0 +1,34 @@
+#
+# Requirement files for Python Virtual Environments
+#
+# Create a Python virt env with:
+#  * For Python2: virtualenv-2.7 .env2
+#  * For Python3: virtualenv-3.4 .env3
+#
+# After activation of the env, install it with:
+# $ pip install -r dev-requirements.txt
+
+-r .virtualenv.requirements.txt
+
+# setuptools for pypi upload
+setuptools
+
+# virtualenv-based automation of test activities
+tox
+
+# python unit testing framework
+pytest
+pytest-cov
+pytest-xdist
+
+# Rolling backport of unittest.mock for all Pythons
+mock
+
+# Version-bump your software with a single command!
+bumpversion
+
+# A built-package format for Python
+wheel
+
+# Python style guide checker
+flake8

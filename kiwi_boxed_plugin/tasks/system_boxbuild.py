@@ -18,7 +18,6 @@
 """
 usage: kiwi-ng system boxbuild -h | --help
        kiwi-ng system boxbuild --boxname=<name> --buildparams=<params>
-           [--host-bridge-interface=<interface>]
 
 commands:
     boxbuild
@@ -33,13 +32,8 @@ options:
     --buildparams=<params>
         List of command parameters as supported by the kiwi-ng
         build command. The information given here is passed
-        along 1:1 to the kiwi-ng system build command
-        running in the virtual machine.
-
-    --host-bridge-interface=<interface>
-        Name of the bridge interface on the host that allows for
-        outgoing connections.
-        
+        along to the kiwi-ng system build command running in
+        the virtual machine.
 """
 from kiwi.tasks.base import CliTask
 from kiwi.help import Help

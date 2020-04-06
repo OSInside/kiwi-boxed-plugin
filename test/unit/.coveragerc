@@ -1,0 +1,7 @@
+[run]
+omit =
+    */version.py
+
+[report]
+omit =
+    */version.py

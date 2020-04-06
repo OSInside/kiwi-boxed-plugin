@@ -1,5 +1,5 @@
 # Copyright (c) 2020 SUSE Software Solutions Germany GmbH.  All rights reserved.
-# 
+#
 # This file is part of kiwi-boxed-build.
 #
 # kiwi-boxed-build is free software: you can redistribute it and/or modify
@@ -44,11 +44,11 @@ options:
 from kiwi.tasks.base import CliTask
 from kiwi.help import Help
 
+
 class SystemBoxbuildTask(CliTask):
     def process(self):
         self.manual = Help()
         if self.command_args.get('help') is True:
             return self.manual.show('kiwi::system::boxbuild')
-
 
         print(self.command_args)

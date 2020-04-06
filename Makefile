@@ -10,6 +10,20 @@ version := $(shell \
 tox:
 	tox "-n 5"
 
+install:
+	# apart from all python source we also need to install
+	# the manual page and box configuration
+	# see setup.py for details when this target is called
+	install -d -m 755 ${buildroot}usr/share/man/man8
+	for man in doc/build/man/*.8; do \
+		test -e $$man && gzip -f $$man || true ;\
+	done
+	for man in doc/build/man/*.8.gz; do \
+		install -m 644 $$man ${buildroot}usr/share/man/man8 ;\
+	done
+	# box configuration
+	install -m 644 boxes.yml ${buildroot}etc/boxes.yml
+
 build: clean
 	# create setup.py variant for rpm build.
 	# delete module versions from setup.py for building an rpm

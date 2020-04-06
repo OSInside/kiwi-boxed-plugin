@@ -10,6 +10,56 @@ from distutils.command import clean as distutils_clean
 
 from kiwi_boxed_plugin.version import __version__
 
+class install(distutils_install.install):
+    """
+    Custom install command
+    Host requirements: make
+    """
+    distutils_install.install.user_options += [
+        ('single-version-externally-managed', None,
+         "used by system package builders to create 'flat' eggs")
+    ]
+
+    sub_commands = [
+        ('install_lib', lambda self:True),
+        ('install_headers', lambda self:False),
+        ('install_scripts', lambda self:True),
+        ('install_data', lambda self:False),
+        ('install_egg_info', lambda self:True),
+    ]
+
+    def initialize_options(self):
+        """
+        Set default values for options
+        Each user option must be listed here with their default value.
+        """
+        distutils_install.install.initialize_options(self)
+        self.single_version_externally_managed = None
+
+    def run(self):
+        """
+        Run first the related plugin installation tasks and after
+        that the usual Python installation
+        """
+        command = ['make']
+        if self.root:
+            command.append('buildroot={0}/'.format(self.root))
+        elif is_venv:
+            command.append('buildroot={0}/'.format(sys.prefix))
+        command.append('python_version={0}'.format(python_version))
+        command.append('install')
+        self.announce(
+            'Running make install target: {0}'.format(command),
+            level=distutils.log.INFO
+        )
+        self.announce(
+            subprocess.check_output(command).decode(),
+            level=distutils.log.INFO
+        )
+        # standard installation
+        distutils_install.install.run(self)
+
+
 config = {
     'name': 'kiwi_boxed_plugin',
     'description': 'KIWI - Boxed Build Plugin',

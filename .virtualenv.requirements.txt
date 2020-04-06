@@ -14,5 +14,8 @@ docopt
 # Network request/response library
 requests
 
+# YAML file parsing
+PyYAML
+
 # kiwi
 kiwi

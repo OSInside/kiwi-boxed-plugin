@@ -1,0 +1,9 @@
+suse:
+    mem_mb: 4096
+    root: /dev/vda1
+    console: hvc0
+    cmdline: rd.plymouth=0
+    source: obs://Virtualization:Appliances:SelfContained
+    boxfiles:
+        - SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz
+        - SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2

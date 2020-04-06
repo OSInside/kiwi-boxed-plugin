@@ -72,6 +72,11 @@ Group:          Development/Languages/Python
 Requires:       python%{python3_pkgversion}-docopt
 Requires:       python%{python3_pkgversion}-requests
 Requires:       python%{python3_pkgversion}-setuptools
+%if 0%{?ubuntu} || 0%{?debian}
+Requires:       python%{python3_pkgversion}-yaml
+%else
+Requires:       python%{python3_pkgversion}-PyYAML
+%endif
 
 %description -n python%{python3_pkgversion}-kiwi-boxed-plugin
 The KIWI boxed plugin provides support for self contained building

@@ -17,19 +17,25 @@
 #
 """
 usage: kiwi-ng system boxbuild -h | --help
-       kiwi-ng system boxbuild --boxname=<name> --buildparams=<params>
+       kiwi-ng system boxbuild --box=<name>
+           [--box-memory=<vmgb>]
+           <kiwi_build_command_args>...
 
 commands:
     boxbuild
         build a system image in a self contained virtual machine
 
 options:
-    --boxname=<name>
+    --box=<name>
         Name of the virtual machine that should be used for
         the build process. Available machines can be looked
         up at: https://build.opensuse.org/project/show/Virtualization:Appliances:SelfContained
 
-    --buildparams=<params>
+    --box-memory=<vmgb>
+        Number of GBs to reserve as main memory for the virtual
+        machine. By default 4GB will be used.
+
+    <kiwi_build_command_args>...
         List of command parameters as supported by the kiwi-ng
         build command. The information given here is passed
         along to the kiwi-ng system build command running in
@@ -44,6 +50,5 @@ class SystemBoxbuildTask(CliTask):
         if self.command_args.get('help') is True:
             return self.manual.show('kiwi::system::boxbuild')
 
-        print(
-            'https://genius.com/Frankie-goes-to-hollywood-relax-lyrics'
-        )
+
+        print(self.command_args)

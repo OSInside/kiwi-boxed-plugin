@@ -1,7 +1,5 @@
 import logging
-from mock import (
-    patch, Mock
-)
+from mock import patch
 from pytest import (
     raises, fixture
 )
@@ -41,13 +39,16 @@ class TestBoxConfig:
     def test_get_box_kernel_cmdline(self):
         assert self.box_config.get_box_kernel_cmdline() == 'rd.plymouth=0'
 
-    @patch('kiwi_boxed_plugin.box_config.Uri')
-    def test_get_box_files(self, mock_Uri):
-        kiwi_uri = Mock()
-        kiwi_uri.translate.return_value = 'translated'
-        mock_Uri.return_value = kiwi_uri
-        source = kiwi_uri.translate.return_value
+    def test_get_box_source(self):
+        assert self.box_config.get_box_source() == \
+            'obs://Virtualization:Appliances:SelfContained/images'
+
+    def test_get_box_packages_file(self):
+        assert self.box_config.get_box_packages_file() == \
+            'SUSE-Box.x86_64-1.42.1-System-BuildBox.packages'
+
+    def test_get_box_files(self):
         assert self.box_config.get_box_files() == [
-            source + 'SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz',
-            source + 'SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2'
+            'SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz',
+            'SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2'
         ]

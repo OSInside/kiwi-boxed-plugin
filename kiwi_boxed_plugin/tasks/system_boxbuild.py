@@ -44,6 +44,8 @@ options:
 from kiwi.tasks.base import CliTask
 from kiwi.help import Help
 
+from kiwi_boxed_plugin.box_download import BoxDownload
+
 
 class SystemBoxbuildTask(CliTask):
     def process(self):
@@ -52,3 +54,7 @@ class SystemBoxbuildTask(CliTask):
             return self.manual.show('kiwi::system::boxbuild')
 
         print(self.command_args)
+
+        box = BoxDownload('suse')
+        vm_setup = box.fetch(update_check=True)
+        print(vm_setup)

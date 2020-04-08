@@ -15,23 +15,20 @@
 # You should have received a copy of the GNU General Public License
 # along with kiwi-boxed-build.  If not, see <http://www.gnu.org/licenses/>
 #
-import os
 import logging
 import yaml
-
-from kiwi.system.uri import Uri
 
 from kiwi_boxed_plugin.defaults import Defaults
 from kiwi_boxed_plugin.exceptions import KiwiBoxPluginConfigError
 
-log = logging.getLogger('kiwi-boxed-plugin')
+log = logging.getLogger('kiwi')
 
 
 class BoxConfig:
     """
     **Implements reading of box configuration file:**
 
-    2. /etc/boxes.yml
+    /etc/boxes.yml
 
     The KIWI boxed plugin box configuration file is a yaml
     formatted file containing information about available
@@ -39,14 +36,14 @@ class BoxConfig:
     """
     def __init__(self, boxname):
         self.box_data = None
+        self.box_config_data = {}
         box_config_file = Defaults.get_box_config_file()
-        if os.path.exists(box_config_file):
-            log.info('Reading box config file: {0}'.format(box_config_file))
-            try:
-                with open(box_config_file, 'r') as config:
-                    self.box_config_data = yaml.safe_load(config).get(boxname)
-            except Exception as issue:
-                raise KiwiBoxPluginConfigError(issue)
+        log.info('Reading box config file: {0}'.format(box_config_file))
+        try:
+            with open(box_config_file, 'r') as config:
+                self.box_config_data = yaml.safe_load(config).get(boxname)
+        except Exception as issue:
+            raise KiwiBoxPluginConfigError(issue)
 
     def get_box_memory_mbytes(self):
         return self.box_config_data.get('mem_mb')
@@ -60,13 +57,14 @@ class BoxConfig:
     def get_box_kernel_cmdline(self):
         return self.box_config_data.get('cmdline')
 
+    def get_box_source(self):
+        return self.box_config_data.get('source')
+
+    def get_box_packages_file(self):
+        return self.box_config_data.get('packages_file')
+
     def get_box_files(self):
         source_files = []
-        source_uri = self.box_config_data.get('source')
-        if source_uri:
-            kiwi_uri = Uri(source_uri)
-            for vm_file in self.box_config_data.get('boxfiles'):
-                source_files.append(
-                    kiwi_uri.translate(check_build_environment=False) + vm_file
-                )
+        for vm_file in self.box_config_data.get('boxfiles'):
+            source_files.append(vm_file)
         return source_files

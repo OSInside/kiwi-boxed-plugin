@@ -33,7 +33,8 @@ class TestSystemBoxbuildTask:
             'kiwi::system::boxbuild'
         )
 
-    def test_process_system_boxbuild(self):
+    @patch('kiwi_boxed_plugin.tasks.system_boxbuild.BoxDownload')
+    def test_process_system_boxbuild(self, mock_BoxDownload):
         self._init_command_args()
         self.task.command_args['boxbuild'] = True
         self.task.process()

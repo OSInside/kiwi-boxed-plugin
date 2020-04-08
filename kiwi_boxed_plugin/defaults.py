@@ -26,3 +26,7 @@ class Defaults:
     @staticmethod
     def get_box_config_file():
         return '/etc/boxes.yml'
+
+    @staticmethod
+    def get_local_box_cache_dir():
+        return '/var/cache/kiwi/boxes'

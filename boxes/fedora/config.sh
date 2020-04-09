@@ -1,8 +1,9 @@
 #!/bin/bash
+
+set -x
+
 test -f /.kconfig && . /.kconfig
 test -f /.profile && . /.profile
-
-echo "Configure image: [$kiwi_iname]..."
 
 #======================================
 # Setup default target, multi-user

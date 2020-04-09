@@ -87,6 +87,9 @@ class BoxDownload:
                     self.kernel = self._extract_kernel_from_tarball(
                         local_box_file
                     )
+                    self.initrd = self._extract_initrd_from_tarball(
+                        local_box_file
+                    )
         return self.vm_setup_type(
             system=self.system,
             kernel=self.kernel,
@@ -106,6 +109,15 @@ class BoxDownload:
             ]
         )
         return os.sep.join([self.box_dir, 'kernel'])
+
+    def _extract_initrd_from_tarball(self, tarfile):
+        Command.run(
+            [
+                'tar', '-C', self.box_dir, '--transform', 's/.*/initrd/',
+                '--wildcards', '-xf', tarfile, '*.initrd'
+            ]
+        )
+        return os.sep.join([self.box_dir, 'initrd'])
 
     def _remote_content_unchanged(self, filename):
         shasum_file = filename + '.sha256'

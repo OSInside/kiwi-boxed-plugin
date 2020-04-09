@@ -19,7 +19,7 @@ class TestBoxDownload:
             system='/var/cache/kiwi/boxes/suse/'
             'SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2',
             kernel='/var/cache/kiwi/boxes/suse/kernel',
-            initrd=None
+            initrd='/var/cache/kiwi/boxes/suse/initrd'
         )
 
     @patch('kiwi_boxed_plugin.box_download.Command.run')
@@ -64,16 +64,28 @@ class TestBoxDownload:
                     'SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2'
                 )
             ]
-            mock_Command_run.assert_called_once_with(
-                [
-                    'tar', '-C', '/var/cache/kiwi/boxes/suse',
-                    '--transform', 's/.*/kernel/',
-                    '--wildcards', '-xf',
-                    '/var/cache/kiwi/boxes/suse/'
-                    'SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz',
-                    '*.kernel'
-                ]
-            )
+            assert mock_Command_run.call_args_list == [
+                call(
+                    [
+                        'tar', '-C', '/var/cache/kiwi/boxes/suse',
+                        '--transform', 's/.*/kernel/',
+                        '--wildcards', '-xf',
+                        '/var/cache/kiwi/boxes/suse/'
+                        'SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz',
+                        '*.kernel'
+                    ]
+                ),
+                call(
+                    [
+                        'tar', '-C', '/var/cache/kiwi/boxes/suse',
+                        '--transform', 's/.*/initrd/',
+                        '--wildcards', '-xf',
+                        '/var/cache/kiwi/boxes/suse/'
+                        'SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz',
+                        '*.initrd'
+                    ]
+                )
+            ]
 
     @patch('kiwi_boxed_plugin.box_download.Command.run')
     @patch('kiwi_boxed_plugin.box_download.Uri')
@@ -97,16 +109,6 @@ class TestBoxDownload:
             '/var/cache/kiwi/boxes/suse/'
             'SUSE-Box.x86_64-1.42.1-System-BuildBox.packages'
         )
-        mock_Command_run.assert_called_once_with(
-            [
-                'tar', '-C', '/var/cache/kiwi/boxes/suse',
-                '--transform', 's/.*/kernel/',
-                '--wildcards', '-xf',
-                '/var/cache/kiwi/boxes/suse/'
-                'SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz',
-                '*.kernel'
-            ]
-        )
 
     @patch('kiwi_boxed_plugin.box_download.Command.run')
     @patch('kiwi_boxed_plugin.box_download.Uri')
@@ -119,13 +121,3 @@ class TestBoxDownload:
     ):
         mock_os_path_exist.return_value = True
         assert self.box.fetch(update_check=False) == self.result
-        mock_Command_run.assert_called_once_with(
-            [
-                'tar', '-C', '/var/cache/kiwi/boxes/suse',
-                '--transform', 's/.*/kernel/',
-                '--wildcards', '-xf',
-                '/var/cache/kiwi/boxes/suse/'
-                'SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz',
-                '*.kernel'
-            ]
-        )

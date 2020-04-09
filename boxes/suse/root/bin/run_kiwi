@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# even though this program is called in a systemd unit that
+# requires the network-online target there could be a delay
+# in the network online status between the host and the guest.
+# This means the guest could be online while the host/guest
+# network negotiation is still not done.
+#
+exec &>/dev/console
+
+sleep_timeout=2
+retry_count=5
+check=0
+echo "Waiting for link up on lan0..."
+while true;do
+    if ip link ls lan0 | grep -qi "state UP"; then
+        # interface link is up
+        break
+    fi
+    if [ "${check}" -eq "${retry_count}" ];then
+        # interface link did not came up
+        break
+    fi
+    echo "Waiting for link up on lan0..."
+    check=$((check + 1))
+    sleep "${sleep_timeout}"
+done
+
+options=$(sed -e 's@.*kiwi="\(.*\)\"@\1@' /proc/cmdline)
+options="${options} --description /description --target-dir /tmp/result"
+logfile=/bundle/result.log
+
+if kiwi-ng --logfile "${logfile}" ${options}; then
+    kiwi-ng result bundle --id 0 --target-dir /tmp/result --bundle-dir /bundle
+fi
+
+if ! grep -q kiwi-no-halt /proc/cmdline; then
+    halt -p
+fi

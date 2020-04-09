@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- The line below is required in order to use the multibuild OBS features -->
+<!-- OBS-Profiles: @BUILD_FLAVOR@ -->
+
+<image schemaversion="7.1" name="Fedora-Box">
+    <description type="system">
+        <author>Marcus Schäfer</author>
+        <contact>ms@suse.com</contact>
+        <specification>Fedora VM for kiwi boxed build</specification>
+    </description>
+    <profiles>
+        <profile name="Kernel" description="Provides kernel for kvm boot"/>
+        <profile name="System" description="Provides system for kvm boot"/>
+    </profiles>
+    <preferences>
+        <version>1.1.2</version>
+        <packagemanager>dnf</packagemanager>
+        <locale>en_US</locale>
+        <keytable>us</keytable>
+        <timezone>UTC</timezone>
+        <rpm-excludedocs>true</rpm-excludedocs>
+        <rpm-check-signatures>false</rpm-check-signatures>
+    </preferences>
+    <preferences profiles="Kernel">
+        <type image="pxe" initrd_system="dracut"/>
+    </preferences>
+    <preferences profiles="System">
+        <type image="vmx" filesystem="ext2" bootloader="grub2" firmware="bios" format="qcow2">
+            <size unit="G">10</size>
+        </type>
+    </preferences>
+    <users>
+        <user password="$1$wYJUgpM5$RXMMeASDc035eX.NbYWFl0" home="/root" name="root" groups="root"/>
+    </users>
+    <repository type="rpm-md" >
+        <source path='obsrepositories:/'/>
+    </repository>
+    <packages type="image">
+        <package name="grub2"/>
+        <package name="grubby"/>
+        <package name="kernel"/>
+        <package name="selinux-policy-targeted"/>
+        <package name="dhclient"/>
+        <package name="glibc-all-langpacks"/>
+        <package name="tzdata"/>
+        <package name="lvm2"/>
+        <package name="xfsprogs"/>
+        <package name="e2fsprogs"/>
+        <package name="btrfsprogs"/>
+        <package name="python3-kiwi"/>
+        <package name="dracut-kiwi-oem-repart"/>
+        <package name="dracut-kiwi-oem-dump"/>
+    </packages>
+    <packages type="bootstrap">
+        <package name="filesystem"/>
+        <package name="basesystem"/>
+    </packages>
+</image>

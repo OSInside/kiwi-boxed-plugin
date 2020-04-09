@@ -4,7 +4,7 @@
 # do not change its name. Thus we can do a simple mapping in the
 # plugin. The update check should be based on the contents of the
 # .packages file
-uri=https://download.opensuse.org/repositories/Virtualization:/Appliances:/SelfContained/images
+uri=https://download.opensuse.org/repositories/Virtualization:/Appliances:/SelfContained:/suse/images
 
 kernel=SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz
 image=SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2

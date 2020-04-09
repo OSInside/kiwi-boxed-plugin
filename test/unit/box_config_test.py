@@ -41,7 +41,7 @@ class TestBoxConfig:
 
     def test_get_box_source(self):
         assert self.box_config.get_box_source() == \
-            'obs://Virtualization:Appliances:SelfContained/images'
+            'obs://Virtualization:Appliances:SelfContained:suse/images'
 
     def test_get_box_packages_file(self):
         assert self.box_config.get_box_packages_file() == \

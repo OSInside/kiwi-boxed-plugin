@@ -4,7 +4,7 @@ After=network.target
 Requires=network-online.target
 
 [Service]
-ExecStart=/bin/run_kiwi
+ExecStart=/usr/local/bin/run_kiwi
 
 [Install]
 WantedBy=multi-user.target

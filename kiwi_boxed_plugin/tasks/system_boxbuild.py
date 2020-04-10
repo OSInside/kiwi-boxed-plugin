@@ -19,6 +19,7 @@
 usage: kiwi-ng system boxbuild -h | --help
        kiwi-ng system boxbuild --box=<name>
            [--box-memory=<vmgb>]
+           [--x86_64 ]
            <kiwi_build_command_args>...
 
 commands:
@@ -34,6 +35,12 @@ options:
     --box-memory=<vmgb>
         Number of GBs to reserve as main memory for the virtual
         machine. By default 4GB will be used.
+
+    --x86_64
+        Select box for the x86_64 architecture. If no architecture
+        is selected the host architecture is used for selecting
+        the box. The selected box architecture also specifies the
+        target architecture for the image build with that box.
 
     <kiwi_build_command_args>...
         List of command parameters as supported by the kiwi-ng

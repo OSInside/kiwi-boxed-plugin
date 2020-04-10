@@ -32,7 +32,7 @@ install_package_docs:
 	install -m 644 README.rst \
 		${buildroot}${docdir}/python-kiwi_boxed_plugin/README
 
-build: clean
+build: clean tox
 	# create setup.py variant for rpm build.
 	# delete module versions from setup.py for building an rpm
 	# the dependencies to the python module rpm packages is

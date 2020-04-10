@@ -13,7 +13,7 @@ mkdir -p "${bundle_dir}"
 
 # no description and target-dir, this comes from shared folders and is
 # setup in the run_kiwi script inside the VM 
-kiwi_options="--type vmx system build"
+kiwi_options="--type iso system build"
 
 # For debugging the VM pass "kiwi-no-halt", this will prevent reboot
 qemu-kvm -m 8096 \

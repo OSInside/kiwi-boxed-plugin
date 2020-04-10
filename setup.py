@@ -8,7 +8,21 @@ from distutils.command import build as distutils_build
 from distutils.command import install as distutils_install
 from distutils.command import clean as distutils_clean
 
+import distutils
+import subprocess
+import os
+import sys
+import platform
+
 from kiwi_boxed_plugin.version import __version__
+
+python_version = platform.python_version().split('.')[0]
+
+# sys.base_prefix points to the installation prefix set during python
+# compilation and sys.prefix points to the same path unless we are inside
+# a venv, in which case points to the $VIRTUAL_ENV value.
+is_venv = sys.base_prefix != sys.prefix if sys.version_info >= (3, 3) else False
+
 
 class install(distutils_install.install):
     """
@@ -77,6 +91,9 @@ config = {
         'requests'
     ],
     'packages': ['kiwi_boxed_plugin'],
+    'cmdclass': {
+        'install': install
+    },
     'entry_points': {
         'kiwi.tasks': [
             'system_boxbuild=kiwi_boxed_plugin.tasks.system_boxbuild'

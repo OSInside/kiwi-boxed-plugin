@@ -1,5 +1,5 @@
 #
-# spec file for package kiwi-boxed-plugin
+# spec file for package kiwi_boxed_plugin
 #
 # Copyright (c) 2020 SUSE Software Solutions Germany GmbH, Nuernberg, Germany.
 #
@@ -42,7 +42,7 @@
 %global develsuffix devel
 %endif
 
-Name:           python-kiwi-boxed-plugin
+Name:           python-kiwi_boxed_plugin
 Version:        %%VERSION
 Release:        0
 Url:            https://github.com/OSInside/kiwi-boxed-plugin
@@ -65,8 +65,8 @@ BuildRequires:  fdupes
 The KIWI boxed plugin provides support for self contained building
 of images based on fast booting VM images
 
-# python3-kiwi-boxed-plugin
-%package -n python%{python3_pkgversion}-kiwi-boxed-plugin
+# python3-kiwi_boxed_plugin
+%package -n python%{python3_pkgversion}-kiwi_boxed_plugin
 Summary:        KIWI - Boxed Build Plugin
 Group:          Development/Languages/Python
 Requires:       python%{python3_pkgversion}-docopt
@@ -78,25 +78,28 @@ Requires:       python%{python3_pkgversion}-yaml
 Requires:       python%{python3_pkgversion}-PyYAML
 %endif
 
-%description -n python%{python3_pkgversion}-kiwi-boxed-plugin
+%description -n python%{python3_pkgversion}-kiwi_boxed_plugin
 The KIWI boxed plugin provides support for self contained building
 of images based on fast booting VM images
 
 %prep
-%setup -q -n kiwi-boxed-plugin-%{version}
+%setup -q -n kiwi_boxed_plugin-%{version}
 
 %build
 # Build Python 3 version
-python3 setup.py build --cflags="${RPM_OPT_FLAGS}"
+python3 setup.py build
 
 %install
 # Install Python 3 version
 python3 setup.py install --prefix=%{_prefix} --root=%{buildroot} %{?is_deb:--install-layout=deb}
 
-%files -n python%{python3_pkgversion}-kiwi-boxed-plugin
+# Install documentation
+make buildroot=%{buildroot}/ docdir=%{_defaultdocdir}/ install_package_docs
+
+%files -n python%{python3_pkgversion}-kiwi_boxed_plugin
 %{python3_sitelib}/kiwi_boxed_plugin*
-%{_defaultdocdir}/python-kiwi-boxed-plugin/LICENSE
-%{_defaultdocdir}/python-kiwi-boxed-plugin/README
+%{_defaultdocdir}/python-kiwi_boxed_plugin/LICENSE
+%{_defaultdocdir}/python-kiwi_boxed_plugin/README
 %doc %{_mandir}/man8/*
 %config %_sysconfdir/kiwi_boxed_plugin.yml
 

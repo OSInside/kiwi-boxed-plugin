@@ -7,7 +7,7 @@ include Makefile
 include README.rst
 include LICENSE
 include tox.ini
-include boxes.yml
+include kiwi_boxed_plugin.yml
 include .bumpversion.cfg
 include .virtualenv.requirements.txt
 include .virtualenv.dev-requirements.txt

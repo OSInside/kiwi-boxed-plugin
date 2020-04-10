@@ -25,7 +25,7 @@ class Defaults:
     """
     @staticmethod
     def get_box_config_file():
-        return '/etc/boxes.yml'
+        return '/etc/kiwi_boxed_plugin.yml'
 
     @staticmethod
     def get_local_box_cache_dir():

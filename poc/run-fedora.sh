@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # load.sh provided those (fetcher in the plugin)
-image=binaries/system.qcow2
-kernel=binaries/kernel
-initrd=binaries/initrd
+image=fedora/system.qcow2
+kernel=fedora/kernel
+initrd=fedora/initrd
 
 # user specified data
 description_dir=/home/ms/Project/kiwi-descriptions/fedora/x86_64/fedora-30.0-JeOS

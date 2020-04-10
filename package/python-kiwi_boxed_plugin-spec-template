@@ -98,6 +98,6 @@ python3 setup.py install --prefix=%{_prefix} --root=%{buildroot} %{?is_deb:--ins
 %{_defaultdocdir}/python-kiwi-boxed-plugin/LICENSE
 %{_defaultdocdir}/python-kiwi-boxed-plugin/README
 %doc %{_mandir}/man8/*
-%config %_sysconfdir/boxes.yml
+%config %_sysconfdir/kiwi_boxed_plugin.yml
 
 %changelog

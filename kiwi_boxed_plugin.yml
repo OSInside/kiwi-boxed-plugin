@@ -1,0 +1,24 @@
+suse:
+    mem_mb: 4096
+    arch: x86_64
+    root: /dev/vda1
+    console: hvc0
+    cmdline: rd.plymouth=0
+    x86_64:
+      source: obs://Virtualization:Appliances:SelfContained:suse/images
+      packages_file: SUSE-Box.x86_64-1.42.1-System-BuildBox.packages
+      boxfiles:
+        - SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz
+        - SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2
+
+fedora:
+    mem_mb: 4096
+    root: /dev/vda1
+    console: hvc0
+    cmdline: rd.plymouth=0
+    x86_64:
+      source: obs://Virtualization:Appliances:SelfContained:fedora/images
+      packages_file: Fedora-Box.x86_64-1.1.2-System-BuildBox.packages
+      boxfiles:
+        - Fedora-Box.x86_64-1.1.2-Kernel-BuildBox.tar.xz
+        - Fedora-Box.x86_64-1.1.2-System-BuildBox.qcow2

@@ -22,7 +22,7 @@ install:
 		install -m 644 $$man ${buildroot}usr/share/man/man8 ;\
 	done
 	# box configuration
-	install -m 644 boxes.yml ${buildroot}etc/boxes.yml
+	install -m 644 kiwi_boxed_plugin.yml ${buildroot}etc/kiwi_boxed_plugin.yml
 
 build: clean
 	# create setup.py variant for rpm build.

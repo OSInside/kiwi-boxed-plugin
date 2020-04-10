@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # load.sh provided those (fetcher in the plugin)
-image=binaries/system.qcow2
-kernel=binaries/kernel
+image=suse/system.qcow2
+kernel=suse/kernel
 
 # user specified data
 description_dir=/home/ms/Project/kiwi-descriptions/suse/x86_64/suse-leap-15.1-JeOS

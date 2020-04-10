@@ -37,8 +37,8 @@ class BoxDownload:
     Reads the box configuration file and provides an interface
     to download the box files according to the configuration
     """
-    def __init__(self, boxname):
-        self.box_config = BoxConfig(boxname)
+    def __init__(self, boxname, arch=None):
+        self.box_config = BoxConfig(boxname, arch)
         self.box_dir = os.sep.join(
             [Defaults.get_local_box_cache_dir(), boxname]
         )

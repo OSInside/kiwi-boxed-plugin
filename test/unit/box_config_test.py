@@ -14,18 +14,23 @@ class TestBoxConfig:
         self._caplog = caplog
 
     @patch('kiwi_boxed_plugin.defaults.Defaults.get_box_config_file')
-    def setup(self, mock_get_box_config_file):
-        mock_get_box_config_file.return_value = '../data/boxes.yml'
+    @patch('platform.machine')
+    def setup(self, mock_platform_machine, mock_get_box_config_file):
+        mock_platform_machine.return_value = 'x86_64'
+        mock_get_box_config_file.return_value = '../data/kiwi_boxed_plugin.yml'
         with self._caplog.at_level(logging.INFO):
             self.box_config = BoxConfig('suse')
 
     @patch('yaml.safe_load')
     @patch('kiwi_boxed_plugin.defaults.Defaults.get_box_config_file')
     def test_setup_raises(self, mock_get_box_config_file, mock_yaml_safe_load):
-        mock_get_box_config_file.return_value = '../data/boxes.yml'
+        mock_get_box_config_file.return_value = '../data/kiwi_boxed_plugin.yml'
         mock_yaml_safe_load.side_effect = Exception
         with raises(KiwiBoxPluginConfigError):
             BoxConfig('suse')
+
+    def test_get_box_arch(self):
+        assert self.box_config.get_box_arch() == 'x86_64'
 
     def test_get_box_memory_mbytes(self):
         assert self.box_config.get_box_memory_mbytes() == 4096

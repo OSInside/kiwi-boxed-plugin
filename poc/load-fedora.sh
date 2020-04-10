@@ -9,18 +9,18 @@ uri=https://download.opensuse.org/repositories/Virtualization:/Appliances:/SelfC
 kernel=Fedora-Box.x86_64-1.1.2-Kernel-BuildBox.tar.xz
 image=Fedora-Box.x86_64-1.1.2-System-BuildBox.qcow2
 
-mkdir -p binaries
-pushd binaries
+mkdir -p fedora
+pushd fedora
 
 curl --progress-bar -L --output kernel.tar.xz ${uri}/${kernel}
 curl --progress-bar -L --output system.qcow2 ${uri}/${image}
 
 popd
 
-tar -C binaries \
+tar -C fedora \
     --transform "s/.*/kernel/" \
-    --wildcards -xf binaries/kernel.tar.xz "*.kernel"
+    --wildcards -xf fedora/kernel.tar.xz "*.kernel"
 
-tar -C binaries \
+tar -C fedora \
     --transform "s/.*/initrd/" \
-    --wildcards -xf binaries/kernel.tar.xz "*.initrd.xz"
+    --wildcards -xf fedora/kernel.tar.xz "*.initrd.xz"

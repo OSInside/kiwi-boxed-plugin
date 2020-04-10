@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with kiwi-boxed-build.  If not, see <http://www.gnu.org/licenses/>
 #
+import platform
 import logging
 import yaml
 
@@ -26,24 +27,30 @@ log = logging.getLogger('kiwi')
 
 class BoxConfig:
     """
-    **Implements reading of box configuration file:**
+    **Implements reading of box plugin config file:**
 
-    /etc/boxes.yml
+    /etc/kiwi_boxed_plugin.yml
 
     The KIWI boxed plugin box configuration file is a yaml
     formatted file containing information about available
     virtual disk images usable as build boxes
     """
-    def __init__(self, boxname):
+    def __init__(self, boxname, arch=None):
+        self.arch = arch or platform.machine()
         self.box_data = None
         self.box_config_data = {}
+        self.box_config_arch_data = {}
         box_config_file = Defaults.get_box_config_file()
         log.info('Reading box config file: {0}'.format(box_config_file))
         try:
             with open(box_config_file, 'r') as config:
                 self.box_config_data = yaml.safe_load(config).get(boxname)
+            self.box_config_arch_data = self.box_config_data.get(self.arch)
         except Exception as issue:
             raise KiwiBoxPluginConfigError(issue)
+
+    def get_box_arch(self):
+        return self.arch
 
     def get_box_memory_mbytes(self):
         return self.box_config_data.get('mem_mb')
@@ -58,13 +65,13 @@ class BoxConfig:
         return self.box_config_data.get('cmdline')
 
     def get_box_source(self):
-        return self.box_config_data.get('source')
+        return self.box_config_arch_data.get('source')
 
     def get_box_packages_file(self):
-        return self.box_config_data.get('packages_file')
+        return self.box_config_arch_data.get('packages_file')
 
     def get_box_files(self):
         source_files = []
-        for vm_file in self.box_config_data.get('boxfiles'):
+        for vm_file in self.box_config_arch_data.get('boxfiles'):
             source_files.append(vm_file)
         return source_files

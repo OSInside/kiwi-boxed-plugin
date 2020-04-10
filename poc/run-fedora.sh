@@ -22,7 +22,7 @@ qemu-kvm -m 4096 \
     -snapshot \
     -kernel "${kernel}" \
     -initrd "${initrd}" \
-    -append "console=hvc0 rd.plymouth=0 kiwi=\"${kiwi_options}\"" \
+    -append "root=/dev/vda1 console=hvc0 rd.plymouth=0 kiwi=\"${kiwi_options}\"" \
     -drive file="${image}",if=virtio,driver=qcow2,snapshot=on \
     -netdev user,id=user0 \
     -device virtio-net-pci,netdev=user0 \

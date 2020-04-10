@@ -1,5 +1,5 @@
 suse:
-    mem_mb: 4096
+    mem_mb: 8096
     arch: x86_64
     root: /dev/vda1
     console: hvc0
@@ -12,7 +12,7 @@ suse:
         - SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2
 
 fedora:
-    mem_mb: 4096
+    mem_mb: 8096
     root: /dev/vda1
     console: hvc0
     cmdline: rd.plymouth=0

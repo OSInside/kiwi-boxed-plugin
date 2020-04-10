@@ -16,13 +16,13 @@ mkdir -p "${bundle_dir}"
 kiwi_options="--type vmx system build"
 
 # For debugging the VM pass "kiwi-no-halt", this will prevent reboot
-qemu-kvm -m 4096 \
+qemu-kvm -m 8096 \
     -nographic \
     -nodefaults \
     -snapshot \
     -kernel "${kernel}" \
     -initrd "${initrd}" \
-    -append "root=/dev/vda1 kiwi-no-halt console=hvc0 rd.plymouth=0 kiwi=\"${kiwi_options}\"" \
+    -append "root=/dev/vda1 console=hvc0 rd.plymouth=0 kiwi=\"${kiwi_options}\"" \
     -drive file="${image}",if=virtio,driver=qcow2,snapshot=on \
     -netdev user,id=user0 \
     -device virtio-net-pci,netdev=user0 \

@@ -23,6 +23,7 @@ install:
 		install -m 644 $$man ${buildroot}usr/share/man/man8 ;\
 	done
 	# box configuration
+	install -d -m 755 ${buildroot}etc
 	install -m 644 kiwi_boxed_plugin.yml ${buildroot}etc/kiwi_boxed_plugin.yml
 
 install_package_docs:

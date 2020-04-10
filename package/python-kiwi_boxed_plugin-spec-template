@@ -97,6 +97,7 @@ python3 setup.py install --prefix=%{_prefix} --root=%{buildroot} %{?is_deb:--ins
 make buildroot=%{buildroot}/ docdir=%{_defaultdocdir}/ install_package_docs
 
 %files -n python%{python3_pkgversion}-kiwi_boxed_plugin
+%dir %{_defaultdocdir}/python-kiwi_boxed_plugin
 %{python3_sitelib}/kiwi_boxed_plugin*
 %{_defaultdocdir}/python-kiwi_boxed_plugin/LICENSE
 %{_defaultdocdir}/python-kiwi_boxed_plugin/README

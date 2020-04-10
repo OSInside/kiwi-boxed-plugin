@@ -1,4 +1,4 @@
-DEVICE="eth0"
+DEVICE="lan0"
 BOOTPROTO="dhcp"
 ONBOOT="yes"
 TYPE="Ethernet"

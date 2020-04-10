@@ -44,6 +44,7 @@
         <package name="dhclient"/>
         <package name="glibc-all-langpacks"/>
         <package name="tzdata"/>
+        <package name="NetworkManager"/>
         <package name="lvm2"/>
         <package name="xfsprogs"/>
         <package name="e2fsprogs"/>

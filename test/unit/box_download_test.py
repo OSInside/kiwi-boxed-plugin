@@ -82,7 +82,7 @@ class TestBoxDownload:
                         '--wildcards', '-xf',
                         '/var/cache/kiwi/boxes/suse/'
                         'SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz',
-                        '*.initrd'
+                        '*.initrd.xz'
                     ]
                 )
             ]

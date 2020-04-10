@@ -114,7 +114,7 @@ class BoxDownload:
         Command.run(
             [
                 'tar', '-C', self.box_dir, '--transform', 's/.*/initrd/',
-                '--wildcards', '-xf', tarfile, '*.initrd'
+                '--wildcards', '-xf', tarfile, '*.initrd.xz'
             ]
         )
         return os.sep.join([self.box_dir, 'initrd'])

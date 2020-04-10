@@ -23,4 +23,4 @@ tar -C binaries \
 
 tar -C binaries \
     --transform "s/.*/initrd/" \
-    --wildcards -xf binaries/kernel.tar.xz "*.initrd"
+    --wildcards -xf binaries/kernel.tar.xz "*.initrd.xz"

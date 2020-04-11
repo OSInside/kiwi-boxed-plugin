@@ -33,7 +33,7 @@ qemu-kvm \
     -snapshot \
     -kernel "${kernel}" \
     -initrd "${initrd}" \
-    -append "root=/dev/vda1 kiwi-no-halt console=hvc0 rd.plymouth=0 kiwi=\"${kiwi_options}\"" \
+    -append "root=/dev/vda1 selinux=0 kiwi-no-halt console=hvc0 rd.plymouth=0 kiwi=\"${kiwi_options}\"" \
     -drive file="${image}",if=virtio,driver=qcow2,snapshot=${snapshot} \
     -netdev user,id=user0 \
     -device virtio-net-pci,netdev=user0 \

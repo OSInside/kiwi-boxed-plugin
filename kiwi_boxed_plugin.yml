@@ -15,7 +15,7 @@ fedora:
     mem_mb: 8096
     root: /dev/vda1
     console: hvc0
-    cmdline: rd.plymouth=0
+    cmdline: rd.plymouth=0 selinux=0
     x86_64:
       source: obs://Virtualization:Appliances:SelfContained:fedora/images
       packages_file: Fedora-Box.x86_64-1.1.2-System-BuildBox.packages

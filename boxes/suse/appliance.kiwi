@@ -27,14 +27,17 @@
     </preferences>
     <preferences profiles="System">
         <type image="vmx" filesystem="ext2" bootloader="grub2" firmware="bios" format="qcow2">
-            <size unit="G">500</size>
+            <size unit="G">50</size>
         </type>
     </preferences>
     <users>
         <user password="$1$wYJUgpM5$RXMMeASDc035eX.NbYWFl0" home="/root" name="root" groups="root"/>
     </users>
-    <repository type="rpm-md" >
-        <source path='obsrepositories:/'/>
+    <repository alias="kiwi" priority="1">
+        <source path="obs://Virtualization:Appliances:Builder/openSUSE_Tumbleweed"/>
+    </repository>
+    <repository alias="Tumbleweed">
+        <source path="http://download.opensuse.org/tumbleweed/repo/oss"/>
     </repository>
     <packages type="image">
         <package name="patterns-base-minimal_base"/>

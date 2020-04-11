@@ -6,7 +6,7 @@ kernel=suse/kernel
 
 # user specified data
 description_dir=/home/ms/Project/kiwi-descriptions/suse/x86_64/suse-leap-15.1-JeOS
-bundle_dir=/tmp/mytest
+bundle_dir=/home/ms/__suse
 
 maxmem=4G
 
@@ -15,6 +15,10 @@ mkdir -p "${bundle_dir}"
 # no description and target-dir, this comes from shared folders and is
 # setup in the run_kiwi script inside the VM 
 kiwi_options="--type vmx system build"
+
+# qemu stores snapshots under /tmp. that can run out space if /tmp on
+# the host is a tmpfs
+export TMPDIR=suse
 
 # For debugging the VM pass "kiwi-no-halt", this will prevent reboot
 qemu-kvm \

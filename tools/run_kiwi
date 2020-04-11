@@ -27,11 +27,11 @@ while true;do
 done
 
 options=$(sed -e 's@.*kiwi="\(.*\)\"@\1@' /proc/cmdline)
-options="${options} --description /description --target-dir /tmp/result"
+options="${options} --description /description --target-dir /result"
 logfile=/bundle/result.log
 
 if kiwi-ng --logfile "${logfile}" ${options}; then
-    kiwi-ng result bundle --id 0 --target-dir /tmp/result --bundle-dir /bundle
+    kiwi-ng result bundle --id 0 --target-dir /result --bundle-dir /bundle
 fi
 
 if ! grep -q kiwi-no-halt /proc/cmdline; then

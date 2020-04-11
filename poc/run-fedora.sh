@@ -5,9 +5,19 @@ image=fedora/system.qcow2
 kernel=fedora/kernel
 initrd=fedora/initrd
 
+maxmem=4G
+
+mem_low=1
+
+if [ "${mem_low}" =  "1" ]; then
+    snapshot="off"
+else
+    snapshot="on"
+fi
+
 # user specified data
 description_dir=/home/ms/Project/kiwi-descriptions/fedora/x86_64/fedora-30.0-JeOS
-bundle_dir=/tmp/mytest
+bundle_dir=/home/ms/__mytest
 
 mkdir -p "${bundle_dir}"
 
@@ -16,14 +26,15 @@ mkdir -p "${bundle_dir}"
 kiwi_options="--type iso system build"
 
 # For debugging the VM pass "kiwi-no-halt", this will prevent reboot
-qemu-kvm -m 8096 \
+qemu-kvm \
+    -m ${maxmem} \
     -nographic \
     -nodefaults \
     -snapshot \
     -kernel "${kernel}" \
     -initrd "${initrd}" \
-    -append "root=/dev/vda1 console=hvc0 rd.plymouth=0 kiwi=\"${kiwi_options}\"" \
-    -drive file="${image}",if=virtio,driver=qcow2,snapshot=on \
+    -append "root=/dev/vda1 kiwi-no-halt console=hvc0 rd.plymouth=0 kiwi=\"${kiwi_options}\"" \
+    -drive file="${image}",if=virtio,driver=qcow2,snapshot=${snapshot} \
     -netdev user,id=user0 \
     -device virtio-net-pci,netdev=user0 \
     -fsdev local,security_model=mapped,id=fsdev0,path="${description_dir}" \

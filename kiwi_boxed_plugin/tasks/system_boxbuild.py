@@ -19,6 +19,7 @@
 usage: kiwi-ng system boxbuild -h | --help
        kiwi-ng system boxbuild --box=<name>
            [--box-memory=<vmgb>]
+           [--disable-snapshot]
            [--x86_64 ]
            <kiwi_build_command_args>...
 
@@ -41,6 +42,15 @@ options:
         is selected the host architecture is used for selecting
         the box. The selected box architecture also specifies the
         target architecture for the image build with that box.
+
+    --disable-snapshot
+        By default the box is started in snapshot mode which
+        sets copy-on-write to be a memory region in RAM and keeps
+        the box image file unchanged. Setting this option
+        allows the box to be modified by the image build and
+        does not eat RAM memory when data is written to the
+        box root filesystem. On hosts with limited RAM space
+        this option might be useful.
 
     <kiwi_build_command_args>...
         List of command parameters as supported by the kiwi-ng

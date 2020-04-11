@@ -26,7 +26,7 @@
         <type image="pxe" initrd_system="dracut"/>
     </preferences>
     <preferences profiles="System">
-        <type image="vmx" filesystem="ext2" bootloader="grub2" firmware="bios" format="qcow2">
+        <type image="vmx" filesystem="ext2" bootloader="grub2" firmware="bios" format="qcow2" formatoptions="preallocation=metadata,compat=1.1,lazy_refcounts=on">
             <size unit="G">50</size>
         </type>
     </preferences>

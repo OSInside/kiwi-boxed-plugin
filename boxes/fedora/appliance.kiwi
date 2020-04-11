@@ -40,7 +40,7 @@
         <package name="grub2"/>
         <package name="grubby"/>
         <package name="kernel"/>
-        <package name="selinux-policy-permissive"/>
+        <package name="selinux-policy-targeted"/>
         <package name="dhclient"/>
         <package name="glibc-all-langpacks"/>
         <package name="tzdata"/>

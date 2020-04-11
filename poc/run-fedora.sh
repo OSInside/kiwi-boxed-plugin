@@ -5,9 +5,9 @@ image=fedora/system.qcow2
 kernel=fedora/kernel
 initrd=fedora/initrd
 
-maxmem=4G
+maxmem=8G
 
-mem_low=1
+mem_low=0
 
 if [ "${mem_low}" =  "1" ]; then
     snapshot="off"

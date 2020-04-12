@@ -19,9 +19,10 @@
 usage: kiwi-ng system boxbuild -h | --help
        kiwi-ng system boxbuild --box=<name>
            [--box-memory=<vmgb>]
-           [--disable-snapshot]
+           [--no-update-check]
            [--x86_64 ]
            <kiwi_build_command_args>...
+       kiwi-ng system boxbuild --list-boxes
 
 commands:
     boxbuild
@@ -30,27 +31,24 @@ commands:
 options:
     --box=<name>
         Name of the virtual machine that should be used for
-        the build process. Available machines can be looked
-        up at: https://build.opensuse.org/project/show/Virtualization:Appliances:SelfContained
+        the build process.
+
+    --list-boxes
+        show available build boxes.
 
     --box-memory=<vmgb>
         Number of GBs to reserve as main memory for the virtual
         machine. By default 4GB will be used.
+
+    --no-update-check
+        Skip check for available box update. The option has no
+        effect if the selected box does not yet exist on the host.
 
     --x86_64
         Select box for the x86_64 architecture. If no architecture
         is selected the host architecture is used for selecting
         the box. The selected box architecture also specifies the
         target architecture for the image build with that box.
-
-    --disable-snapshot
-        By default the box is started in snapshot mode which
-        sets copy-on-write to be a memory region in RAM and keeps
-        the box image file unchanged. Setting this option
-        allows the box to be modified by the image build and
-        does not eat RAM memory when data is written to the
-        box root filesystem. On hosts with limited RAM space
-        this option might be useful.
 
     <kiwi_build_command_args>...
         List of command parameters as supported by the kiwi-ng
@@ -62,6 +60,7 @@ from kiwi.tasks.base import CliTask
 from kiwi.help import Help
 
 from kiwi_boxed_plugin.box_download import BoxDownload
+from kiwi_boxed_plugin.plugin_config import PluginConfig
 
 
 class SystemBoxbuildTask(CliTask):
@@ -70,8 +69,10 @@ class SystemBoxbuildTask(CliTask):
         if self.command_args.get('help') is True:
             return self.manual.show('kiwi::system::boxbuild')
 
-        print(self.command_args)
+        elif self.command_args.get('--list-boxes'):
+            print(PluginConfig().dump_config())
 
-        box = BoxDownload('suse')
-        vm_setup = box.fetch(update_check=True)
-        print(vm_setup)
+        elif self.command_args.get('--box'):
+            box = BoxDownload('suse')
+            vm_setup = box.fetch(update_check=True)
+            print(vm_setup)

@@ -20,6 +20,8 @@ class TestSystemBoxbuildTask:
         self.task.command_args = {}
         self.task.command_args['help'] = False
         self.task.command_args['boxbuild'] = False
+        self.task.command_args['--list-boxes'] = False
+        self.task.command_args['--box'] = None
 
     @patch('kiwi_boxed_plugin.tasks.system_boxbuild.Help')
     def test_process_system_boxbuild_help(self, mock_kiwi_Help):
@@ -33,8 +35,19 @@ class TestSystemBoxbuildTask:
             'kiwi::system::boxbuild'
         )
 
+    @patch('kiwi_boxed_plugin.tasks.system_boxbuild.PluginConfig')
+    def test_process_system_boxbuild_list_boxes(self, mock_PluginConfig):
+        plugin = Mock()
+        mock_PluginConfig.return_value = plugin
+        self._init_command_args()
+        self.task.command_args['boxbuild'] = True
+        self.task.command_args['--list-boxes'] = True
+        self.task.process()
+        plugin.dump_config.assert_called_once_with()
+
     @patch('kiwi_boxed_plugin.tasks.system_boxbuild.BoxDownload')
     def test_process_system_boxbuild(self, mock_BoxDownload):
         self._init_command_args()
         self.task.command_args['boxbuild'] = True
+        self.task.command_args['--box'] = 'suse'
         self.task.process()

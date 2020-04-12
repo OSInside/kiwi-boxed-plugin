@@ -24,7 +24,7 @@ class Defaults:
     Provides static methods for default values and state information
     """
     @staticmethod
-    def get_box_config_file():
+    def get_plugin_config_file():
         return '/etc/kiwi_boxed_plugin.yml'
 
     @staticmethod

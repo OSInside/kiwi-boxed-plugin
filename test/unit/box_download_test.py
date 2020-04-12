@@ -7,10 +7,11 @@ from kiwi_boxed_plugin.box_download import BoxDownload
 
 
 class TestBoxDownload:
-    @patch('kiwi_boxed_plugin.defaults.Defaults.get_box_config_file')
+    @patch('kiwi_boxed_plugin.defaults.Defaults.get_plugin_config_file')
     @patch('kiwi_boxed_plugin.box_download.Path')
-    def setup(self, mock_Path, mock_get_box_config_file):
-        mock_get_box_config_file.return_value = '../data/kiwi_boxed_plugin.yml'
+    def setup(self, mock_Path, mock_get_plugin_config_file):
+        mock_get_plugin_config_file.return_value = \
+            '../data/kiwi_boxed_plugin.yml'
         self.box = BoxDownload('suse', 'x86_64')
         mock_Path.create.assert_called_once_with(
             '/var/cache/kiwi/boxes/suse'

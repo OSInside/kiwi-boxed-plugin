@@ -47,7 +47,13 @@ class PluginConfig:
             raise KiwiBoxPluginConfigError(issue)
 
     def get_config(self):
+        """
+        Return config data dictionary
+        """
         return self.config_data
 
     def dump_config(self):
+        """
+        Return config dump as pretty string for the console
+        """
         return yaml.dump(self.config_data)

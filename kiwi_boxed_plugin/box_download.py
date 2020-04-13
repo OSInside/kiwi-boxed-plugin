@@ -36,6 +36,9 @@ class BoxDownload:
 
     Reads the box configuration file and provides an interface
     to download the box files according to the configuration
+
+    :param string boxname: name of the box from kiwi_boxed_plugin.yml
+    :param string arch: arch name for box
     """
     def __init__(self, boxname, arch=None):
         self.box_config = BoxConfig(boxname, arch)
@@ -53,6 +56,11 @@ class BoxDownload:
         Path.create(self.box_dir)
 
     def fetch(self, update_check=True):
+        """
+        Download box from the open build service
+
+        :param bool update_check: check for box updates True|False
+        """
         download = update_check
         repo_source = self.box_config.get_box_source()
         if repo_source:

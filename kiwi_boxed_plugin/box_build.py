@@ -33,12 +33,34 @@ class BoxBuild:
 
     Implements an interface to run a kiwi build box using
     the KVM virtualization platform
+
+    :param string boxname: name of the box from kiwi_boxed_plugin.yml
+    :param string arch: arch name for box
     """
     def __init__(self, boxname, arch=None):
         self.arch = arch or platform.machine()
         self.box = BoxDownload(boxname, arch)
 
     def run(self, kiwi_build_command_args, update_check=True):
+        """
+        Start the build process in a box VM using KVM
+
+        :param dict kiwi_build_command_args:
+            Arguments dict matching a kiwi build command line
+            Example:
+
+            .. code:: python
+
+                {
+                    '--type': 'vmx',
+                    'system': None,
+                    'build': None,
+                    '--description': 'some/description',
+                    '--target-dir': 'some/target-dir'
+                }
+
+        :param bool update_check: check for box updates True|False
+        """
         vm_setup = self.box.fetch(update_check)
         vm_run = [
             'qemu-system-{0}'.format(self.arch)

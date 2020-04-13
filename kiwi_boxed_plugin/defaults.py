@@ -29,4 +29,4 @@ class Defaults:
 
     @staticmethod
     def get_local_box_cache_dir():
-        return '/var/cache/kiwi/boxes'
+        return '/var/tmp/kiwi/boxes'

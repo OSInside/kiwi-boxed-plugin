@@ -30,3 +30,50 @@ class Defaults:
     @staticmethod
     def get_local_box_cache_dir():
         return '/var/tmp/kiwi/boxes'
+
+    @staticmethod
+    def get_qemu_generic_setup():
+        return [
+            '-machine', 'accel=kvm',
+            '-cpu', 'host',
+            '-nographic',
+            '-nodefaults',
+            '-snapshot'
+        ]
+
+    @staticmethod
+    def get_qemu_network_setup():
+        return [
+            '-netdev', 'user,id=user0',
+            '-device', 'virtio-net-pci,netdev=user0'
+        ]
+
+    @staticmethod
+    def get_qemu_shared_path_setup(index, path, mount_tag):
+        return [
+            '-fsdev',
+            'local,security_model=mapped,id=fsdev{0},path={1}'.format(
+                index, path
+            ),
+            '-device',
+            'virtio-9p-pci,id=fs{0},fsdev=fsdev{0},mount_tag={1}'.format(
+                index, mount_tag
+            )
+        ]
+
+    @staticmethod
+    def get_qemu_console_setup():
+        return [
+            '-device', 'virtio-serial',
+            '-chardev', 'stdio,id=virtiocon0',
+            '-device', 'virtconsole,chardev=virtiocon0'
+        ]
+
+    @staticmethod
+    def get_qemu_storage_setup(image_file):
+        return [
+            '-drive',
+            'file={0},if=virtio,driver=qcow2,cache=off,snapshot=on'.format(
+                image_file
+            )
+        ]

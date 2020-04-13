@@ -44,7 +44,7 @@ class BoxDownload:
         )
         self.vm_setup_type = namedtuple(
             'vm_setup_type', [
-                'system', 'kernel', 'initrd'
+                'system', 'kernel', 'initrd', 'append'
             ]
         )
         self.system = None
@@ -93,7 +93,8 @@ class BoxDownload:
         return self.vm_setup_type(
             system=self.system,
             kernel=self.kernel,
-            initrd=self.initrd
+            initrd=self.initrd,
+            append=self.box_config.get_box_kernel_cmdline()
         )
 
     def _create_packages_checksum(self, filename):

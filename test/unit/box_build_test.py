@@ -13,9 +13,13 @@ class TestBoxBuild:
         self.vm_setup.kernel = 'kernel'
         self.vm_setup.append = 'append'
         self.vm_setup.system = 'system'
+        self.vm_setup.initrd = 'initrd'
+        self.vm_setup.ram = 4096
         self.box.fetch.return_value = self.vm_setup
         mock_BoxDownload.return_value = self.box
-        self.build = BoxBuild('suse', 'x86_64')
+        self.build = BoxBuild(
+            boxname='suse', arch='x86_64'
+        )
 
     @patch('kiwi_boxed_plugin.box_build.Command.call')
     @patch('os.environ')
@@ -32,6 +36,7 @@ class TestBoxBuild:
         mock_Command_call.assert_called_once_with(
             [
                 'qemu-system-x86_64',
+                '-m', '4096',
                 '-machine', 'accel=kvm',
                 '-cpu', 'host',
                 '-nographic',
@@ -51,6 +56,7 @@ class TestBoxBuild:
                 'mount_tag=kiwidescription',
                 '-fsdev', 'local,security_model=mapped,id=fsdev1,path=target',
                 '-device', 'virtio-9p-pci,id=fs1,fsdev=fsdev1,'
-                'mount_tag=kiwibundle'
+                'mount_tag=kiwibundle',
+                '-initrd', 'initrd'
             ], {'TMPDIR': '/var/tmp/kiwi/boxes'}
         )

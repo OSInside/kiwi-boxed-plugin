@@ -37,7 +37,8 @@ class BoxBuild:
     :param string boxname: name of the box from kiwi_boxed_plugin.yml
     :param string arch: arch name for box
     """
-    def __init__(self, boxname, arch=None):
+    def __init__(self, boxname, ram=None, arch=None):
+        self.ram = ram
         self.arch = arch or platform.machine()
         self.box = BoxDownload(boxname, arch)
 
@@ -63,7 +64,8 @@ class BoxBuild:
         """
         vm_setup = self.box.fetch(update_check)
         vm_run = [
-            'qemu-system-{0}'.format(self.arch)
+            'qemu-system-{0}'.format(self.arch),
+            '-m', format(self.ram or vm_setup.ram)
         ] + Defaults.get_qemu_generic_setup() + [
             '-kernel', vm_setup.kernel,
             '-append', '{0} kiwi="{1}"'.format(
@@ -80,6 +82,8 @@ class BoxBuild:
             Defaults.get_qemu_shared_path_setup(1, kiwi_build_command_args.get(
                 '--target-dir'
             ), 'kiwibundle')
+        if vm_setup.initrd:
+            vm_run += ['-initrd', vm_setup.initrd]
         return Command.call(
             vm_run, self._create_runtime_environment()
         )

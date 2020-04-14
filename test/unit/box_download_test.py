@@ -21,7 +21,8 @@ class TestBoxDownload:
             'SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2',
             kernel='/var/tmp/kiwi/boxes/suse/kernel',
             initrd='/var/tmp/kiwi/boxes/suse/initrd',
-            append='rd.plymouth=0'
+            append='root=/dev/vda1 rd.plymouth=0',
+            ram=4096
         )
 
     @patch('kiwi_boxed_plugin.box_download.Command.run')

@@ -9,8 +9,11 @@ from kiwi_boxed_plugin.tasks.system_boxbuild import SystemBoxbuildTask
 class TestSystemBoxbuildTask:
     def setup(self):
         sys.argv = [
-            sys.argv[0], 'system', 'boxbuild',
+            sys.argv[0],
+            '--profile', 'foo', '--type', 'vmx',
+            'system', 'boxbuild',
             '--box', 'suse', '--box-memory', '4', '--',
+            'system', 'build',
             '--description', '../data/description',
             '--target-dir', '../data/target_dir'
         ]
@@ -22,6 +25,10 @@ class TestSystemBoxbuildTask:
         self.task.command_args['boxbuild'] = False
         self.task.command_args['--list-boxes'] = False
         self.task.command_args['--box'] = None
+        self.task.command_args['<kiwi_build_command_args>'] = [
+            '--', 'system', 'build', '--description', 'foo',
+            '--target-dir', 'xxx'
+        ]
 
     @patch('kiwi_boxed_plugin.tasks.system_boxbuild.Help')
     def test_process_system_boxbuild_help(self, mock_kiwi_Help):

@@ -56,11 +56,18 @@ options:
         along to the kiwi-ng system build command running in
         the virtual machine.
 """
+import logging
+import os
+from docopt import docopt
 from kiwi.tasks.base import CliTask
 from kiwi.help import Help
 
+import kiwi.tasks.system_build
+
 from kiwi_boxed_plugin.box_download import BoxDownload
 from kiwi_boxed_plugin.plugin_config import PluginConfig
+
+log = logging.getLogger('kiwi')
 
 
 class SystemBoxbuildTask(CliTask):
@@ -73,6 +80,39 @@ class SystemBoxbuildTask(CliTask):
             print(PluginConfig().dump_config())
 
         elif self.command_args.get('--box'):
+            kiwi_command_args = self._validate_kiwi_build_command()
+            print(kiwi_command_args)
             box = BoxDownload('suse')
             vm_setup = box.fetch(update_check=True)
             print(vm_setup)
+
+    def _validate_kiwi_build_command(self):
+        kiwi_build_command = self.command_args.get(
+            '<kiwi_build_command_args>'
+        )
+        if '--' in kiwi_build_command:
+            kiwi_build_command.remove('--')
+        log.info(
+            'Validating kiwi_build_command_args:{0}    {1}'.format(
+                os.linesep, kiwi_build_command
+            )
+        )
+        docopt(
+            doc=kiwi.tasks.system_build.__doc__,
+            argv=kiwi_build_command
+        )
+        final_kiwi_build_command = []
+        if self.global_args.get('--type'):
+            final_kiwi_build_command.append('--type')
+            final_kiwi_build_command.append(self.global_args.get('--type'))
+        if self.global_args.get('--profile'):
+            for profile in sorted(set(self.global_args.get('--profile'))):
+                final_kiwi_build_command.append('--profile')
+                final_kiwi_build_command.append(profile)
+        final_kiwi_build_command += kiwi_build_command
+        log.info(
+            'Building with:{0}    {1}'.format(
+                os.linesep, final_kiwi_build_command
+            )
+        )
+        return final_kiwi_build_command

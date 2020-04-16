@@ -18,8 +18,7 @@
 import os
 import logging
 import platform
-from collections import OrderedDict
-from kiwi.command import Command
+from kiwi.path import Path
 
 from kiwi_boxed_plugin.box_download import BoxDownload
 from kiwi_boxed_plugin.defaults import Defaults
@@ -42,66 +41,67 @@ class BoxBuild:
         self.arch = arch or platform.machine()
         self.box = BoxDownload(boxname, arch)
 
-    def run(self, kiwi_build_command_args, update_check=True):
+    def run(self, kiwi_build_command, update_check=True):
         """
         Start the build process in a box VM using KVM
 
-        :param dict kiwi_build_command_args:
-            Arguments dict matching a kiwi build command line
-            Example:
+        :param list kiwi_build_command:
+            kiwi build command line Example:
 
             .. code:: python
 
-                {
-                    '--type': 'vmx',
-                    'system': None,
-                    'build': None,
-                    '--description': 'some/description',
-                    '--target-dir': 'some/target-dir'
-                }
+                [
+                    '--type', 'vmx', 'system', 'build',
+                    '--description', 'some/description',
+                    '--target-dir', 'some/target-dir'
+                ]
 
         :param bool update_check: check for box updates True|False
         """
+        self.kiwi_build_command = kiwi_build_command
+        desc = self._pop_arg_param(
+            '--description'
+        )
+        target_dir = self._pop_arg_param(
+            '--target-dir'
+        )
+        Path.create(target_dir)
         vm_setup = self.box.fetch(update_check)
         vm_run = [
             'qemu-system-{0}'.format(self.arch),
             '-m', format(self.ram or vm_setup.ram)
         ] + Defaults.get_qemu_generic_setup() + [
             '-kernel', vm_setup.kernel,
-            '-append', '{0} kiwi="{1}"'.format(
-                vm_setup.append, self._prepare_vm_kiwi_command_args(
-                    kiwi_build_command_args
-                )
+            '-append', '"{0} kiwi=\\"{1}\\""'.format(
+                vm_setup.append, ' '.join(self.kiwi_build_command)
             )
         ] + Defaults.get_qemu_storage_setup(vm_setup.system) + \
             Defaults.get_qemu_network_setup() + \
             Defaults.get_qemu_console_setup() + \
-            Defaults.get_qemu_shared_path_setup(0, kiwi_build_command_args.get(
-                '--description'
-            ), 'kiwidescription') + \
-            Defaults.get_qemu_shared_path_setup(1, kiwi_build_command_args.get(
-                '--target-dir'
-            ), 'kiwibundle')
+            Defaults.get_qemu_shared_path_setup(0, desc, 'kiwidescription') + \
+            Defaults.get_qemu_shared_path_setup(1, target_dir, 'kiwibundle')
         if vm_setup.initrd:
             vm_run += ['-initrd', vm_setup.initrd]
-        return Command.call(
-            vm_run, self._create_runtime_environment()
+        os.environ['TMPDIR'] = Defaults.get_local_box_cache_dir()
+        log.debug(
+            'Set TMPDIR: {0}'.format(os.environ['TMPDIR'])
+        )
+        log.debug(
+            'Calling Qemu: {0}'.format(vm_run)
+        )
+        os.system(
+            ' '.join(vm_run)
+        )
+        log.info(
+            'Box build done. Find build log at: {0}'.format(
+                os.sep.join([target_dir, 'result.log'])
+            )
         )
 
-    def _create_runtime_environment(self):
-        return dict(
-            os.environ, TMPDIR=Defaults.get_local_box_cache_dir()
-        )
-
-    def _prepare_vm_kiwi_command_args(self, args):
-        args_dict = OrderedDict(list(args.items()))
-        args_list = []
-        if '--description' in args_dict:
-            del args_dict['--description']
-        if '--target-dir' in args_dict:
-            del args_dict['--target-dir']
-        for key, value in list(args_dict.items()):
-            args_list.append(key)
-            if value:
-                args_list.append(value)
-        return ' '.join(args_list)
+    def _pop_arg_param(self, arg):
+        arg_index = self.kiwi_build_command.index(arg)
+        if arg_index:
+            value = self.kiwi_build_command[arg_index + 1]
+            del self.kiwi_build_command[arg_index + 1]
+            del self.kiwi_build_command[arg_index]
+            return value

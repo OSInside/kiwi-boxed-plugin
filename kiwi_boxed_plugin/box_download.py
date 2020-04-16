@@ -103,8 +103,9 @@ class BoxDownload:
             system=self.system,
             kernel=self.kernel,
             initrd=self.initrd,
-            append='root={0} {1}'.format(
+            append='root={0} console={1} {2}'.format(
                 self.box_config.get_box_root(),
+                self.box_config.get_box_console(),
                 self.box_config.get_box_kernel_cmdline()
             ),
             ram=self.box_config.get_box_memory_mbytes()

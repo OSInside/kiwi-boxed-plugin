@@ -61,11 +61,11 @@ import os
 from docopt import docopt
 from kiwi.tasks.base import CliTask
 from kiwi.help import Help
-
 import kiwi.tasks.system_build
 
-from kiwi_boxed_plugin.box_download import BoxDownload
+from kiwi_boxed_plugin.box_build import BoxBuild
 from kiwi_boxed_plugin.plugin_config import PluginConfig
+
 
 log = logging.getLogger('kiwi')
 
@@ -80,14 +80,24 @@ class SystemBoxbuildTask(CliTask):
             print(PluginConfig().dump_config())
 
         elif self.command_args.get('--box'):
-            kiwi_command_args = self._validate_kiwi_build_command()
-            print(kiwi_command_args)
-            box = BoxDownload('suse')
-            vm_setup = box.fetch(update_check=True)
-            print(vm_setup)
+            request_update_check = not self.command_args.get(
+                '--no-update-check'
+            )
+            box_build = BoxBuild(
+                boxname=self.command_args.get('--box'),
+                ram=self.command_args.get('--box-memory'),
+                arch=self._get_box_arch()
+            )
+            box_build.run(
+                self._validate_kiwi_build_command(),
+                request_update_check
+            )
 
     def _validate_kiwi_build_command(self):
-        kiwi_build_command = self.command_args.get(
+        kiwi_build_command = [
+            'system', 'build'
+        ]
+        kiwi_build_command += self.command_args.get(
             '<kiwi_build_command_args>'
         )
         if '--' in kiwi_build_command:
@@ -116,3 +126,6 @@ class SystemBoxbuildTask(CliTask):
             )
         )
         return final_kiwi_build_command
+
+    def _get_box_arch(self):
+        return 'x86_64' if self.command_args.get('--x86_64') else None

@@ -21,7 +21,7 @@ class TestBoxDownload:
             'SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2',
             kernel='/var/tmp/kiwi/boxes/suse/kernel',
             initrd='/var/tmp/kiwi/boxes/suse/initrd',
-            append='root=/dev/vda1 rd.plymouth=0',
+            append='root=/dev/vda1 console=hvc0 rd.plymouth=0',
             ram=4096
         )
 

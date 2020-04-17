@@ -88,7 +88,8 @@ config = {
     'install_requires': [
         'docopt',
         'kiwi',
-        'requests'
+        'requests',
+        'PyYAML'
     ],
     'packages': ['kiwi_boxed_plugin'],
     'cmdclass': {

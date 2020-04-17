@@ -1,0 +1,7 @@
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    lan0:
+      dhcp4: yes
+      dhcp6: yes

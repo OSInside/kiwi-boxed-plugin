@@ -22,3 +22,15 @@ fedora:
       boxfiles:
         - Fedora-Box.x86_64-1.1.2-Kernel-BuildBox.tar.xz
         - Fedora-Box.x86_64-1.1.2-System-BuildBox.qcow2
+
+ubuntu:
+    mem_mb: 8096
+    root: /dev/vda1
+    console: hvc0
+    cmdline: rd.plymouth=0 selinux=0
+    x86_64:
+      source: obs://Virtualization:Appliances:SelfContained:ubuntu/images
+      packages_file: Ubuntu-Box.x86_64-1.18.4-System-BuildBox.packages
+      boxfiles:
+        - Ubuntu-Box.x86_64-1.18.4-Kernel-BuildBox.tar.xz
+        - Ubuntu-Box.x86_64-1.18.4-System-BuildBox.qcow2

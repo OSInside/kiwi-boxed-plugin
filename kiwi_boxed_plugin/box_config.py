@@ -18,6 +18,7 @@
 import platform
 
 from kiwi_boxed_plugin.plugin_config import PluginConfig
+from kiwi_boxed_plugin.exceptions import KiwiBoxPluginBoxNameError
 
 
 class BoxConfig:
@@ -29,6 +30,10 @@ class BoxConfig:
         self.config = plugin_config.get_config()
         self.arch = arch or platform.machine()
         self.box_config = self.config.get(boxname)
+        if not self.box_config:
+            raise KiwiBoxPluginBoxNameError(
+                'Box: {0} not found'.format(boxname)
+            )
         self.box_arch_config = self.box_config.get(self.arch)
 
     def get_box_arch(self):

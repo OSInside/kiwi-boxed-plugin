@@ -5,7 +5,10 @@ from pytest import (
 )
 
 from kiwi_boxed_plugin.box_config import BoxConfig
-from kiwi_boxed_plugin.exceptions import KiwiBoxPluginConfigError
+from kiwi_boxed_plugin.exceptions import (
+    KiwiBoxPluginConfigError,
+    KiwiBoxPluginBoxNameError
+)
 
 
 class TestBoxConfig:
@@ -32,6 +35,13 @@ class TestBoxConfig:
         mock_yaml_safe_load.side_effect = Exception
         with raises(KiwiBoxPluginConfigError):
             BoxConfig('suse')
+
+    @patch('kiwi_boxed_plugin.defaults.Defaults.get_plugin_config_file')
+    def test_setup_raises_box_not_found(self, mock_get_plugin_config_file):
+        mock_get_plugin_config_file.return_value = \
+            '../data/kiwi_boxed_plugin.yml'
+        with raises(KiwiBoxPluginBoxNameError):
+            self.box_config = BoxConfig('foo', 'x86_64')
 
     def test_get_box_arch(self):
         assert self.box_config.get_box_arch() == 'x86_64'

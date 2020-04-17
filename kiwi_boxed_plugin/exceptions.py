@@ -22,3 +22,9 @@ class KiwiBoxPluginConfigError(KiwiError):
     """
     Exception raised if the box config yaml file is invalid
     """
+
+
+class KiwiBoxPluginBoxNameError(KiwiError):
+    """
+    Exception raised if the boxname could not be found
+    """

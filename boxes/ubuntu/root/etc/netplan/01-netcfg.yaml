@@ -1,6 +1,6 @@
 network:
   version: 2
-  renderer: NetworkManager
   ethernets:
     lan0:
       dhcp4: yes
+      set-name: lan0

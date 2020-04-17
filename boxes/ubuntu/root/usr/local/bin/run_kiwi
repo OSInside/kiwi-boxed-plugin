@@ -26,7 +26,7 @@ while true;do
     sleep "${sleep_timeout}"
 done
 
-options=$(sed -e 's@.*kiwi="\(.*\)\"@\1@' /proc/cmdline)
+options=$(cut -f2 -d\" /proc/cmdline)
 options="${options} --description /description --target-dir /result"
 logfile=/bundle/result.log
 

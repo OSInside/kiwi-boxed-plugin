@@ -19,8 +19,9 @@
 usage: kiwi-ng system boxbuild -h | --help
        kiwi-ng system boxbuild --box=<name>
            [--box-memory=<vmgb>]
+           [--box-debug]
            [--no-update-check]
-           [--x86_64 ]
+           [--x86_64]
            <kiwi_build_command_args>...
        kiwi-ng system boxbuild --list-boxes
 
@@ -49,6 +50,9 @@ options:
         is selected the host architecture is used for selecting
         the box. The selected box architecture also specifies the
         target architecture for the image build with that box.
+
+    --box-debug
+        In debug mode the started virtual machine will be kept open
 
     <kiwi_build_command_args>...
         List of command parameters as supported by the kiwi-ng
@@ -83,6 +87,7 @@ class SystemBoxbuildTask(CliTask):
             request_update_check = not self.command_args.get(
                 '--no-update-check'
             )
+            keep_open = self.command_args.get('--box-debug')
             box_build = BoxBuild(
                 boxname=self.command_args.get('--box'),
                 ram=self.command_args.get('--box-memory'),
@@ -90,7 +95,8 @@ class SystemBoxbuildTask(CliTask):
             )
             box_build.run(
                 self._validate_kiwi_build_command(),
-                request_update_check
+                request_update_check,
+                keep_open
             )
 
     def _validate_kiwi_build_command(self):

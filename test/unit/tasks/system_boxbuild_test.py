@@ -24,6 +24,7 @@ class TestSystemBoxbuildTask:
         self.task.command_args['boxbuild'] = False
         self.task.command_args['--list-boxes'] = False
         self.task.command_args['--box'] = None
+        self.task.command_args['--box-debug'] = False
         self.task.command_args['<kiwi_build_command_args>'] = [
             '--', '--description', 'foo',
             '--target-dir', 'xxx'
@@ -66,5 +67,5 @@ class TestSystemBoxbuildTask:
             [
                 '--type', 'vmx', '--profile', 'foo', 'system', 'build',
                 '--description', 'foo', '--target-dir', 'xxx'
-            ], True
+            ], True, False
         )

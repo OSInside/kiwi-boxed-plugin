@@ -29,7 +29,8 @@ class TestBoxBuild:
             [
                 '--type', 'vmx', 'system', 'build',
                 '--description', 'desc', '--target-dir', 'target'
-            ]
+            ],
+            keep_open=True
         )
         mock_path_create.assert_called_once_with('target')
         mock_os_system.assert_called_once_with(
@@ -41,7 +42,7 @@ class TestBoxBuild:
             '-nodefaults '
             '-snapshot '
             '-kernel kernel '
-            '-append "append kiwi=\\"--type vmx system build\\"" '
+            '-append "append kiwi=\\"--type vmx system build\\" kiwi-no-halt" '
             '-drive file=system,if=virtio,driver=qcow2,cache=off,snapshot=on '
             '-netdev user,id=user0 '
             '-device virtio-net-pci,netdev=user0 '

@@ -43,7 +43,7 @@
     </repository>
     <packages type="image">
         <package name="netplan"/>
-        <package name="network-manager"/>
+        <package name="networkd"/>
         <package name="grub2-themes-ubuntu-mate"/>
         <package name="plymouth-theme-sabily"/>
         <package name="plymouth"/>

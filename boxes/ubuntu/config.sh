@@ -35,3 +35,8 @@ systemctl enable bundle.automount
 # Activate kiwi service
 #--------------------------------------
 baseInsertService kiwi
+
+#======================================
+# lvmetad sucks for building lvm images
+#--------------------------------------
+cp /usr/bin/true /sbin/lvmetad

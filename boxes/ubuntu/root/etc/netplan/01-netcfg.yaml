@@ -3,3 +3,5 @@ network:
   ethernets:
     lan0:
       dhcp4: yes
+      nameservers:
+        addresses: [8.8.8.8]

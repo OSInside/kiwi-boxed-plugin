@@ -39,4 +39,7 @@ baseInsertService kiwi
 #======================================
 # lvmetad sucks for building lvm images
 #--------------------------------------
-cp /usr/bin/true /sbin/lvmetad
+systemctl disable lvm2-lvmetad
+systemctl mask lvm2-lvmetad
+systemctl disable lvm2-lvmetad.socket
+systemctl mask lvm2-lvmetad.socket

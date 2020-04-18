@@ -3,4 +3,3 @@ network:
   ethernets:
     lan0:
       dhcp4: yes
-      set-name: lan0

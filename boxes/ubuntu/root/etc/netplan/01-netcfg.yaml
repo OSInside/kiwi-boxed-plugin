@@ -1,5 +1,0 @@
-network:
-  version: 2
-  ethernets:
-    lan0:
-      dhcp4: yes

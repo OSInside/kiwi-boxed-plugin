@@ -47,4 +47,5 @@ systemctl mask lvm2-lvmetad.socket
 #======================================
 # Create systemd resolver link
 #--------------------------------------
+rm -f /etc/resolv.conf
 ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf

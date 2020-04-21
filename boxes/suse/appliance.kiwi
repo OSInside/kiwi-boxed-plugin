@@ -49,6 +49,7 @@
         <package name="btrfsprogs"/>
         <package name="kernel-kvmsmall"/>
         <package name="python3-kiwi"/>
+        <package name="checkmedia"/>
         <package name="dracut-kiwi-oem-repart"/>
         <package name="dracut-kiwi-oem-dump"/>
     </packages>

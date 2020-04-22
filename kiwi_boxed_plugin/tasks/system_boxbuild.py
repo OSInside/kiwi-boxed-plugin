@@ -39,7 +39,7 @@ options:
 
     --box-memory=<vmgb>
         Number of GBs to reserve as main memory for the virtual
-        machine. By default 4GB will be used.
+        machine. By default 8GB will be used.
 
     --no-update-check
         Skip check for available box update. The option has no

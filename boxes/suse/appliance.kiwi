@@ -51,6 +51,7 @@
         <package name="python3-kiwi"/>
         <package name="checkmedia"/>
         <package name="jing"/>
+        <package name="iproute2"/>
         <package name="gfxboot"/>
         <package name="dracut-kiwi-oem-repart"/>
         <package name="dracut-kiwi-oem-dump"/>

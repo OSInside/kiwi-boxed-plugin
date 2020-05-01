@@ -24,6 +24,7 @@ usage: kiwi-ng system boxbuild -h | --help
            [--x86_64]
            <kiwi_build_command_args>...
        kiwi-ng system boxbuild --list-boxes
+       kiwi-ng system boxbuild help
 
 commands:
     boxbuild

@@ -36,7 +36,8 @@ class TestPluginConfig:
                     'boxfiles': [
                         'SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz',
                         'SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2'
-                    ]
+                    ],
+                    'use_initrd': True
                 }
             }
         }

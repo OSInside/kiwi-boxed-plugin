@@ -62,3 +62,6 @@ class BoxConfig:
         for vm_file in self.box_arch_config.get('boxfiles'):
             source_files.append(vm_file)
         return source_files
+
+    def use_initrd(self):
+        return bool(self.box_arch_config.get('use_initrd'))

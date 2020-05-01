@@ -96,9 +96,10 @@ class BoxDownload:
                     self.kernel = self._extract_kernel_from_tarball(
                         local_box_file
                     )
-                    self.initrd = self._extract_initrd_from_tarball(
-                        local_box_file
-                    )
+                    if self.box_config.use_initrd():
+                        self.initrd = self._extract_initrd_from_tarball(
+                            local_box_file
+                        )
         return self.vm_setup_type(
             system=self.system,
             kernel=self.kernel,

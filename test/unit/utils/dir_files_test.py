@@ -1,0 +1,37 @@
+from mock import (
+    Mock, patch, call
+)
+
+from kiwi_boxed_plugin.utils.dir_files import DirFiles
+
+
+class TestDirFiles:
+    @patch('kiwi_boxed_plugin.utils.dir_files.Path')
+    def setup(self, mock_Path):
+        self.dir_manager = DirFiles('box_dir')
+        mock_Path.wipe.assert_called_once_with('box_dir.tmp')
+
+    @patch('kiwi_boxed_plugin.utils.dir_files.NamedTemporaryFile')
+    def test_register(self, mock_NamedTemporaryFile):
+        tmpfile = Mock()
+        tmpfile.name = 'tmp_a'
+        mock_NamedTemporaryFile.return_value = tmpfile
+        self.dir_manager.register('/some/path/to/file_a')
+        assert self.dir_manager.collection == {
+            'file_a': 'tmp_a'
+        }
+
+    @patch('kiwi_boxed_plugin.utils.dir_files.Path')
+    @patch('kiwi_boxed_plugin.utils.dir_files.Command.run')
+    def test_commit(self, mock_Command_run, mock_Path):
+        self.dir_manager.collection = {
+            'file_a': 'tmp_a'
+        }
+        self.dir_manager.commit()
+        mock_Path.create.assert_called_once_with('box_dir.tmp')
+        assert mock_Command_run.call_args_list == [
+            call(['mv', 'tmp_a', 'box_dir.tmp/file_a']),
+            call(['mv', 'box_dir', 'box_dir.wipe']),
+            call(['mv', 'box_dir.tmp', 'box_dir']),
+            call(['rm', '-rf', 'box_dir.wipe'])
+        ]

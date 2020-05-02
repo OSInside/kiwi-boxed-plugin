@@ -1,6 +1,7 @@
 # Manifest describing source package contents
 
 graft kiwi_boxed_plugin/tasks
+graft kiwi_boxed_plugin/utils
 graft package
 
 include Makefile

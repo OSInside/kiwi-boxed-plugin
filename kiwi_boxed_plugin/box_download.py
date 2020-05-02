@@ -18,6 +18,7 @@
 import os
 import logging
 from collections import namedtuple
+from kiwi_boxed_plugin.utils.dir_files import DirFiles
 from kiwi.command import Command
 from kiwi.utils.checksum import Checksum
 from kiwi.solver.repository import SolverRepository
@@ -51,6 +52,7 @@ class BoxDownload:
                 'append', 'ram'
             ]
         )
+        self.box_stage = DirFiles(self.box_dir)
         self.system = None
         self.kernel = None
         self.initrd = None
@@ -69,17 +71,32 @@ class BoxDownload:
                 Uri(repo_source, 'rpm-md')
             )
             packages_file = self.box_config.get_box_packages_file()
-            if update_check and packages_file:
+            packages_shasum_file = \
+                self.box_config.get_box_packages_shasum_file()
+            if update_check and packages_file and packages_shasum_file:
                 local_packages_file = os.sep.join(
                     [self.box_dir, packages_file]
                 )
-                repo.download_from_repository(
-                    packages_file, local_packages_file
+                local_packages_shasum_file = os.sep.join(
+                    [self.box_dir, packages_shasum_file]
                 )
-                if self._remote_content_unchanged(local_packages_file):
+                local_packages_file_tmp = self.box_stage.register(
+                    local_packages_file
+                )
+                local_packages_shasum_file_tmp = self.box_stage.register(
+                    local_packages_shasum_file
+                )
+                repo.download_from_repository(
+                    packages_file, local_packages_file_tmp
+                )
+                checksum = Checksum(local_packages_file_tmp)
+                shasum = checksum.sha256()
+                if checksum.matches(shasum, local_packages_shasum_file):
                     download = False
                 else:
-                    self._create_packages_checksum(local_packages_file)
+                    self._create_packages_checksum(
+                        local_packages_shasum_file_tmp, shasum
+                    )
 
             for box_file in self.box_config.get_box_files():
                 local_box_file = os.sep.join([self.box_dir, box_file])
@@ -87,9 +104,18 @@ class BoxDownload:
                     download = True
                 if download:
                     log.info('Downloading {0}'.format(box_file))
-                    repo.download_from_repository(
-                        box_file, local_box_file
+                    local_box_file_tmp = self.box_stage.register(
+                        local_box_file
                     )
+                    repo.download_from_repository(
+                        box_file, local_box_file_tmp
+                    )
+
+            if download:
+                self.box_stage.commit()
+
+            for box_file in self.box_config.get_box_files():
+                local_box_file = os.sep.join([self.box_dir, box_file])
                 if box_file.endswith('.qcow2'):
                     self.system = local_box_file
                 if box_file.endswith('.tar.xz'):
@@ -100,6 +126,7 @@ class BoxDownload:
                         self.initrd = self._extract_initrd_from_tarball(
                             local_box_file
                         )
+
         return self.vm_setup_type(
             system=self.system,
             kernel=self.kernel,
@@ -112,10 +139,9 @@ class BoxDownload:
             ram=self.box_config.get_box_memory_mbytes()
         )
 
-    def _create_packages_checksum(self, filename):
-        checksum = Checksum(filename)
-        with open(filename + '.sha256', 'w') as shasum:
-            shasum.write(checksum.sha256())
+    def _create_packages_checksum(self, filename, shasum):
+        with open(filename, 'w') as sha_file:
+            sha_file.write(shasum)
 
     def _extract_kernel_from_tarball(self, tarfile):
         Command.run(
@@ -134,10 +160,3 @@ class BoxDownload:
             ]
         )
         return os.sep.join([self.box_dir, 'initrd'])
-
-    def _remote_content_unchanged(self, filename):
-        shasum_file = filename + '.sha256'
-        checksum = Checksum(filename)
-        return checksum.matches(
-            checksum.sha256(), shasum_file
-        )

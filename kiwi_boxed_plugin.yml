@@ -7,6 +7,7 @@ suse:
     x86_64:
       source: obs://Virtualization:Appliances:SelfContained:suse/images
       packages_file: SUSE-Box.x86_64-1.42.1-System-BuildBox.packages
+      packages_shasum: SUSE-Box.x86_64-1.42.1-System-BuildBox.packages.sha256
       boxfiles:
         - SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz
         - SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2
@@ -20,6 +21,7 @@ fedora:
     x86_64:
       source: obs://Virtualization:Appliances:SelfContained:fedora/images
       packages_file: Fedora-Box.x86_64-1.1.2-System-BuildBox.packages
+      packages_shasum: Fedora-Box.x86_64-1.1.2-System-BuildBox.packages.sha256
       boxfiles:
         - Fedora-Box.x86_64-1.1.2-Kernel-BuildBox.tar.xz
         - Fedora-Box.x86_64-1.1.2-System-BuildBox.qcow2
@@ -33,6 +35,7 @@ ubuntu:
     x86_64:
       source: obs://Virtualization:Appliances:SelfContained:ubuntu/images
       packages_file: Ubuntu-Box.x86_64-1.18.4-System-BuildBox.packages
+      packages_shasum: Ubuntu-Box.x86_64-1.18.4-System-BuildBox.packages.sha256
       boxfiles:
         - Ubuntu-Box.x86_64-1.18.4-Kernel-BuildBox.tar.xz
         - Ubuntu-Box.x86_64-1.18.4-System-BuildBox.qcow2

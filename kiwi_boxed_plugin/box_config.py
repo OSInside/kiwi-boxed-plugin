@@ -57,6 +57,9 @@ class BoxConfig:
     def get_box_packages_file(self):
         return self.box_arch_config.get('packages_file')
 
+    def get_box_packages_shasum_file(self):
+        return self.box_arch_config.get('packages_shasum')
+
     def get_box_files(self):
         source_files = []
         for vm_file in self.box_arch_config.get('boxfiles'):

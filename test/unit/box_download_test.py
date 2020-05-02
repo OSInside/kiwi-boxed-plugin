@@ -9,7 +9,10 @@ from kiwi_boxed_plugin.box_download import BoxDownload
 class TestBoxDownload:
     @patch('kiwi_boxed_plugin.defaults.Defaults.get_plugin_config_file')
     @patch('kiwi_boxed_plugin.box_download.Path')
-    def setup(self, mock_Path, mock_get_plugin_config_file):
+    @patch('kiwi_boxed_plugin.box_download.DirFiles')
+    def setup(self, mock_DirFiles, mock_Path, mock_get_plugin_config_file):
+        self.box_stage = Mock()
+        mock_DirFiles.return_value = self.box_stage
         mock_get_plugin_config_file.return_value = \
             '../data/kiwi_boxed_plugin.yml'
         self.box = BoxDownload('suse', 'x86_64')
@@ -45,28 +48,43 @@ class TestBoxDownload:
             mock_open.return_value = MagicMock(spec=io.IOBase)
             file_handle = mock_open.return_value.__enter__.return_value
             assert self.box.fetch(update_check=True) == self.result
+            assert self.box_stage.register.call_args_list == [
+                call(
+                    '/var/tmp/kiwi/boxes/suse/'
+                    'SUSE-Box.x86_64-1.42.1-System-BuildBox.packages'
+                ),
+                call(
+                    '/var/tmp/kiwi/boxes/suse/'
+                    'SUSE-Box.x86_64-1.42.1-System-BuildBox.packages.sha256'
+                ),
+                call(
+                    '/var/tmp/kiwi/boxes/suse/'
+                    'SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz'
+                ),
+                call(
+                    '/var/tmp/kiwi/boxes/suse/'
+                    'SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2'
+                )
+            ]
             mock_open.assert_called_once_with(
-                '/var/tmp/kiwi/boxes/suse/'
-                'SUSE-Box.x86_64-1.42.1-System-BuildBox.packages.sha256', 'w'
+                self.box_stage.register.return_value, 'w'
             )
             file_handle.write.assert_called_once_with('sum')
             assert repo.download_from_repository.call_args_list == [
                 call(
                     'SUSE-Box.x86_64-1.42.1-System-BuildBox.packages',
-                    '/var/tmp/kiwi/boxes/suse/'
-                    'SUSE-Box.x86_64-1.42.1-System-BuildBox.packages'
+                    self.box_stage.register.return_value
                 ),
                 call(
                     'SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz',
-                    '/var/tmp/kiwi/boxes/suse/'
-                    'SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz'
+                    self.box_stage.register.return_value
                 ),
                 call(
                     'SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2',
-                    '/var/tmp/kiwi/boxes/suse/'
-                    'SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2'
+                    self.box_stage.register.return_value
                 )
             ]
+            self.box_stage.commit.assert_called_once_with()
             assert mock_Command_run.call_args_list == [
                 call(
                     [
@@ -109,8 +127,7 @@ class TestBoxDownload:
         assert self.box.fetch(update_check=True) == self.result
         repo.download_from_repository.assert_called_once_with(
             'SUSE-Box.x86_64-1.42.1-System-BuildBox.packages',
-            '/var/tmp/kiwi/boxes/suse/'
-            'SUSE-Box.x86_64-1.42.1-System-BuildBox.packages'
+            self.box_stage.register.return_value
         )
 
     @patch('kiwi_boxed_plugin.box_download.Command.run')

@@ -33,6 +33,8 @@ class TestPluginConfig:
                     'suse/images',
                     'packages_file': 'SUSE-Box.x86_64-1.42.1-System-BuildBox'
                     '.packages',
+                    'packages_shasum': 'SUSE-Box.x86_64-1.42.1-System-BuildBox'
+                    '.packages.sha256',
                     'boxfiles': [
                         'SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz',
                         'SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2'

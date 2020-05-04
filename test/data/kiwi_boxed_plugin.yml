@@ -1,13 +1,17 @@
-suse:
-    mem_mb: 4096
+box:
+  -
+    name: suse
+    mem_mb: 8096
     root: /dev/vda1
     console: hvc0
-    cmdline: rd.plymouth=0
-    x86_64:
-      source: obs://Virtualization:Appliances:SelfContained:suse/images
-      packages_file: SUSE-Box.x86_64-1.42.1-System-BuildBox.packages
-      packages_shasum: SUSE-Box.x86_64-1.42.1-System-BuildBox.packages.sha256
-      boxfiles:
-        - SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz
-        - SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2
-      use_initrd: true
+    arch:
+      -
+        name: x86_64
+        cmdline:
+          - rd.plymouth=0
+        source: obs://Virtualization:Appliances:SelfContained:suse/images
+        packages_file: SUSE-Box.x86_64-1.42.1-System-BuildBox.packages
+        boxfiles:
+          - SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz
+          - SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2
+        use_initrd: true

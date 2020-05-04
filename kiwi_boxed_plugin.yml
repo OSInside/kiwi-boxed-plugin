@@ -1,39 +1,53 @@
-suse:
+box:
+  -
+    name: suse
     mem_mb: 8096
-    arch: x86_64
     root: /dev/vda1
     console: hvc0
-    cmdline: rd.plymouth=0
-    x86_64:
-      source: obs://Virtualization:Appliances:SelfContained:suse/images
-      packages_file: SUSE-Box.x86_64-1.42.1-System-BuildBox.packages
-      boxfiles:
-        - SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz
-        - SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2
-      use_initrd: true
+    arch:
+      -
+        name: x86_64
+        cmdline:
+          - rd.plymouth=0
+        source: obs://Virtualization:Appliances:SelfContained:suse/images
+        packages_file: SUSE-Box.x86_64-1.42.1-System-BuildBox.packages
+        boxfiles:
+          - SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz
+          - SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2
+        use_initrd: true
 
-fedora:
+  -
+    name: fedora
     mem_mb: 8096
     root: /dev/vda1
     console: hvc0
-    cmdline: rd.plymouth=0 selinux=0
-    x86_64:
-      source: obs://Virtualization:Appliances:SelfContained:fedora/images
-      packages_file: Fedora-Box.x86_64-1.1.2-System-BuildBox.packages
-      boxfiles:
-        - Fedora-Box.x86_64-1.1.2-Kernel-BuildBox.tar.xz
-        - Fedora-Box.x86_64-1.1.2-System-BuildBox.qcow2
-      use_initrd: true
+    arch:
+      -
+        name: x86_64
+        cmdline:
+          - rd.plymouth=0
+          - selinux=0
+        source: obs://Virtualization:Appliances:SelfContained:fedora/images
+        packages_file: Fedora-Box.x86_64-1.1.2-System-BuildBox.packages
+        boxfiles:
+          - Fedora-Box.x86_64-1.1.2-Kernel-BuildBox.tar.xz
+          - Fedora-Box.x86_64-1.1.2-System-BuildBox.qcow2
+        use_initrd: true
 
-ubuntu:
+  -
+    name: ubuntu
     mem_mb: 8096
     root: /dev/vda1
     console: hvc0
-    cmdline: rd.plymouth=0 selinux=0
-    x86_64:
-      source: obs://Virtualization:Appliances:SelfContained:ubuntu/images
-      packages_file: Ubuntu-Box.x86_64-1.18.4-System-BuildBox.packages
-      boxfiles:
-        - Ubuntu-Box.x86_64-1.18.4-Kernel-BuildBox.tar.xz
-        - Ubuntu-Box.x86_64-1.18.4-System-BuildBox.qcow2
-      use_initrd: true
+    arch:
+      -
+        name: x86_64
+        cmdline:
+          - rd.plymouth=0
+          - selinux=0
+        source: obs://Virtualization:Appliances:SelfContained:ubuntu/images
+        packages_file: Ubuntu-Box.x86_64-1.18.4-System-BuildBox.packages
+        boxfiles:
+          - Ubuntu-Box.x86_64-1.18.4-Kernel-BuildBox.tar.xz
+          - Ubuntu-Box.x86_64-1.18.4-System-BuildBox.qcow2
+        use_initrd: true

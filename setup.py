@@ -89,7 +89,8 @@ config = {
         'docopt',
         'kiwi',
         'requests',
-        'PyYAML'
+        'PyYAML',
+        'cerberus'
     ],
     'packages': ['kiwi_boxed_plugin'],
     'cmdclass': {

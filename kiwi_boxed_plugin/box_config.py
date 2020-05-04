@@ -26,15 +26,20 @@ class BoxConfig:
     **Implements reading of box configuration:**
     """
     def __init__(self, boxname, arch=None):
-        plugin_config = PluginConfig()
-        self.config = plugin_config.get_config()
         self.arch = arch or platform.machine()
-        self.box_config = self.config.get(boxname)
+
+        plugin_config = PluginConfig()
+
+        self.box_config = self._get_box_config(
+            plugin_config.get_config(), boxname
+        )
         if not self.box_config:
             raise KiwiBoxPluginBoxNameError(
                 'Box: {0} not found'.format(boxname)
             )
-        self.box_arch_config = self.box_config.get(self.arch)
+        self.box_arch_config = self._get_box_arch_config(
+            self.box_config, self.arch
+        )
 
     def get_box_arch(self):
         return self.arch
@@ -49,7 +54,7 @@ class BoxConfig:
         return self.box_config.get('console')
 
     def get_box_kernel_cmdline(self):
-        return self.box_config.get('cmdline')
+        return ' '.join(self.box_arch_config.get('cmdline'))
 
     def get_box_source(self):
         return self.box_arch_config.get('source')
@@ -68,3 +73,13 @@ class BoxConfig:
 
     def use_initrd(self):
         return bool(self.box_arch_config.get('use_initrd'))
+
+    def _get_box_config(self, plugin_config, name):
+        for box in plugin_config:
+            if box.get('name') == name:
+                return box
+
+    def _get_box_arch_config(self, box_config, arch):
+        for box_arch in box_config.get('arch'):
+            if box_arch.get('name') == arch:
+                return box_arch

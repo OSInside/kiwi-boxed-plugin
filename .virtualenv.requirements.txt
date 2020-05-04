@@ -17,5 +17,8 @@ requests
 # YAML file parsing
 PyYAML
 
+# config file schema
+cerberus
+
 # kiwi
 kiwi

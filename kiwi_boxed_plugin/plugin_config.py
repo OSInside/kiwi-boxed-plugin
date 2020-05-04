@@ -15,9 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with kiwi-boxed-build.  If not, see <http://www.gnu.org/licenses/>
 #
+from cerberus import Validator
 import logging
 import yaml
 
+from kiwi_boxed_plugin.plugin_config_schema import schema
 from kiwi_boxed_plugin.defaults import Defaults
 from kiwi_boxed_plugin.exceptions import KiwiBoxPluginConfigError
 
@@ -45,15 +47,23 @@ class PluginConfig:
                 self.config_data = yaml.safe_load(config)
         except Exception as issue:
             raise KiwiBoxPluginConfigError(issue)
+        validator = Validator(schema)
+        validator.validate(self.config_data, schema)
+        if validator.errors:
+            raise KiwiBoxPluginConfigError(
+                'Failed to validate {0}: {1}'.format(
+                    plugin_config_file, validator.errors
+                )
+            )
 
     def get_config(self):
         """
         Return config data dictionary
         """
-        return self.config_data
+        return self.config_data.get('box')
 
     def dump_config(self):
         """
         Return config dump as pretty string for the console
         """
-        return yaml.dump(self.config_data)
+        return yaml.dump(self.config_data.get('box'))

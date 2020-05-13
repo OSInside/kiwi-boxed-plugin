@@ -15,6 +15,17 @@ jobs:
       dist: xenial
       sudo: true
       env: TOXENV=check,unit_py3_7
+    - stage: deploy
+      python: 3.6
+      env: TOXENV=doc
+      deploy:
+        - provider: pypi
+          skip_cleanup: true
+          user: schaefi
+          password: $PYPI_PASS
+          distributions: sdist
+          on:
+            tags: true
 
 before_install:
   - sudo apt-get update -qq

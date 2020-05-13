@@ -60,6 +60,9 @@ build: clean tox
 	# provide rpm rpmlintrc
 	cp package/python-kiwi_boxed_plugin-rpmlintrc dist
 
+pypi: clean tox
+	$(python) setup.py sdist upload
+
 clean:
 	$(python) setup.py clean
 	rm -rf doc/build

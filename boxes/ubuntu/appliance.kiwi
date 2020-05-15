@@ -67,7 +67,7 @@
         <package name="lvm2"/>
         <package name="xfsprogs"/>
         <package name="e2fsprogs"/>
-        <package name="btrfs-tools"/>
+        <package name="btrfs-progs"/>
         <package name="python3-kiwi"/>
         <package name="dracut-kiwi-oem-repart"/>
         <package name="dracut-kiwi-oem-dump"/>

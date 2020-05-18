@@ -46,8 +46,8 @@ box:
           - rd.plymouth=0
           - selinux=0
         source: obs://Virtualization:Appliances:SelfContained:ubuntu/images
-        packages_file: Ubuntu-Box.x86_64-1.18.4-System-BuildBox.packages
+        packages_file: Ubuntu-Box.x86_64-1.20.4-System-BuildBox.packages
         boxfiles:
-          - Ubuntu-Box.x86_64-1.18.4-Kernel-BuildBox.tar.xz
-          - Ubuntu-Box.x86_64-1.18.4-System-BuildBox.qcow2
+          - Ubuntu-Box.x86_64-1.20.4-Kernel-BuildBox.tar.xz
+          - Ubuntu-Box.x86_64-1.20.4-System-BuildBox.qcow2
         use_initrd: true

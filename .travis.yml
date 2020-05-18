@@ -7,7 +7,7 @@ branches:
 stages:
   - test
   - name: deploy
-  if: tag IS present
+    if: tag IS present
 
 jobs:
   include:

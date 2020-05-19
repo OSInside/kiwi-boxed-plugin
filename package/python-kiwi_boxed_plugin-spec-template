@@ -100,8 +100,8 @@ python3 setup.py build
 # Install Python 3 version
 python3 setup.py install --prefix=%{_prefix} --root=%{buildroot} %{?is_deb:--install-layout=deb}
 
-# Install documentation
-make buildroot=%{buildroot}/ docdir=%{_defaultdocdir}/ install_package_docs
+# Install man pages and package documentation
+make buildroot=%{buildroot}/ docdir=%{_defaultdocdir}/ install
 
 %files -n python%{python3_pkgversion}-kiwi_boxed_plugin
 %dir %{_defaultdocdir}/python-kiwi_boxed_plugin
@@ -109,6 +109,5 @@ make buildroot=%{buildroot}/ docdir=%{_defaultdocdir}/ install_package_docs
 %{_defaultdocdir}/python-kiwi_boxed_plugin/LICENSE
 %{_defaultdocdir}/python-kiwi_boxed_plugin/README
 %doc %{_mandir}/man8/*
-%config %_sysconfdir/kiwi_boxed_plugin.yml
 
 %changelog

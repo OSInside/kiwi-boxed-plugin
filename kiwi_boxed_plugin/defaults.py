@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with kiwi-boxed-build.  If not, see <http://www.gnu.org/licenses/>
 #
+from pkg_resources import resource_filename
 
 
 class Defaults:
@@ -25,7 +26,9 @@ class Defaults:
     """
     @staticmethod
     def get_plugin_config_file():
-        return '/etc/kiwi_boxed_plugin.yml'
+        return resource_filename(
+            'kiwi_boxed_plugin', 'config/kiwi_boxed_plugin.yml'
+        )
 
     @staticmethod
     def get_local_box_cache_dir():

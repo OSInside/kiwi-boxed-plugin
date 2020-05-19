@@ -13,21 +13,12 @@ tox:
 	tox "-n 5"
 
 install:
-	# apart from all python source we also need to install
-	# the manual page and the plugin configuration
-	# see setup.py for details when this target is called
+	# install plugin manual page and license/readme
+	# NOTE: this file is not handled through pip because on system level
 	install -d -m 755 ${buildroot}usr/share/man/man8
-	for man in doc/build/man/*.8; do \
-		test -e $$man && gzip -f $$man || true ;\
-	done
-	for man in doc/build/man/*.8.gz; do \
-		install -m 644 $$man ${buildroot}usr/share/man/man8 ;\
-	done
-	# box configuration
-	install -d -m 755 ${buildroot}etc
-	install -m 644 kiwi_boxed_plugin.yml ${buildroot}etc/kiwi_boxed_plugin.yml
-
-install_package_docs:
+	gzip -f doc/build/man/kiwi::system::boxbuild.8
+	install -m 644 doc/build/man/kiwi::system::boxbuild.8.gz \
+		${buildroot}usr/share/man/man8
 	install -d -m 755 ${buildroot}${docdir}/python-kiwi_boxed_plugin
 	install -m 644 LICENSE \
 		${buildroot}${docdir}/python-kiwi_boxed_plugin/LICENSE

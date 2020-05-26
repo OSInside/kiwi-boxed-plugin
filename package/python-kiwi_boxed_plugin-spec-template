@@ -48,7 +48,7 @@ Release:        0
 Url:            https://github.com/OSInside/kiwi-boxed-plugin
 Summary:        KIWI - Boxed Build Plugin
 License:        GPL-3.0-or-later
-%if %{_vendor} == "debbuild"
+%if "%{_vendor}" == "debbuild"
 # Needed to set Maintainer in output debs
 Packager:       Marcus Schaefer <ms@suse.de>
 %endif

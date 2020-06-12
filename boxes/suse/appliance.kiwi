@@ -47,7 +47,7 @@
         <package name="xfsprogs"/>
         <package name="e2fsprogs"/>
         <package name="btrfsprogs"/>
-        <package name="kernel-kvmsmall"/>
+        <package name="kernel-default"/>
         <package name="python3-kiwi"/>
         <package name="checkmedia"/>
         <package name="jing"/>

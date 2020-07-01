@@ -49,7 +49,7 @@ class BoxDownload:
         self.vm_setup_type = namedtuple(
             'vm_setup_type', [
                 'system', 'kernel', 'initrd',
-                'append', 'ram'
+                'append', 'ram', 'smp'
             ]
         )
         self.box_stage = DirFiles(self.box_dir)
@@ -136,7 +136,8 @@ class BoxDownload:
                 self.box_config.get_box_console(),
                 self.box_config.get_box_kernel_cmdline()
             ),
-            ram=self.box_config.get_box_memory_mbytes()
+            ram=self.box_config.get_box_memory_mbytes(),
+            smp=self.box_config.get_box_processors()
         )
 
     def _create_packages_checksum(self, filename, shasum):

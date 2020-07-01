@@ -33,6 +33,7 @@ class TestPluginConfig:
             {
                 'name': 'suse',
                 'mem_mb': 8096,
+                'processors': 4,
                 'root': '/dev/vda1',
                 'console': 'hvc0',
                 'arch': [

@@ -25,7 +25,8 @@ class TestBoxDownload:
             kernel='/var/tmp/kiwi/boxes/suse/kernel',
             initrd='/var/tmp/kiwi/boxes/suse/initrd',
             append='root=/dev/vda1 console=hvc0 rd.plymouth=0',
-            ram=8096
+            ram=8096,
+            smp=4
         )
 
     @patch('kiwi_boxed_plugin.box_download.Command.run')

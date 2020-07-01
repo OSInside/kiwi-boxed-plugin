@@ -15,6 +15,11 @@ schema = {
                     'required': True,
                     'empty': False
                 },
+                'processors': {
+                    'type': 'number',
+                    'required': False,
+                    'empty': False
+                },
                 'root': {
                     'type': 'string',
                     'required': True,

@@ -2,6 +2,7 @@ box:
   -
     name: suse
     mem_mb: 8096
+    processors: 4
     root: /dev/vda1
     console: hvc0
     arch:
@@ -19,6 +20,7 @@ box:
   -
     name: fedora
     mem_mb: 8096
+    processors: 4
     root: /dev/vda1
     console: hvc0
     arch:
@@ -37,6 +39,7 @@ box:
   -
     name: ubuntu
     mem_mb: 8096
+    processors: 4
     root: /dev/vda1
     console: hvc0
     arch:

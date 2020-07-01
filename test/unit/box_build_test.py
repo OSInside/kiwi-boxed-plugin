@@ -15,6 +15,7 @@ class TestBoxBuild:
         self.vm_setup.system = 'system'
         self.vm_setup.initrd = 'initrd'
         self.vm_setup.ram = 4096
+        self.vm_setup.smp = 4
         self.box.fetch.return_value = self.vm_setup
         mock_BoxDownload.return_value = self.box
         self.build = BoxBuild(
@@ -55,5 +56,6 @@ class TestBoxBuild:
             '-fsdev local,security_model=mapped,id=fsdev1,path=target '
             '-device virtio-9p-pci,id=fs1,fsdev=fsdev1,mount_tag='
             'kiwibundle '
-            '-initrd initrd'
+            '-initrd initrd '
+            '-smp 4'
         )

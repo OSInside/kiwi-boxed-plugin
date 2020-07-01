@@ -87,6 +87,8 @@ class BoxBuild:
             Defaults.get_qemu_shared_path_setup(1, target_dir, 'kiwibundle')
         if vm_setup.initrd:
             vm_run += ['-initrd', vm_setup.initrd]
+        if vm_setup.smp:
+            vm_run += ['-smp', format(vm_setup.smp)]
         os.environ['TMPDIR'] = Defaults.get_local_box_cache_dir()
         log.debug(
             'Set TMPDIR: {0}'.format(os.environ['TMPDIR'])

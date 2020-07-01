@@ -47,6 +47,9 @@ class BoxConfig:
     def get_box_memory_mbytes(self):
         return self.box_config.get('mem_mb')
 
+    def get_box_processors(self):
+        return self.box_config.get('processors')
+
     def get_box_root(self):
         return self.box_config.get('root')
 

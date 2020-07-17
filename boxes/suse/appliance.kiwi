@@ -55,6 +55,7 @@
         <package name="gfxboot"/>
         <package name="dracut-kiwi-oem-repart"/>
         <package name="dracut-kiwi-oem-dump"/>
+        <package name="pixz"/>
     </packages>
     <packages type="bootstrap">
         <package name="udev"/>

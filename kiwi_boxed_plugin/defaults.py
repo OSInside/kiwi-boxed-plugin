@@ -73,10 +73,10 @@ class Defaults:
         ]
 
     @staticmethod
-    def get_qemu_storage_setup(image_file):
+    def get_qemu_storage_setup(image_file, snapshot=True):
         return [
             '-drive',
-            'file={0},if=virtio,driver=qcow2,cache=off,snapshot=on'.format(
-                image_file
+            'file={0},if=virtio,driver=qcow2,cache=off,snapshot={1}'.format(
+                image_file, 'on' if snapshot else 'off'
             )
         ]

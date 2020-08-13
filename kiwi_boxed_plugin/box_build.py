@@ -41,7 +41,10 @@ class BoxBuild:
         self.arch = arch or platform.machine()
         self.box = BoxDownload(boxname, arch)
 
-    def run(self, kiwi_build_command, update_check=True, keep_open=False):
+    def run(
+        self, kiwi_build_command, update_check=True,
+        snapshot=True, keep_open=False
+    ):
         """
         Start the build process in a box VM using KVM
 
@@ -57,6 +60,7 @@ class BoxBuild:
                 ]
 
         :param bool update_check: check for box updates True|False
+        :param bool snapshot: run box in snapshot mode True|False
         :param bool keep_open: keep VM running True|False
         """
         self.kiwi_build_command = kiwi_build_command
@@ -80,7 +84,7 @@ class BoxBuild:
         ] + Defaults.get_qemu_generic_setup() + [
             '-kernel', vm_setup.kernel,
             '-append', '"{0}"'.format(' '.join(vm_append))
-        ] + Defaults.get_qemu_storage_setup(vm_setup.system) + \
+        ] + Defaults.get_qemu_storage_setup(vm_setup.system, snapshot) + \
             Defaults.get_qemu_network_setup() + \
             Defaults.get_qemu_console_setup() + \
             Defaults.get_qemu_shared_path_setup(0, desc, 'kiwidescription') + \

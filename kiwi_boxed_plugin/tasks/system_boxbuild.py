@@ -21,6 +21,7 @@ usage: kiwi-ng system boxbuild -h | --help
            [--box-memory=<vmgb>]
            [--box-debug]
            [--no-update-check]
+           [--no-snapshot]
            [--x86_64]
            <kiwi_build_command_args>...
        kiwi-ng system boxbuild --list-boxes
@@ -45,6 +46,18 @@ options:
     --no-update-check
         Skip check for available box update. The option has no
         effect if the selected box does not yet exist on the host.
+
+    --no-snapshot
+        Run box with snapshot mode switched off. This causes the
+        box disk file to be modified by the build process and allows
+        to keep a persistent package cache as part of the box.
+        The option can be used to increase the build performance
+        due to data stored in the box which doesn't have to be
+        reloaded from the network. On the contrary this option
+        invalidates the immutable box attribute and should be
+        used with care. On update of the box all data stored
+        will be wiped. To prevent this combine the option with
+        the --no-update-check option.
 
     --x86_64
         Select box for the x86_64 architecture. If no architecture
@@ -88,6 +101,9 @@ class SystemBoxbuildTask(CliTask):
             request_update_check = not self.command_args.get(
                 '--no-update-check'
             )
+            request_snapshot_mode = not self.command_args.get(
+                '--no-snapshot'
+            )
             keep_open = self.command_args.get('--box-debug')
             box_build = BoxBuild(
                 boxname=self.command_args.get('--box'),
@@ -97,6 +113,7 @@ class SystemBoxbuildTask(CliTask):
             box_build.run(
                 self._validate_kiwi_build_command(),
                 request_update_check,
+                request_snapshot_mode,
                 keep_open
             )
 

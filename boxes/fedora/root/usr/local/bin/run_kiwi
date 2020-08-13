@@ -26,6 +26,8 @@ while true;do
     sleep "${sleep_timeout}"
 done
 
+rm -rf /result
+
 options=$(cut -f2 -d\" /proc/cmdline)
 options="${options} --description /description --target-dir /result"
 logfile=/bundle/result.log

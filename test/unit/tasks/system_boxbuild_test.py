@@ -67,5 +67,5 @@ class TestSystemBoxbuildTask:
             [
                 '--type', 'vmx', '--profile', 'foo', 'system', 'build',
                 '--description', 'foo', '--target-dir', 'xxx'
-            ], True, False
+            ], True, True, False
         )

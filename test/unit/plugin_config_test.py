@@ -46,7 +46,7 @@ class TestPluginConfig:
                             'obs://Virtualization:Appliances:SelfContained:'
                             'suse/images',
                         'packages_file':
-                            'SUSE-Box.x86_64-1.42.1-System-BuildBox.packages',
+                            'SUSE-Box.x86_64-1.42.1-System-BuildBox.report',
                         'boxfiles': [
                             'SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz',
                             'SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2'

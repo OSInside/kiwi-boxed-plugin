@@ -10,7 +10,7 @@ class TestSystemBoxbuildTask:
     def setup(self):
         sys.argv = [
             sys.argv[0],
-            '--profile', 'foo', '--type', 'vmx',
+            '--profile', 'foo', '--type', 'oem',
             'system', 'boxbuild',
             '--box', 'suse', '--box-memory', '4', '--',
             '--description', '../data/description',
@@ -65,7 +65,7 @@ class TestSystemBoxbuildTask:
         )
         box_build.run.assert_called_once_with(
             [
-                '--type', 'vmx', '--profile', 'foo', 'system', 'build',
+                '--type', 'oem', '--profile', 'foo', 'system', 'build',
                 '--description', 'foo', '--target-dir', 'xxx'
             ], True, True, False
         )

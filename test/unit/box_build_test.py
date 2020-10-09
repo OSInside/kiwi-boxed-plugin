@@ -28,7 +28,7 @@ class TestBoxBuild:
     def test_run(self, mock_path_create, mock_os_system, mock_os_environ):
         self.build.run(
             [
-                '--type', 'vmx', 'system', 'build',
+                '--type', 'oem', 'system', 'build',
                 '--description', 'desc', '--target-dir', 'target'
             ],
             keep_open=True
@@ -43,7 +43,7 @@ class TestBoxBuild:
             '-nodefaults '
             '-snapshot '
             '-kernel kernel '
-            '-append "append kiwi=\\"--type vmx system build\\" kiwi-no-halt" '
+            '-append "append kiwi=\\"--type oem system build\\" kiwi-no-halt" '
             '-drive file=system,if=virtio,driver=qcow2,cache=off,snapshot=on '
             '-netdev user,id=user0 '
             '-device virtio-net-pci,netdev=user0 '

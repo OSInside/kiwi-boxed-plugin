@@ -52,11 +52,11 @@ class TestBoxDownload:
             assert self.box_stage.register.call_args_list == [
                 call(
                     '/var/tmp/kiwi/boxes/suse/'
-                    'SUSE-Box.x86_64-1.42.1-System-BuildBox.packages'
+                    'SUSE-Box.x86_64-1.42.1-System-BuildBox.report'
                 ),
                 call(
                     '/var/tmp/kiwi/boxes/suse/'
-                    'SUSE-Box.x86_64-1.42.1-System-BuildBox.packages.sha256'
+                    'SUSE-Box.x86_64-1.42.1-System-BuildBox.report.sha256'
                 ),
                 call(
                     '/var/tmp/kiwi/boxes/suse/'
@@ -73,7 +73,7 @@ class TestBoxDownload:
             file_handle.write.assert_called_once_with('sum')
             assert repo.download_from_repository.call_args_list == [
                 call(
-                    'SUSE-Box.x86_64-1.42.1-System-BuildBox.packages',
+                    'SUSE-Box.x86_64-1.42.1-System-BuildBox.report',
                     self.box_stage.register.return_value
                 ),
                 call(
@@ -127,7 +127,7 @@ class TestBoxDownload:
         mock_os_path_exist.return_value = True
         assert self.box.fetch(update_check=True) == self.result
         repo.download_from_repository.assert_called_once_with(
-            'SUSE-Box.x86_64-1.42.1-System-BuildBox.packages',
+            'SUSE-Box.x86_64-1.42.1-System-BuildBox.report',
             self.box_stage.register.return_value
         )
 

@@ -71,11 +71,8 @@
         <package name="python3-kiwi"/>
         <package name="dracut-kiwi-oem-repart"/>
         <package name="dracut-kiwi-oem-dump"/>
-    </packages>
-    <packages type="bootstrap">
-        <!-- not added by default on OBS -->
-        <package name="mawk"/>
-        <!-- comptibility package for /usr/lib paths -->
         <package name="usrmerge"/>
+        <package name="mawk"/>
     </packages>
+    <packages type="bootstrap"/>
 </image>

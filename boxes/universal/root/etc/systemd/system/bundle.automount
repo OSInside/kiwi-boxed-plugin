@@ -1,0 +1,7 @@
+Description=Shared KIWI Bundle Directory
+
+[Automount]
+Where=/bundle
+
+[Install]
+WantedBy=multi-user.target

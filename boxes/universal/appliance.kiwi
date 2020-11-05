@@ -3,19 +3,19 @@
 <!-- The line below is required in order to use the multibuild OBS features -->
 <!-- OBS-Profiles: @BUILD_FLAVOR@ -->
 
-<image schemaversion="7.1" name="SUSE-Box">
+<image schemaversion="7.1" name="Universal-Box">
     <description type="system">
         <author>Marcus Schäfer</author>
         <contact>ms@suse.com</contact>
-        <specification>SUSE VM for kiwi boxed build</specification>
+        <specification>Universal VM for kiwi boxed build (Fedora based)</specification>
     </description>
     <profiles>
         <profile name="Kernel" description="Provides kernel for kvm boot"/>
         <profile name="System" description="Provides system for kvm boot"/>
     </profiles>
     <preferences>
-        <version>1.42.1</version>
-        <packagemanager>zypper</packagemanager>
+        <version>1.1.2</version>
+        <packagemanager>dnf</packagemanager>
         <locale>en_US</locale>
         <keytable>us</keytable>
         <timezone>UTC</timezone>
@@ -37,37 +37,32 @@
         <source path='obsrepositories:/'/>
     </repository>
     <packages type="image">
-        <package name="patterns-base-minimal_base"/>
-        <package name="plymouth-scripts"/>
-        <package name="timezone"/>
-        <package name="systemd"/>
         <package name="grub2"/>
-        <package name="grub2-i386-pc"/>
+        <package name="grubby"/>
+        <package name="kernel"/>
+        <package name="selinux-policy-targeted"/>
+        <package name="dhclient"/>
+        <package name="glibc-all-langpacks"/>
+        <package name="tzdata"/>
+        <package name="NetworkManager"/>
+        <package name="dbus-daemon"/>
         <package name="lvm2"/>
         <package name="xfsprogs"/>
         <package name="e2fsprogs"/>
-        <package name="btrfsprogs"/>
-        <package name="kernel-default"/>
+        <package name="btrfs-progs"/>
         <package name="python3-kiwi"/>
-        <package name="checkmedia"/>
+        <package name="python3-anymarkup"/>
+        <package name="zypper"/>
+        <package name="pacman"/>
+        <package name="dpkg"/>
+        <package name="apt"/>
+        <package name="debootstrap"/>
         <package name="jing"/>
-        <package name="iproute2"/>
         <package name="dracut-kiwi-oem-repart"/>
         <package name="dracut-kiwi-oem-dump"/>
     </packages>
     <packages type="bootstrap">
-        <package name="udev"/>
         <package name="filesystem"/>
-        <package name="glibc-locale"/>
-        <package name="openSUSE-release"/>
-    </packages>
-    <packages type="delete">
-        <package name="dracut-kiwi-oem-repart"/>
-        <package name="dracut-kiwi-oem-dump"/>
-        <package name="plymouth"/>
-        <package name="plymouth-theme-bgrt"/>
-        <package name="plymouth-theme-spinner"/>
-        <package name="plymouth-plugin-two-step"/>
-        <package name="plymouth-plugin-label"/>
+        <package name="basesystem"/>
     </packages>
 </image>

@@ -54,3 +54,22 @@ box:
           - Ubuntu-Box.x86_64-1.20.4-Kernel-BuildBox.tar.xz
           - Ubuntu-Box.x86_64-1.20.4-System-BuildBox.qcow2
         use_initrd: true
+
+  -
+    name: universal
+    mem_mb: 8096
+    processors: 4
+    root: /dev/vda1
+    console: hvc0
+    arch:
+      -
+        name: x86_64
+        cmdline:
+          - rd.plymouth=0
+          - selinux=0
+        source: obs://Virtualization:Appliances:SelfContained:universal/images
+        packages_file: Universal-Box.x86_64-1.1.2-System-BuildBox.report
+        boxfiles:
+          - Universal-Box.x86_64-1.1.2-Kernel-BuildBox.tar.xz
+          - Universal-Box.x86_64-1.1.2-System-BuildBox.qcow2
+        use_initrd: true

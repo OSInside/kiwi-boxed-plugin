@@ -31,7 +31,7 @@ class TestBoxDownload:
 
     @patch('kiwi_boxed_plugin.box_download.Command.run')
     @patch('kiwi_boxed_plugin.box_download.Uri')
-    @patch('kiwi_boxed_plugin.box_download.SolverRepository')
+    @patch('kiwi_boxed_plugin.box_download.SolverRepository.new')
     @patch('kiwi_boxed_plugin.box_download.Checksum')
     @patch('os.path.exists')
     def test_fetch_checksum_did_not_match(
@@ -111,7 +111,7 @@ class TestBoxDownload:
 
     @patch('kiwi_boxed_plugin.box_download.Command.run')
     @patch('kiwi_boxed_plugin.box_download.Uri')
-    @patch('kiwi_boxed_plugin.box_download.SolverRepository')
+    @patch('kiwi_boxed_plugin.box_download.SolverRepository.new')
     @patch('kiwi_boxed_plugin.box_download.Checksum')
     @patch('os.path.exists')
     def test_fetch_checksum_matches(
@@ -133,7 +133,7 @@ class TestBoxDownload:
 
     @patch('kiwi_boxed_plugin.box_download.Command.run')
     @patch('kiwi_boxed_plugin.box_download.Uri')
-    @patch('kiwi_boxed_plugin.box_download.SolverRepository')
+    @patch('kiwi_boxed_plugin.box_download.SolverRepository.new')
     @patch('kiwi_boxed_plugin.box_download.Checksum')
     @patch('os.path.exists')
     def test_fetch_update_check_disabled(

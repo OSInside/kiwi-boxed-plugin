@@ -67,7 +67,7 @@ class BoxDownload:
         download = update_check
         repo_source = self.box_config.get_box_source()
         if repo_source:
-            repo = SolverRepository(
+            repo = SolverRepository.new(
                 Uri(repo_source, 'rpm-md')
             )
             packages_file = self.box_config.get_box_packages_file()

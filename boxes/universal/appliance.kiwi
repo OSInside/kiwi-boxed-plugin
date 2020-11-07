@@ -57,6 +57,8 @@
         <package name="dpkg"/>
         <package name="apt"/>
         <package name="debootstrap"/>
+        <package name="buildah"/>
+        <package name="skopeo"/>
         <package name="jing"/>
         <package name="dracut-kiwi-oem-repart"/>
         <package name="dracut-kiwi-oem-dump"/>

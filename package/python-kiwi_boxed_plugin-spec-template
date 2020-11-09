@@ -70,7 +70,7 @@ of images based on fast booting VM images
 Summary:        KIWI - Boxed Build Plugin
 Group:          Development/Languages/Python
 Requires:       python%{python3_pkgversion}-docopt
-Requires:       python%{python3_pkgversion}-kiwi
+Requires:       python%{python3_pkgversion}-kiwi >= 9.21.21
 Requires:       python%{python3_pkgversion}-requests
 Requires:       python%{python3_pkgversion}-setuptools
 %if 0%{?ubuntu} || 0%{?debian}

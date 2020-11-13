@@ -52,6 +52,7 @@
         <package name="btrfs-progs"/>
         <package name="python3-kiwi"/>
         <package name="python3-anymarkup"/>
+        <package name="microdnf"/>
         <package name="zypper"/>
         <package name="pacman"/>
         <package name="dpkg"/>

@@ -19,7 +19,7 @@ config = {
     'license' : 'GPLv3+',
     'install_requires': [
         'docopt',
-        'kiwi',
+        'kiwi>=9.21.21',
         'requests',
         'PyYAML',
         'cerberus'

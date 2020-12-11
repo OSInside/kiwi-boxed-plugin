@@ -20,6 +20,7 @@ usage: kiwi-ng system boxbuild -h | --help
        kiwi-ng system boxbuild --box=<name>
            [--box-memory=<vmgb>]
            [--box-debug]
+           [--kiwi-version=<version>]
            [--no-update-check]
            [--no-snapshot]
            [--x86_64]
@@ -68,6 +69,13 @@ options:
     --box-debug
         In debug mode the started virtual machine will be kept open
 
+    --kiwi-version=<version>
+        Specify a KIWI version to use for the build. The referenced
+        KIWI will be fetched from pip and replaces the box installed
+        KIWI version. Note: If --no-snapshot is used in combination
+        with this option, the change of the KIWI version will be
+        permanently stored in the used box.
+
     <kiwi_build_command_args>...
         List of command parameters as supported by the kiwi-ng
         build command. The information given here is passed
@@ -105,6 +113,7 @@ class SystemBoxbuildTask(CliTask):
                 '--no-snapshot'
             )
             keep_open = self.command_args.get('--box-debug')
+            kiwi_version = self.command_args.get('--kiwi-version')
             box_build = BoxBuild(
                 boxname=self.command_args.get('--box'),
                 ram=self.command_args.get('--box-memory'),
@@ -114,7 +123,8 @@ class SystemBoxbuildTask(CliTask):
                 self._validate_kiwi_build_command(),
                 request_update_check,
                 request_snapshot_mode,
-                keep_open
+                keep_open,
+                kiwi_version
             )
 
     def _validate_kiwi_build_command(self):

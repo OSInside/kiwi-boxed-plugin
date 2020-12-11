@@ -43,7 +43,7 @@ class BoxBuild:
 
     def run(
         self, kiwi_build_command, update_check=True,
-        snapshot=True, keep_open=False
+        snapshot=True, keep_open=False, kiwi_version=None
     ):
         """
         Start the build process in a box VM using KVM
@@ -78,6 +78,8 @@ class BoxBuild:
         ]
         if keep_open:
             vm_append.append('kiwi-no-halt')
+        if kiwi_version:
+            vm_append.append('kiwi-version=_{0}_'.format(kiwi_version))
         vm_run = [
             'qemu-system-{0}'.format(self.arch),
             '-m', format(self.ram or vm_setup.ram)

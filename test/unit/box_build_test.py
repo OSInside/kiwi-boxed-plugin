@@ -31,7 +31,8 @@ class TestBoxBuild:
                 '--type', 'oem', 'system', 'build',
                 '--description', 'desc', '--target-dir', 'target'
             ],
-            keep_open=True
+            keep_open=True,
+            kiwi_version='9.22.1'
         )
         mock_path_create.assert_called_once_with('target')
         mock_os_system.assert_called_once_with(
@@ -43,7 +44,8 @@ class TestBoxBuild:
             '-nodefaults '
             '-snapshot '
             '-kernel kernel '
-            '-append "append kiwi=\\"--type oem system build\\" kiwi-no-halt" '
+            '-append "append kiwi=\\"--type oem system build\\"'
+            ' kiwi-no-halt kiwi-version=_9.22.1_" '
             '-drive file=system,if=virtio,driver=qcow2,cache=off,snapshot=on '
             '-netdev user,id=user0 '
             '-device virtio-net-pci,netdev=user0 '

@@ -69,10 +69,18 @@
         <package name="e2fsprogs"/>
         <package name="btrfs-progs"/>
         <package name="python3-kiwi"/>
+        <package name="python3-pip"/>
         <package name="dracut-kiwi-oem-repart"/>
         <package name="dracut-kiwi-oem-dump"/>
         <package name="usrmerge"/>
         <package name="mawk"/>
+        <!-- for on demand compile of python requirements when needed -->
+        <package name="python3-dev"/>
+        <package name="libxml2-dev"/>
+        <package name="libxslt-dev"/>
+        <package name="enchant"/>
+        <package name="gcc"/>
+        <package name="make"/>
     </packages>
     <packages type="bootstrap"/>
 </image>

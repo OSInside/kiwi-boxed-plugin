@@ -10,6 +10,8 @@ variables:
 code_style:
   image: $CI_REGISTRY/$BUILD_IMAGES_PROJECT:$FEDORA_BUILD
   stage: test
+  only:
+    - branches
   script:
     - tox -e check
   cache:
@@ -20,6 +22,8 @@ code_style:
 unit_py36:
   image: $CI_REGISTRY/$BUILD_IMAGES_PROJECT:$FEDORA_BUILD
   stage: test
+  only:
+    - branches
   script:
     - export PYTHON=python3.6
     - tox -e unit_py3_6 "-n $(nproc)"
@@ -31,6 +35,8 @@ unit_py36:
 unit_py38:
   image: $CI_REGISTRY/$BUILD_IMAGES_PROJECT:$FEDORA_BUILD
   stage: test
+  only:
+    - branches
   script:
     - export PYTHON=python3.8
     - tox -e unit_py3_8 "-n $(nproc)"

@@ -44,17 +44,11 @@ pypi_upload:
   image: $CI_REGISTRY/$BUILD_IMAGES_PROJECT:$FEDORA_BUILD
   only:
     - tags
-  variables:
-    PYPI_REGISTRY: https://pypi.example.com/pypi/
-    PYPI_CONFIG: |
-      [distutils]
-      index-servers = registry
-
-      [registry]
-      repository: $PYPI_REGISTRY
-      username: $PYPI_USERNAME
-      password: $PYPI_PASSWORD
   script:
-    - echo "$PYPI_CONFIG" > ~/.pypirc
-    - pip install wheel
-    - python setup.py sdist bdist_wheel --universal upload -r registry
+    - base64 --decode "$PYPI_CONFIG" > .pypirc
+    - export PYTHON=python3.6
+    - tox -e release
+  cache:
+    key: "$CI_JOB_NAME"
+    paths:
+      - .tox/3.6

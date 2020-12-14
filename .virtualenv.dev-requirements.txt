@@ -36,3 +36,6 @@ flake8
 # for building documentation
 sphinx
 sphinx_rtd_theme
+
+# for release
+twine

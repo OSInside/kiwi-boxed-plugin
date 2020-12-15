@@ -14,7 +14,6 @@ include .virtualenv.requirements.txt
 include .virtualenv.dev-requirements.txt
 
 include .coverage*
-include .travis*
 
 recursive-include doc/build/man *
 

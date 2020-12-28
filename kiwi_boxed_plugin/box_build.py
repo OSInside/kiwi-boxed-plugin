@@ -43,7 +43,8 @@ class BoxBuild:
 
     def run(
         self, kiwi_build_command, update_check=True,
-        snapshot=True, keep_open=False, kiwi_version=None
+        snapshot=True, keep_open=False, kiwi_version=None,
+        custom_shared_path=None
     ):
         """
         Start the build process in a box VM using KVM
@@ -80,6 +81,8 @@ class BoxBuild:
             vm_append.append('kiwi-no-halt')
         if kiwi_version:
             vm_append.append('kiwi-version=_{0}_'.format(kiwi_version))
+        if custom_shared_path:
+            vm_append.append('custom-mount=_{0}_'.format(custom_shared_path))
         vm_run = [
             'qemu-system-{0}'.format(self.arch),
             '-m', format(self.ram or vm_setup.ram)
@@ -91,6 +94,10 @@ class BoxBuild:
             Defaults.get_qemu_console_setup() + \
             Defaults.get_qemu_shared_path_setup(0, desc, 'kiwidescription') + \
             Defaults.get_qemu_shared_path_setup(1, target_dir, 'kiwibundle')
+        if custom_shared_path:
+            vm_run += Defaults.get_qemu_shared_path_setup(
+                2, custom_shared_path, 'custompath'
+            )
         if vm_setup.initrd:
             vm_run += ['-initrd', vm_setup.initrd]
         if vm_setup.smp:

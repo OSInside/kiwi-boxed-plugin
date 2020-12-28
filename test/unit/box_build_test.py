@@ -32,7 +32,8 @@ class TestBoxBuild:
                 '--description', 'desc', '--target-dir', 'target'
             ],
             keep_open=True,
-            kiwi_version='9.22.1'
+            kiwi_version='9.22.1',
+            custom_shared_path='/var/tmp/repos'
         )
         mock_path_create.assert_called_once_with('target')
         mock_os_system.assert_called_once_with(
@@ -45,7 +46,7 @@ class TestBoxBuild:
             '-snapshot '
             '-kernel kernel '
             '-append "append kiwi=\\"--type oem system build\\"'
-            ' kiwi-no-halt kiwi-version=_9.22.1_" '
+            ' kiwi-no-halt kiwi-version=_9.22.1_ custom-mount=_/var/tmp/repos_" '
             '-drive file=system,if=virtio,driver=qcow2,cache=off,snapshot=on '
             '-netdev user,id=user0 '
             '-device virtio-net-pci,netdev=user0 '
@@ -58,6 +59,9 @@ class TestBoxBuild:
             '-fsdev local,security_model=mapped,id=fsdev1,path=target '
             '-device virtio-9p-pci,id=fs1,fsdev=fsdev1,mount_tag='
             'kiwibundle '
+            '-fsdev local,security_model=mapped,id=fsdev2,path=/var/tmp/repos '
+            '-device virtio-9p-pci,id=fs2,fsdev=fsdev2,mount_tag='
+            'custompath '
             '-initrd initrd '
             '-smp 4'
         )

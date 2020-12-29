@@ -27,6 +27,8 @@ class TestSystemBoxbuildTask:
         self.task.command_args['--box-debug'] = False
         self.task.command_args['--kiwi-version'] = None
         self.task.command_args['--shared-path'] = None
+        self.task.command_args['--9p-sharing'] = None
+        self.task.command_args['--virtiofs-sharing'] = None
         self.task.command_args['<kiwi_build_command_args>'] = [
             '--', '--description', 'foo',
             '--target-dir', 'xxx'
@@ -63,11 +65,31 @@ class TestSystemBoxbuildTask:
         mock_BoxBuild.return_value = box_build
         self.task.process()
         mock_BoxBuild.assert_called_once_with(
-            boxname='suse', ram=None, arch=None
+            boxname='suse', ram=None, arch=None, sharing_backend='9p'
         )
         box_build.run.assert_called_once_with(
             [
                 '--type', 'oem', '--profile', 'foo', 'system', 'build',
                 '--description', 'foo', '--target-dir', 'xxx'
             ], True, True, False, None, None
+        )
+
+    @patch('kiwi_boxed_plugin.tasks.system_boxbuild.BoxBuild')
+    def test_process_system_boxbuild_with_sharing_backend(self, mock_BoxBuild):
+        self._init_command_args()
+        self.task.command_args['boxbuild'] = True
+        self.task.command_args['--box'] = 'suse'
+        self.task.command_args['--9p-sharing'] = True
+        box_build = Mock()
+        mock_BoxBuild.return_value = box_build
+        self.task.process()
+        mock_BoxBuild.assert_called_once_with(
+            boxname='suse', ram=None, arch=None, sharing_backend='9p'
+        )
+        self.task.command_args['--9p-sharing'] = False
+        self.task.command_args['--virtiofs-sharing'] = True
+        mock_BoxBuild.reset_mock()
+        self.task.process()
+        mock_BoxBuild.assert_called_once_with(
+            boxname='suse', ram=None, arch=None, sharing_backend='virtiofs'
         )

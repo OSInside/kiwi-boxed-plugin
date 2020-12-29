@@ -23,6 +23,8 @@ from kiwi.path import Path
 from kiwi_boxed_plugin.box_download import BoxDownload
 from kiwi_boxed_plugin.defaults import Defaults
 
+import kiwi_boxed_plugin.defaults as runtime
+
 log = logging.getLogger('kiwi')
 
 
@@ -36,10 +38,11 @@ class BoxBuild:
     :param string boxname: name of the box from kiwi_boxed_plugin.yml
     :param string arch: arch name for box
     """
-    def __init__(self, boxname, ram=None, arch=None):
+    def __init__(self, boxname, ram=None, arch=None, sharing_backend='9p'):
         self.ram = ram
         self.arch = arch or platform.machine()
         self.box = BoxDownload(boxname, arch)
+        self.sharing_backend = sharing_backend
 
     def run(
         self, kiwi_build_command, update_check=True,
@@ -83,6 +86,9 @@ class BoxBuild:
             vm_append.append('kiwi-version=_{0}_'.format(kiwi_version))
         if custom_shared_path:
             vm_append.append('custom-mount=_{0}_'.format(custom_shared_path))
+        vm_append.append(
+            'sharing-backend=_{0}_'.format(self.sharing_backend)
+        )
         vm_run = [
             'qemu-system-{0}'.format(self.arch),
             '-m', format(self.ram or vm_setup.ram)
@@ -92,12 +98,21 @@ class BoxBuild:
         ] + Defaults.get_qemu_storage_setup(vm_setup.system, snapshot) + \
             Defaults.get_qemu_network_setup() + \
             Defaults.get_qemu_console_setup() + \
-            Defaults.get_qemu_shared_path_setup(0, desc, 'kiwidescription') + \
-            Defaults.get_qemu_shared_path_setup(1, target_dir, 'kiwibundle')
+            Defaults.get_qemu_shared_path_setup(
+                0, desc, 'kiwidescription', self.sharing_backend) + \
+            Defaults.get_qemu_shared_path_setup(
+                1, target_dir, 'kiwibundle', self.sharing_backend)
         if custom_shared_path:
             vm_run += Defaults.get_qemu_shared_path_setup(
-                2, custom_shared_path, 'custompath'
+                2, custom_shared_path, 'custompath', self.sharing_backend
             )
+        if self.sharing_backend == 'virtiofs':
+            vm_run += [
+                '-object', '{0},id=mem,size={1},mem-path={2},share=on'.format(
+                    'memory-backend-file', self.ram or vm_setup.ram, '/dev/shm'
+                ),
+                '-numa', 'node,memdev=mem'
+            ]
         if vm_setup.initrd:
             vm_run += ['-initrd', vm_setup.initrd]
         if vm_setup.smp:
@@ -112,6 +127,8 @@ class BoxBuild:
         os.system(
             ' '.join(vm_run)
         )
+        for virtiofsd_process in runtime.VIRTIOFSD_PROCESS_LIST:
+            virtiofsd_process.terminate()
         log.info(
             'Box build done. Find build log at: {0}'.format(
                 os.sep.join([target_dir, 'result.log'])

@@ -18,5 +18,5 @@
 """
 Global version information used in kiwi-boxed-build and the package
 """
-__version__ = '0.1.17'
+__version__ = '0.1.18'
 __githash__ = '$Format:%H$'

@@ -21,6 +21,7 @@ usage: kiwi-ng system boxbuild -h | --help
            [--box-memory=<vmgb>]
            [--box-debug]
            [--kiwi-version=<version>]
+           [--shared-path=<path>]
            [--no-update-check]
            [--no-snapshot]
            [--x86_64]
@@ -76,6 +77,11 @@ options:
         with this option, the change of the KIWI version will be
         permanently stored in the used box.
 
+    --shared-path=<path>
+        Optional host path to share with the box. The same path
+        as it is present on the host will also be available inside
+        of the box during build time.
+
     <kiwi_build_command_args>...
         List of command parameters as supported by the kiwi-ng
         build command. The information given here is passed
@@ -114,6 +120,7 @@ class SystemBoxbuildTask(CliTask):
             )
             keep_open = self.command_args.get('--box-debug')
             kiwi_version = self.command_args.get('--kiwi-version')
+            shared_path = self.command_args.get('--shared-path')
             box_build = BoxBuild(
                 boxname=self.command_args.get('--box'),
                 ram=self.command_args.get('--box-memory'),
@@ -124,7 +131,8 @@ class SystemBoxbuildTask(CliTask):
                 request_update_check,
                 request_snapshot_mode,
                 keep_open,
-                kiwi_version
+                kiwi_version,
+                shared_path
             )
 
     def _validate_kiwi_build_command(self):

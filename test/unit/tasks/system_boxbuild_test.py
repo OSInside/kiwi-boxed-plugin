@@ -26,6 +26,7 @@ class TestSystemBoxbuildTask:
         self.task.command_args['--box'] = None
         self.task.command_args['--box-debug'] = False
         self.task.command_args['--kiwi-version'] = None
+        self.task.command_args['--shared-path'] = None
         self.task.command_args['<kiwi_build_command_args>'] = [
             '--', '--description', 'foo',
             '--target-dir', 'xxx'
@@ -68,5 +69,5 @@ class TestSystemBoxbuildTask:
             [
                 '--type', 'oem', '--profile', 'foo', 'system', 'build',
                 '--description', 'foo', '--target-dir', 'xxx'
-            ], True, True, False, None
+            ], True, True, False, None, None
         )

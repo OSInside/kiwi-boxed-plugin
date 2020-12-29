@@ -45,7 +45,7 @@ function wait_network {
         fi
         if [ "${check}" -eq "${retry_count}" ];then
             # interface link did not came up
-            break
+            exit 1
         fi
         echo "Waiting for link up on lan0..."
         check=$((check + 1))
@@ -53,17 +53,41 @@ function wait_network {
     done
 }
 
+function mount_shared_path {
+    # """
+    # optional: mount custom shared host path prior build. The
+    # mount point for the shared path is the same as it exists
+    # on the host
+    # """
+    local path=$1
+    mkdir -p "${path}"
+    mount -t 9p -o "trans=virtio,version=9p2000.L" \
+        "custompath" "${path}"
+}
+
+function finish {
+    if ! grep -q kiwi-no-halt /proc/cmdline; then
+        halt -p
+    fi
+}
+
+# main
+trap finish EXIT
+
 wait_network
+
+if grep -q custom-mount /proc/cmdline; then
+    custom_path=$(sed -s "s@.*custom-mount=_\(.*\)_.*@\1@" /proc/cmdline)
+    if ! mount_shared_path "${custom_path}"; then
+        exit 1
+    fi
+fi
 
 if grep -q kiwi-version /proc/cmdline; then
     kiwi_version=$(sed -s "s@.*kiwi-version=_\(.*\)_.*@\1@" /proc/cmdline)
-    if pip3 install kiwi=="${kiwi_version}"; then
-        run_build
+    if ! pip3 install kiwi=="${kiwi_version}"; then
+        exit 1
     fi
-else
-    run_build
 fi
 
-if ! grep -q kiwi-no-halt /proc/cmdline; then
-    halt -p
-fi
+run_build

@@ -72,6 +72,7 @@
         <package name="enchant"/>
         <package name="gcc"/>
         <package name="make"/>
+        <package name="syslinux"/>
     </packages>
     <packages type="bootstrap">
         <package name="filesystem"/>

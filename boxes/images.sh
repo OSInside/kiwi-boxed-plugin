@@ -55,14 +55,18 @@ function wait_network {
 
 function mount_shared_path {
     # """
-    # optional: mount custom shared host path prior build. The
-    # mount point for the shared path is the same as it exists
-    # on the host
+    # mount shared host path identified by given mount tag
     # """
     local path=$1
+    local tag=$2
+    local backend
     mkdir -p "${path}"
-    mount -t 9p -o "trans=virtio,version=9p2000.L" \
-        "custompath" "${path}"
+    backend=$(sed -s "s@.*sharing-backend=_\(.*\)_.*@\1@" /proc/cmdline)
+    if [ "${backend}" = "virtiofs" ];then
+        mount -t virtiofs "${tag}" "${path}"
+    else
+        mount -t 9p -o "trans=virtio,version=9p2000.L" "${tag}" "${path}"
+    fi
 }
 
 function finish {
@@ -76,9 +80,17 @@ trap finish EXIT
 
 wait_network
 
+if ! mount_shared_path "/description" "kiwidescription"; then
+    exit 1
+fi
+
+if ! mount_shared_path "/bundle" "kiwibundle"; then
+    exit 1
+fi
+
 if grep -q custom-mount /proc/cmdline; then
     custom_path=$(sed -s "s@.*custom-mount=_\(.*\)_.*@\1@" /proc/cmdline)
-    if ! mount_shared_path "${custom_path}"; then
+    if ! mount_shared_path "${custom_path}" "custompath"; then
         exit 1
     fi
 fi

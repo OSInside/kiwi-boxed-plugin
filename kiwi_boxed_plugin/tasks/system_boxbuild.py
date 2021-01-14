@@ -24,6 +24,7 @@ usage: kiwi-ng system boxbuild -h | --help
            [--shared-path=<path>]
            [--no-update-check]
            [--no-snapshot]
+           [--9p-sharing | --virtiofs-sharing]
            [--x86_64]
            <kiwi_build_command_args>...
        kiwi-ng system boxbuild --list-boxes
@@ -60,6 +61,11 @@ options:
         used with care. On update of the box all data stored
         will be wiped. To prevent this combine the option with
         the --no-update-check option.
+
+    --9p-sharing|--virtiofs-sharing
+        Select sharing backend to use for sharing data between the
+        host and the box. This can be either 9p or virtiofs. By
+        default 9p is used
 
     --x86_64
         Select box for the x86_64 architecture. If no architecture
@@ -124,7 +130,8 @@ class SystemBoxbuildTask(CliTask):
             box_build = BoxBuild(
                 boxname=self.command_args.get('--box'),
                 ram=self.command_args.get('--box-memory'),
-                arch=self._get_box_arch()
+                arch=self._get_box_arch(),
+                sharing_backend=self._get_sharing_backend()
             )
             box_build.run(
                 self._validate_kiwi_build_command(),
@@ -171,3 +178,8 @@ class SystemBoxbuildTask(CliTask):
 
     def _get_box_arch(self):
         return 'x86_64' if self.command_args.get('--x86_64') else None
+
+    def _get_sharing_backend(self):
+        return 'virtiofs' if self.command_args.get(
+            '--virtiofs-sharing'
+        ) else '9p'

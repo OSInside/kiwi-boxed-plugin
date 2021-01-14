@@ -1,7 +1,0 @@
-Description=Shared KIWI Description Directory
-
-[Automount]
-Where=/description
-
-[Install]
-WantedBy=multi-user.target

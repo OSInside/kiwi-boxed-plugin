@@ -28,3 +28,9 @@ class KiwiBoxPluginBoxNameError(KiwiError):
     """
     Exception raised if the boxname could not be found
     """
+
+
+class KiwiBoxPluginVirtioFsError(KiwiError):
+    """
+    Exception raised if virtiofsd does not start
+    """

@@ -3,7 +3,7 @@
 <!-- The line below is required in order to use the multibuild OBS features -->
 <!-- OBS-Profiles: @BUILD_FLAVOR@ -->
 
-<image schemaversion="7.1" name="SUSE-Box">
+<image schemaversion="7.3" name="SUSE-Box">
     <description type="system">
         <author>Marcus Schäfer</author>
         <contact>ms@suse.com</contact>
@@ -26,15 +26,19 @@
         <type image="pxe" initrd_system="dracut"/>
     </preferences>
     <preferences profiles="System">
-        <type image="vmx" filesystem="ext2" bootloader="grub2" firmware="bios" format="qcow2" formatoptions="preallocation=metadata,compat=1.1,lazy_refcounts=on">
+        <type image="oem" filesystem="ext2" firmware="bios" format="qcow2" formatoptions="preallocation=metadata,compat=1.1,lazy_refcounts=on">
+            <oemconfig>
+                <oem-resize>false</oem-resize>
+            </oemconfig>
+            <bootloader name="grub2"/>
             <size unit="G">50</size>
         </type>
     </preferences>
     <users>
         <user password="$1$wYJUgpM5$RXMMeASDc035eX.NbYWFl0" home="/root" name="root" groups="root"/>
     </users>
-    <repository type="rpm-md" >
-        <source path='obsrepositories:/'/>
+    <repository type="rpm-md">
+        <source path="obsrepositories:/"/>
     </repository>
     <packages type="image">
         <package name="patterns-base-minimal_base"/>
@@ -58,7 +62,6 @@
         <package name="gfxboot"/>
         <package name="dracut-kiwi-oem-repart"/>
         <package name="dracut-kiwi-oem-dump"/>
-        <!-- for on demand compile of python requirements when needed -->
         <package name="python3-devel"/>
         <package name="libxml2-devel"/>
         <package name="libxslt-devel"/>

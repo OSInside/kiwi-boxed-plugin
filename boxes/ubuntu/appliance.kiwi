@@ -84,6 +84,7 @@
         <package name="enchant"/>
         <package name="gcc"/>
         <package name="make"/>
+        <package name="kiwi-systemdeps"/>
     </packages>
     <packages type="bootstrap"/>
 </image>

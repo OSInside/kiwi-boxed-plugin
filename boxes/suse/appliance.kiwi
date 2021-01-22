@@ -70,6 +70,7 @@
         <package name="gcc"/>
         <package name="tack"/>
         <package name="make"/>
+        <package name="kiwi-systemdeps"/>
     </packages>
     <packages type="bootstrap">
         <package name="udev"/>

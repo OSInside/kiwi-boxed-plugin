@@ -76,6 +76,7 @@
         <package name="gcc"/>
         <package name="make"/>
         <package name="syslinux"/>
+        <package name="kiwi-systemdeps"/>
     </packages>
     <packages type="bootstrap">
         <package name="filesystem"/>

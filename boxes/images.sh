@@ -60,6 +60,9 @@ function mount_shared_path {
     local path=$1
     local tag=$2
     local backend
+    if mountpoint -q "${path}"; then
+        return
+    fi
     mkdir -p "${path}"
     backend=$(sed -s "s@.*sharing-backend=_\(.*\)_.*@\1@" /proc/cmdline)
     if [ "${backend}" = "virtiofs" ];then

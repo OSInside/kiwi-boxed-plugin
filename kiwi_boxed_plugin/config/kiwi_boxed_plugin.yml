@@ -18,6 +18,24 @@ box:
         use_initrd: true
 
   -
+    name: leap
+    mem_mb: 8096
+    processors: 4
+    root: /dev/vda1
+    console: hvc0
+    arch:
+      -
+        name: x86_64
+        cmdline:
+          - rd.plymouth=0
+        source: obs://Virtualization:Appliances:SelfContained:leap/images
+        packages_file: Leap-Box.x86_64-1.42.1-System-BuildBox.report
+        boxfiles:
+          - Leap-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz
+          - Leap-Box.x86_64-1.42.1-System-BuildBox.qcow2
+        use_initrd: true
+
+  -
     name: fedora
     mem_mb: 8096
     processors: 4

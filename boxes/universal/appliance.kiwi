@@ -75,7 +75,7 @@
         <package name="enchant"/>
         <package name="gcc"/>
         <package name="make"/>
-        <package name="syslinux"/>
+        <package name="syslinux" arch="x86_64"/>
         <package name="kiwi-systemdeps"/>
     </packages>
     <packages type="bootstrap">

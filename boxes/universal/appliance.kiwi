@@ -26,7 +26,7 @@
         <type image="pxe" initrd_system="dracut"/>
     </preferences>
     <preferences profiles="System">
-        <type image="oem" filesystem="ext2" firmware="efi" format="qcow2" formatoptions="preallocation=metadata,compat=1.1,lazy_refcounts=on">
+        <type image="oem" filesystem="ext2" firmware="uefi" format="qcow2" formatoptions="preallocation=metadata,compat=1.1,lazy_refcounts=on">
             <oemconfig>
                 <oem-resize>false</oem-resize>
             </oemconfig>
@@ -76,6 +76,12 @@
         <package name="gcc"/>
         <package name="make"/>
         <package name="syslinux" arch="x86_64"/>
+        <package name="shim" arch="x86_64"/>
+        <package name="grub2-efi-x64-modules" arch="x86_64"/>
+        <package name="grub2-efi-x64" arch="x86_64"/>
+        <package name="shim-signed-aa64" arch="aarch64"/>
+        <package name="grub2-efi-aa64" arch="aarch64"/>
+        <package name="grub2-efi-aa64-modules" arch="aarch64"/>
         <package name="kiwi-systemdeps"/>
     </packages>
     <packages type="bootstrap">

@@ -68,6 +68,10 @@ class DirFiles:
         fully atomic as it uses two move commands in a series
         """
         Path.create(self.dirname_tmp)
+        bash_command = [
+            'cp', '-a', f'{self.dirname}/*', self.dirname_tmp
+        ]
+        Command.run(['bash', '-c', ' '.join(bash_command)])
         for origin, tmpname in list(self.collection.items()):
             Command.run(
                 ['mv', tmpname, os.sep.join([self.dirname_tmp, origin])]

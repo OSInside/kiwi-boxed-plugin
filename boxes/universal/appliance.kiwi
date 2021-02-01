@@ -26,7 +26,7 @@
         <type image="pxe" initrd_system="dracut"/>
     </preferences>
     <preferences profiles="System">
-        <type image="oem" filesystem="ext2" firmware="bios" format="qcow2" formatoptions="preallocation=metadata,compat=1.1,lazy_refcounts=on">
+        <type image="oem" filesystem="ext2" firmware="efi" format="qcow2" formatoptions="preallocation=metadata,compat=1.1,lazy_refcounts=on">
             <oemconfig>
                 <oem-resize>false</oem-resize>
             </oemconfig>

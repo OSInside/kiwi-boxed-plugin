@@ -38,8 +38,13 @@ class BoxBuild:
     :param string boxname: name of the box from kiwi_boxed_plugin.yml
     :param string arch: arch name for box
     """
-    def __init__(self, boxname, ram=None, arch=None, sharing_backend='9p'):
+    def __init__(
+        self, boxname, ram=None, arch=None, machine=None,
+        cpu='host', sharing_backend='9p'
+    ):
         self.ram = ram
+        self.cpu = cpu
+        self.machine = machine
         self.arch = arch or platform.machine()
         self.box = BoxDownload(boxname, arch)
         self.sharing_backend = sharing_backend
@@ -89,9 +94,20 @@ class BoxBuild:
         vm_append.append(
             'sharing-backend=_{0}_'.format(self.sharing_backend)
         )
+        vm_machine = [
+            '-machine'
+        ]
+        if self.machine:
+            vm_machine.append(self.machine)
+        if self.arch == 'x86_64':
+            # KVM is only present for Intel and AMD
+            vm_machine.append('accel=kvm')
+        vm_machine.append('-cpu')
+        vm_machine.append(self.cpu)
         vm_run = [
             'qemu-system-{0}'.format(self.arch),
             '-m', format(self.ram or vm_setup.ram)
+        ] + vm_machine + [
         ] + Defaults.get_qemu_generic_setup() + [
             '-kernel', vm_setup.kernel,
             '-append', '"{0}"'.format(' '.join(vm_append))

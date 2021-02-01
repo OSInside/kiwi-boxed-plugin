@@ -20,11 +20,6 @@ schema = {
                     'required': False,
                     'empty': False
                 },
-                'root': {
-                    'type': 'string',
-                    'required': True,
-                    'empty': False
-                },
                 'console': {
                     'type': 'string',
                     'required': True,

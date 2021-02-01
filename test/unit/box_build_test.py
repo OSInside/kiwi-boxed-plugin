@@ -25,6 +25,10 @@ class TestBoxBuild:
         self.build = BoxBuild(
             boxname='suse', arch='x86_64'
         )
+        self.build_arm = BoxBuild(
+            boxname='universal', arch='aarch64',
+            machine='virt', cpu='cortex-a57'
+        )
 
     @patch('os.environ')
     @patch('os.system')
@@ -47,6 +51,54 @@ class TestBoxBuild:
             '-m 4096 '
             '-machine accel=kvm '
             '-cpu host '
+            '-nographic '
+            '-nodefaults '
+            '-snapshot '
+            '-kernel kernel '
+            '-append "append kiwi=\\"--type oem system build\\"'
+            ' kiwi-no-halt kiwi-version=_9.22.1_'
+            ' custom-mount=_/var/tmp/repos_'
+            ' sharing-backend=_9p_" '
+            '-drive file=system,if=virtio,driver=qcow2,cache=off,snapshot=on '
+            '-netdev user,id=user0 '
+            '-device virtio-net-pci,netdev=user0 '
+            '-device virtio-serial '
+            '-chardev stdio,id=virtiocon0 '
+            '-device virtconsole,chardev=virtiocon0 '
+            '-fsdev local,security_model=mapped,id=fsdev0,path=desc '
+            '-device virtio-9p-pci,id=fs0,fsdev=fsdev0,mount_tag='
+            'kiwidescription '
+            '-fsdev local,security_model=mapped,id=fsdev1,path=target '
+            '-device virtio-9p-pci,id=fs1,fsdev=fsdev1,mount_tag='
+            'kiwibundle '
+            '-fsdev local,security_model=mapped,id=fsdev2,path=/var/tmp/repos '
+            '-device virtio-9p-pci,id=fs2,fsdev=fsdev2,mount_tag='
+            'custompath '
+            '-initrd initrd '
+            '-smp 4'
+        )
+
+    @patch('os.environ')
+    @patch('os.system')
+    @patch('kiwi_boxed_plugin.box_build.Path.create')
+    def test_run_cross_arch_aarch64_on_x86_64(
+        self, mock_path_create, mock_os_system, mock_os_environ
+    ):
+        self.build_arm.run(
+            [
+                '--type', 'oem', 'system', 'build',
+                '--description', 'desc', '--target-dir', 'target'
+            ],
+            keep_open=True,
+            kiwi_version='9.22.1',
+            custom_shared_path='/var/tmp/repos'
+        )
+        mock_path_create.assert_called_once_with('target')
+        mock_os_system.assert_called_once_with(
+            'qemu-system-aarch64 '
+            '-m 4096 '
+            '-machine virt '
+            '-cpu cortex-a57 '
             '-nographic '
             '-nodefaults '
             '-snapshot '

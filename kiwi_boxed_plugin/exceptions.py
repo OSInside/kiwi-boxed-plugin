@@ -34,3 +34,9 @@ class KiwiBoxPluginVirtioFsError(KiwiError):
     """
     Exception raised if virtiofsd does not start
     """
+
+
+class KiwiBoxPluginArchNotFoundError(KiwiError):
+    """
+    Exception raised if the selected architecture has no configuration
+    """

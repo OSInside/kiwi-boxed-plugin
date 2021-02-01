@@ -22,9 +22,9 @@ class TestBoxDownload:
         self.result = self.box.vm_setup_type(
             system='/var/tmp/kiwi/boxes/suse/'
             'SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2',
-            kernel='/var/tmp/kiwi/boxes/suse/kernel',
-            initrd='/var/tmp/kiwi/boxes/suse/initrd',
-            append='root=/dev/vda1 console=hvc0 rd.plymouth=0',
+            kernel='/var/tmp/kiwi/boxes/suse/kernel.x86_64',
+            initrd='/var/tmp/kiwi/boxes/suse/initrd.x86_64',
+            append='console=hvc0 root=/dev/vda1 rd.plymouth=0',
             ram=8096,
             smp=4
         )
@@ -90,7 +90,7 @@ class TestBoxDownload:
                 call(
                     [
                         'tar', '-C', '/var/tmp/kiwi/boxes/suse',
-                        '--transform', 's/.*/kernel/',
+                        '--transform', 's/.*/kernel.x86_64/',
                         '--wildcards', '-xf',
                         '/var/tmp/kiwi/boxes/suse/'
                         'SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz',
@@ -100,7 +100,7 @@ class TestBoxDownload:
                 call(
                     [
                         'tar', '-C', '/var/tmp/kiwi/boxes/suse',
-                        '--transform', 's/.*/initrd/',
+                        '--transform', 's/.*/initrd.x86_64/',
                         '--wildcards', '-xf',
                         '/var/tmp/kiwi/boxes/suse/'
                         'SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz',

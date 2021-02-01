@@ -16,6 +16,7 @@
 # along with kiwi-boxed-build.  If not, see <http://www.gnu.org/licenses/>
 #
 import os
+import platform
 import logging
 from collections import namedtuple
 from kiwi_boxed_plugin.utils.dir_files import DirFiles
@@ -42,6 +43,7 @@ class BoxDownload:
     :param string arch: arch name for box
     """
     def __init__(self, boxname, arch=None):
+        self.arch = arch or platform.machine()
         self.box_config = BoxConfig(boxname, arch)
         self.box_dir = os.sep.join(
             [Defaults.get_local_box_cache_dir(), boxname]
@@ -131,8 +133,7 @@ class BoxDownload:
             system=self.system,
             kernel=self.kernel,
             initrd=self.initrd,
-            append='root={0} console={1} {2}'.format(
-                self.box_config.get_box_root(),
+            append='console={0} {1}'.format(
                 self.box_config.get_box_console(),
                 self.box_config.get_box_kernel_cmdline()
             ),
@@ -147,17 +148,19 @@ class BoxDownload:
     def _extract_kernel_from_tarball(self, tarfile):
         Command.run(
             [
-                'tar', '-C', self.box_dir, '--transform', 's/.*/kernel/',
+                'tar', '-C', self.box_dir,
+                '--transform', f's/.*/kernel.{self.arch}/',
                 '--wildcards', '-xf', tarfile, '*.kernel'
             ]
         )
-        return os.sep.join([self.box_dir, 'kernel'])
+        return os.sep.join([self.box_dir, f'kernel.{self.arch}'])
 
     def _extract_initrd_from_tarball(self, tarfile):
         Command.run(
             [
-                'tar', '-C', self.box_dir, '--transform', 's/.*/initrd/',
+                'tar', '-C', self.box_dir,
+                '--transform', f's/.*/initrd.{self.arch}/',
                 '--wildcards', '-xf', tarfile, '*.initrd.xz'
             ]
         )
-        return os.sep.join([self.box_dir, 'initrd'])
+        return os.sep.join([self.box_dir, f'initrd.{self.arch}'])

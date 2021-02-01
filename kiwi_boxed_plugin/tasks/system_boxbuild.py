@@ -25,7 +25,9 @@ usage: kiwi-ng system boxbuild -h | --help
            [--no-update-check]
            [--no-snapshot]
            [--9p-sharing | --virtiofs-sharing]
-           [--x86_64]
+           [--x86_64 | --aarch64]
+           [--machine=<qemu_machine>]
+           [--cpu=<qemu_cpu>]
            <kiwi_build_command_args>...
        kiwi-ng system boxbuild --list-boxes
        kiwi-ng system boxbuild help
@@ -67,8 +69,8 @@ options:
         host and the box. This can be either 9p or virtiofs. By
         default 9p is used
 
-    --x86_64
-        Select box for the x86_64 architecture. If no architecture
+    --x86_64|--aarch64
+        Select box for the given architecture. If no architecture
         is selected the host architecture is used for selecting
         the box. The selected box architecture also specifies the
         target architecture for the image build with that box.
@@ -87,6 +89,24 @@ options:
         Optional host path to share with the box. The same path
         as it is present on the host will also be available inside
         of the box during build time.
+
+    --machine=<qemu_machine>
+        Optional machine name used by QEMU. By default no specific
+        value is used here and qemu selects its default machine type.
+        For cross arch builds or for system architectures for which
+        QEMU defines no default like for Arm, it's required to specify
+        a machine name.
+
+        If you don’t care about reproducing the idiosyncrasies of
+        a particular bit of hardware, the best option is to use
+        the 'virt' machine type.
+
+    --cpu=<qemu_cpu>
+        Optional CPU type used by QEMU. By default the host CPU
+        type is used which is only a good selection if the host
+        and the selected box are from the same architecture. On
+        cross arch builds it's required to specify the CPU
+        emulation the box should use
 
     <kiwi_build_command_args>...
         List of command parameters as supported by the kiwi-ng
@@ -131,6 +151,8 @@ class SystemBoxbuildTask(CliTask):
                 boxname=self.command_args.get('--box'),
                 ram=self.command_args.get('--box-memory'),
                 arch=self._get_box_arch(),
+                machine=self.command_args.get('--machine'),
+                cpu=self.command_args.get('--cpu') or 'host',
                 sharing_backend=self._get_sharing_backend()
             )
             box_build.run(
@@ -177,7 +199,12 @@ class SystemBoxbuildTask(CliTask):
         return final_kiwi_build_command
 
     def _get_box_arch(self):
-        return 'x86_64' if self.command_args.get('--x86_64') else None
+        box_arch = None
+        if self.command_args.get('--x86_64'):
+            box_arch = 'x86_64'
+        elif self.command_args.get('--aarch64'):
+            box_arch = 'aarch64'
+        return box_arch
 
     def _get_sharing_backend(self):
         return 'virtiofs' if self.command_args.get(

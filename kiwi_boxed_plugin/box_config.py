@@ -18,7 +18,10 @@
 import platform
 
 from kiwi_boxed_plugin.plugin_config import PluginConfig
-from kiwi_boxed_plugin.exceptions import KiwiBoxPluginBoxNameError
+from kiwi_boxed_plugin.exceptions import (
+    KiwiBoxPluginBoxNameError,
+    KiwiBoxPluginArchNotFoundError
+)
 
 
 class BoxConfig:
@@ -49,9 +52,6 @@ class BoxConfig:
 
     def get_box_processors(self):
         return self.box_config.get('processors')
-
-    def get_box_root(self):
-        return self.box_config.get('root')
 
     def get_box_console(self):
         return self.box_config.get('console')
@@ -86,3 +86,6 @@ class BoxConfig:
         for box_arch in box_config.get('arch'):
             if box_arch.get('name') == arch:
                 return box_arch
+        raise KiwiBoxPluginArchNotFoundError(
+            f'No box configuration found for architecture: {arch}'
+        )

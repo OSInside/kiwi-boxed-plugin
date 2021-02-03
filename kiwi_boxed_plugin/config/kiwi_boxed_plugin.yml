@@ -3,12 +3,12 @@ box:
     name: suse
     mem_mb: 8096
     processors: 4
-    root: /dev/vda1
     console: hvc0
     arch:
       -
         name: x86_64
         cmdline:
+          - root=/dev/vda1
           - rd.plymouth=0
         source: obs://Virtualization:Appliances:SelfContained:suse/images
         packages_file: SUSE-Box.x86_64-1.42.1-System-BuildBox.report
@@ -21,12 +21,12 @@ box:
     name: leap
     mem_mb: 8096
     processors: 4
-    root: /dev/vda1
     console: hvc0
     arch:
       -
         name: x86_64
         cmdline:
+          - root=/dev/vda1
           - rd.plymouth=0
         source: obs://Virtualization:Appliances:SelfContained:leap/images
         packages_file: Leap-Box.x86_64-1.42.1-System-BuildBox.report
@@ -39,12 +39,12 @@ box:
     name: fedora
     mem_mb: 8096
     processors: 4
-    root: /dev/vda1
     console: hvc0
     arch:
       -
         name: x86_64
         cmdline:
+          - root=/dev/vda1
           - rd.plymouth=0
           - selinux=0
         source: obs://Virtualization:Appliances:SelfContained:fedora/images
@@ -58,12 +58,12 @@ box:
     name: ubuntu
     mem_mb: 8096
     processors: 4
-    root: /dev/vda1
     console: hvc0
     arch:
       -
         name: x86_64
         cmdline:
+          - root=/dev/vda1
           - rd.plymouth=0
           - selinux=0
         source: obs://Virtualization:Appliances:SelfContained:ubuntu/images
@@ -77,12 +77,12 @@ box:
     name: universal
     mem_mb: 8096
     processors: 4
-    root: /dev/vda1
     console: hvc0
     arch:
       -
         name: x86_64
         cmdline:
+          - root=/dev/vda3
           - rd.plymouth=0
           - selinux=0
         source: obs://Virtualization:Appliances:SelfContained:universal/images
@@ -90,4 +90,17 @@ box:
         boxfiles:
           - Universal-Box.x86_64-1.1.2-Kernel-BuildBox.tar.xz
           - Universal-Box.x86_64-1.1.2-System-BuildBox.qcow2
+        use_initrd: true
+
+      -
+        name: aarch64
+        cmdline:
+          - root=/dev/vda2
+          - rd.plymouth=0
+          - selinux=0
+        source: obs://Virtualization:Appliances:SelfContained:universal/images
+        packages_file: Universal-Box.aarch64-1.1.2-System-BuildBox.report
+        boxfiles:
+          - Universal-Box.aarch64-1.1.2-Kernel-BuildBox.tar.xz
+          - Universal-Box.aarch64-1.1.2-System-BuildBox.qcow2
         use_initrd: true

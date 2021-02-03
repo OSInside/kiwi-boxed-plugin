@@ -44,8 +44,6 @@ class Defaults:
     @staticmethod
     def get_qemu_generic_setup():
         return [
-            '-machine', 'accel=kvm',
-            '-cpu', 'host',
             '-nographic',
             '-nodefaults',
             '-snapshot'

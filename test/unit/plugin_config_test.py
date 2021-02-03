@@ -29,19 +29,17 @@ class TestPluginConfig:
             PluginConfig()
 
     def test_get_config(self):
+        print(self.plugin_config.get_config())
         assert self.plugin_config.get_config() == [
             {
                 'name': 'suse',
                 'mem_mb': 8096,
                 'processors': 4,
-                'root': '/dev/vda1',
                 'console': 'hvc0',
                 'arch': [
                     {
                         'name': 'x86_64',
-                        'cmdline': [
-                            'rd.plymouth=0'
-                        ],
+                        'cmdline': ['root=/dev/vda1', 'rd.plymouth=0'],
                         'source':
                             'obs://Virtualization:Appliances:SelfContained:'
                             'suse/images',
@@ -50,6 +48,48 @@ class TestPluginConfig:
                         'boxfiles': [
                             'SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz',
                             'SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2'
+                        ],
+                        'use_initrd': True
+                    }
+                ]
+            },
+            {
+                'name': 'universal',
+                'mem_mb': 8096,
+                'processors': 4,
+                'console': 'hvc0',
+                'arch': [
+                    {
+                        'name': 'x86_64',
+                        'cmdline': [
+                            'root=/dev/vda3', 'rd.plymouth=0', 'selinux=0'
+                        ],
+                        'source':
+                            'obs://Virtualization:Appliances:SelfContained:'
+                            'universal/images',
+                        'packages_file':
+                            'Universal-Box.x86_64-1.1.2-System-BuildBox.report',
+                        'boxfiles': [
+                            'Universal-Box.x86_64-1.1.2-Kernel-BuildBox.tar.xz',
+                            'Universal-Box.x86_64-1.1.2-System-BuildBox.qcow2'
+                        ],
+                        'use_initrd': True
+                    },
+                    {
+                        'name': 'aarch64',
+                        'cmdline': [
+                            'root=/dev/vda2', 'rd.plymouth=0', 'selinux=0'
+                        ],
+                        'source':
+                            'obs://Virtualization:Appliances:SelfContained:'
+                            'universal/images',
+                        'packages_file': 'Universal-Box.'
+                            'aarch64-1.1.2-System-BuildBox.report',
+                        'boxfiles': [
+                            'Universal-Box.aarch64-1.1.2-'
+                            'Kernel-BuildBox.tar.xz',
+                            'Universal-Box.aarch64-1.1.2-'
+                            'System-BuildBox.qcow2'
                         ],
                         'use_initrd': True
                     }

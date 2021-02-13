@@ -1,13 +1,19 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
+from os import path
 from setuptools import setup
 
 from kiwi_boxed_plugin.version import __version__
 
+here = path.abspath(path.dirname(__file__))
+with open(path.join(here, 'README.rst'), encoding='utf-8') as readme:
+    long_description = readme.read()
 
 config = {
     'name': 'kiwi_boxed_plugin',
+    'long_description': long_description,
+    'long_description_content_type': 'text/x-rst',
     'description': 'KIWI - Boxed Build Plugin',
     'author': 'Marcus Schaefer',
     'url': 'https://github.com/OSInside/kiwi-boxed-plugin',

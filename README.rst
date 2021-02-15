@@ -6,4 +6,7 @@ KIWI - Boxed Build Plugin
 
 |GitLab CI Pipeline|
 
-KIWI plugin to provide self contained build support
+KIWI plugin to provide self contained build support. For further
+details see:
+
+`Building in a Self-Contained Environment <https://osinside.github.io/kiwi/self_contained.html>`__

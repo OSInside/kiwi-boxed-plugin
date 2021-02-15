@@ -71,7 +71,9 @@ class DirFiles:
         bash_command = [
             'cp', '-a', f'{self.dirname}/*', self.dirname_tmp
         ]
-        Command.run(['bash', '-c', ' '.join(bash_command)])
+        Command.run(
+            ['bash', '-c', ' '.join(bash_command)], raise_on_error=False
+        )
         for origin, tmpname in list(self.collection.items()):
             Command.run(
                 ['mv', tmpname, os.sep.join([self.dirname_tmp, origin])]

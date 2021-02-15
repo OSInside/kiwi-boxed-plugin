@@ -30,7 +30,10 @@ class TestDirFiles:
         self.dir_manager.commit()
         mock_Path.create.assert_called_once_with('box_dir.tmp')
         assert mock_Command_run.call_args_list == [
-            call(['bash', '-c', 'cp -a box_dir/* box_dir.tmp']),
+            call(
+                ['bash', '-c', 'cp -a box_dir/* box_dir.tmp'],
+                raise_on_error=False
+            ),
             call(['mv', 'tmp_a', 'box_dir.tmp/file_a']),
             call(['mv', 'box_dir', 'box_dir.wipe']),
             call(['mv', 'box_dir.tmp', 'box_dir']),

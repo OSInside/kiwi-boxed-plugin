@@ -49,6 +49,7 @@
         <package name="glibc-all-langpacks"/>
         <package name="tzdata"/>
         <package name="NetworkManager"/>
+        <package name="dbus-daemon"/>
         <package name="lvm2"/>
         <package name="xfsprogs"/>
         <package name="e2fsprogs"/>

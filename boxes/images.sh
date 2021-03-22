@@ -64,7 +64,9 @@ function mount_shared_path {
         return
     fi
     mkdir -p "${path}"
-    backend=$(sed -s "s@.*sharing-backend=_\(.*\)_.*@\1@" /proc/cmdline)
+    backend=$(
+        sed -s "s@.*sharing-backend=_\([a-zA-Z0-9]*\)_.*@\1@" /proc/cmdline
+    )
     if [ "${backend}" = "virtiofs" ];then
         mount -t virtiofs "${tag}" "${path}"
     else
@@ -92,14 +94,16 @@ if ! mount_shared_path "/bundle" "kiwibundle"; then
 fi
 
 if grep -q custom-mount /proc/cmdline; then
-    custom_path=$(sed -s "s@.*custom-mount=_\(.*\)_.*@\1@" /proc/cmdline)
+    custom_path=$(
+        sed -s "s@.*custom-mount=_\([a-zA-Z0-9_/\.\-]*\)_.*@\1@" /proc/cmdline
+    )
     if ! mount_shared_path "${custom_path}" "custompath"; then
         exit 1
     fi
 fi
 
 if grep -q kiwi-version /proc/cmdline; then
-    kiwi_version=$(sed -s "s@.*kiwi-version=_\(.*\)_.*@\1@" /proc/cmdline)
+    kiwi_version=$(sed -s "s@.*kiwi-version=_\([0-9\.]*\)_.*@\1@" /proc/cmdline)
     if ! pip3 install kiwi=="${kiwi_version}"; then
         exit 1
     fi

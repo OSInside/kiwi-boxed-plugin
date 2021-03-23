@@ -31,3 +31,8 @@ systemctl disable lvm2-lvmetad
 systemctl mask lvm2-lvmetad
 systemctl disable lvm2-lvmetad.socket
 systemctl mask lvm2-lvmetad.socket
+
+#======================================
+# Fedora uses systemd-resolved for DNS
+#--------------------------------------
+systemctl enable systemd-resolved

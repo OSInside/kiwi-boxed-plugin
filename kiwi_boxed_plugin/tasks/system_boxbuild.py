@@ -28,13 +28,15 @@ usage: kiwi-ng system boxbuild -h | --help
            [--x86_64 | --aarch64]
            [--machine=<qemu_machine>]
            [--cpu=<qemu_cpu>]
-           <kiwi_build_command_args>...
+           -- <kiwi_build_command_args>...
        kiwi-ng system boxbuild --list-boxes
        kiwi-ng system boxbuild help
 
 commands:
     boxbuild
-        build a system image in a self contained virtual machine
+        build a system image in a self contained virtual machine,
+        where separator -- marks the start of arguments passed to
+        the build command.
 
 options:
     --box=<name>
@@ -108,7 +110,7 @@ options:
         cross arch builds it's required to specify the CPU
         emulation the box should use
 
-    <kiwi_build_command_args>...
+    -- <kiwi_build_command_args>...
         List of command parameters as supported by the kiwi-ng
         build command. The information given here is passed
         along to the kiwi-ng system build command running in

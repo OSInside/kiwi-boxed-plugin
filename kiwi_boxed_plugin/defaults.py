@@ -39,7 +39,7 @@ class Defaults:
 
     @staticmethod
     def get_local_box_cache_dir():
-        return '/var/tmp/kiwi/boxes'
+        return f'{os.environ.get("HOME")}/.kiwi_boxes'
 
     @staticmethod
     def get_qemu_generic_setup():

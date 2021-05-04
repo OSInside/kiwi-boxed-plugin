@@ -40,3 +40,10 @@ class KiwiBoxPluginArchNotFoundError(KiwiError):
     """
     Exception raised if the selected architecture has no configuration
     """
+
+
+class KiwiBoxPluginQEMUBinaryNotFound(KiwiError):
+    """
+    Exception raised if no QEMU binary for the desired architecture
+    could be found
+    """

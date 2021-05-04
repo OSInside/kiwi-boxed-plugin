@@ -6,7 +6,10 @@ from pytest import raises
 from kiwi_boxed_plugin.box_build import BoxBuild
 import kiwi_boxed_plugin.defaults as defaults
 
-from kiwi_boxed_plugin.exceptions import KiwiBoxPluginVirtioFsError
+from kiwi_boxed_plugin.exceptions import (
+    KiwiBoxPluginVirtioFsError,
+    KiwiBoxPluginQEMUBinaryNotFound
+)
 
 
 class TestBoxBuild:
@@ -33,9 +36,12 @@ class TestBoxBuild:
     @patch('os.environ')
     @patch('os.system')
     @patch('kiwi_boxed_plugin.box_build.Path.create')
+    @patch('kiwi_boxed_plugin.box_build.Path.which')
     def test_run_with_9p_sharing(
-        self, mock_path_create, mock_os_system, mock_os_environ
+        self, mock_path_which, mock_path_create,
+        mock_os_system, mock_os_environ
     ):
+        mock_path_which.return_value = 'qemu-system-x86_64'
         self.build.run(
             [
                 '--type', 'oem', 'system', 'build',
@@ -81,9 +87,12 @@ class TestBoxBuild:
     @patch('os.environ')
     @patch('os.system')
     @patch('kiwi_boxed_plugin.box_build.Path.create')
+    @patch('kiwi_boxed_plugin.box_build.Path.which')
     def test_run_cross_arch_aarch64_on_x86_64(
-        self, mock_path_create, mock_os_system, mock_os_environ
+        self, mock_path_which, mock_path_create,
+        mock_os_system, mock_os_environ
     ):
+        mock_path_which.return_value = 'qemu-system-aarch64'
         self.build_arm.run(
             [
                 '--type', 'oem', 'system', 'build',
@@ -128,6 +137,26 @@ class TestBoxBuild:
 
     @patch('os.environ')
     @patch('os.system')
+    @patch('kiwi_boxed_plugin.box_build.Path.create')
+    @patch('kiwi_boxed_plugin.box_build.Path.which')
+    def test_run_raises_no_qemu_binary_found(
+        self, mock_path_which, mock_path_create,
+        mock_os_system, mock_os_environ
+    ):
+        mock_path_which.return_value = None
+        with raises(KiwiBoxPluginQEMUBinaryNotFound):
+            self.build.run(
+                [
+                    '--type', 'oem', 'system', 'build',
+                    '--description', 'desc', '--target-dir', 'target'
+                ],
+                keep_open=True,
+                kiwi_version='9.22.1',
+                custom_shared_path='/var/tmp/repos'
+            )
+
+    @patch('os.environ')
+    @patch('os.system')
     @patch('subprocess.Popen')
     @patch('kiwi_boxed_plugin.box_build.Path.create')
     @patch('kiwi_boxed_plugin.defaults.Path.which')
@@ -135,8 +164,14 @@ class TestBoxBuild:
         self, mock_path_which, mock_path_create, mock_subprocess_Popen,
         mock_os_system, mock_os_environ
     ):
+        path_which_results = [None, 'qemu-system-x86_64']
+
+        def path_which(name, lookup=None):
+            return path_which_results.pop()
+
+        mock_path_which.side_effect = path_which
+
         self.build.sharing_backend = 'virtiofs'
-        mock_path_which.return_value = None
         with raises(KiwiBoxPluginVirtioFsError):
             self.build.run(
                 [
@@ -144,7 +179,8 @@ class TestBoxBuild:
                     '--description', 'desc', '--target-dir', 'target'
                 ]
             )
-        mock_path_which.return_value = 'virtiofsd'
+
+        path_which_results = ['virtiofsd', 'qemu-system-x86_64']
         mock_subprocess_Popen.side_effect = Exception
         with raises(KiwiBoxPluginVirtioFsError):
             self.build.run(
@@ -170,7 +206,13 @@ class TestBoxBuild:
         def new_process(self, **args):
             return Mock()
 
-        mock_path_which.return_value = '/usr/libexec/virtiofsd'
+        def path_which(name, lookup=None):
+            if name == 'qemu-system-x86_64':
+                return 'qemu-system-x86_64'
+            elif name == 'virtiofsd':
+                return '/usr/libexec/virtiofsd'
+
+        mock_path_which.side_effect = path_which
         mock_os_path_abspath.side_effect = abs_path
         mock_subprocess_Popen.side_effect = new_process
         self.build.sharing_backend = 'virtiofs'

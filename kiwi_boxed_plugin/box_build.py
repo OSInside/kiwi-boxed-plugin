@@ -35,14 +35,20 @@ class BoxBuild:
     Implements an interface to run a kiwi build box using
     the KVM virtualization platform
 
-    :param string boxname: name of the box from kiwi_boxed_plugin.yml
-    :param string arch: arch name for box
+    :param str boxname: name of the box from kiwi_boxed_plugin.yml
+    :param str ram: amount of main memory to use for the box
+    :param str smp: number of CPUs to use in the SMP setup for the box
+    :param str arch: arch name for box
+    :param str machine: machine emulaton type for the box
+    :param str cpu: CPU emulation type
+    :param str sharing_backend: guest/host sharing backend type
     """
     def __init__(
-        self, boxname, ram=None, arch=None, machine=None,
+        self, boxname, ram=None, smp=None, arch=None, machine=None,
         cpu='host', sharing_backend='9p'
     ):
         self.ram = ram
+        self.smp = smp
         self.cpu = cpu
         self.machine = machine
         self.arch = arch or platform.machine()
@@ -132,7 +138,7 @@ class BoxBuild:
         if vm_setup.initrd:
             vm_run += ['-initrd', vm_setup.initrd]
         if vm_setup.smp:
-            vm_run += ['-smp', format(vm_setup.smp)]
+            vm_run += ['-smp', format(self.smp or vm_setup.smp)]
         os.environ['TMPDIR'] = Defaults.get_local_box_cache_dir()
         log.debug(
             'Set TMPDIR: {0}'.format(os.environ['TMPDIR'])

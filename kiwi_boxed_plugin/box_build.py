@@ -25,6 +25,8 @@ from kiwi_boxed_plugin.defaults import Defaults
 
 import kiwi_boxed_plugin.defaults as runtime
 
+from kiwi_boxed_plugin.exceptions import KiwiBoxPluginQEMUBinaryNotFound
+
 log = logging.getLogger('kiwi')
 
 
@@ -104,8 +106,13 @@ class BoxBuild:
             vm_machine.append('accel=kvm')
         vm_machine.append('-cpu')
         vm_machine.append(self.cpu)
+        qemu_binary = self._find_qemu_call_binary()
+        if not qemu_binary:
+            raise KiwiBoxPluginQEMUBinaryNotFound(
+                f'No QEMU binary for {self.arch} found'
+            )
         vm_run = [
-            'qemu-system-{0}'.format(self.arch),
+            qemu_binary,
             '-m', format(self.ram or vm_setup.ram)
         ] + vm_machine + [
         ] + Defaults.get_qemu_generic_setup() + [
@@ -158,3 +165,9 @@ class BoxBuild:
             del self.kiwi_build_command[arg_index + 1]
             del self.kiwi_build_command[arg_index]
             return value
+
+    def _find_qemu_call_binary(self):
+        qemu_by_system = Path.which(f'qemu-system-{self.arch}')
+        if qemu_by_system:
+            return qemu_by_system
+        return Path.which('qemu-kvm') if self.arch == 'x86_64' else None

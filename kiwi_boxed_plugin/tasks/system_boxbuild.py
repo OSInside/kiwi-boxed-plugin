@@ -173,6 +173,7 @@ class SystemBoxbuildTask(CliTask):
             )
 
     def _validate_kiwi_build_command(self):
+        # construct build command from given command line
         kiwi_build_command = [
             'system', 'build'
         ]
@@ -181,15 +182,30 @@ class SystemBoxbuildTask(CliTask):
         )
         if '--' in kiwi_build_command:
             kiwi_build_command.remove('--')
+        # validate build command through docopt from the original
+        # kiwi.tasks.system_build docopt information
         log.info(
             'Validating kiwi_build_command_args:{0}    {1}'.format(
                 os.linesep, kiwi_build_command
             )
         )
-        docopt(
+        validated_build_command = docopt(
             doc=kiwi.tasks.system_build.__doc__,
             argv=kiwi_build_command
         )
+        # rebuild kiwi build command from validated docopt parser result
+        kiwi_build_command = [
+            'system', 'build'
+        ]
+        for option, value in validated_build_command.items():
+            if option.startswith('-') and value:
+                if isinstance(value, bool):
+                    kiwi_build_command.append(option)
+                elif isinstance(value, str):
+                    kiwi_build_command.extend([option, value])
+                elif isinstance(value, list):
+                    for element in value:
+                        kiwi_build_command.extend([option, element])
         final_kiwi_build_command = []
         if self.global_args.get('--type'):
             final_kiwi_build_command.append('--type')

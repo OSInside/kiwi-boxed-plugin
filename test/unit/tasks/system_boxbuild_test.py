@@ -33,7 +33,9 @@ class TestSystemBoxbuildTask:
         self.task.command_args['--machine'] = None
         self.task.command_args['<kiwi_build_command_args>'] = [
             '--', '--description', 'foo',
-            '--target-dir', 'xxx'
+            '--target-dir', 'xxx',
+            '--add-package=a', '--add-package', 'b',
+            '--allow-existing-root'
         ]
 
     @patch('kiwi_boxed_plugin.tasks.system_boxbuild.Help')
@@ -73,7 +75,9 @@ class TestSystemBoxbuildTask:
         box_build.run.assert_called_once_with(
             [
                 '--type', 'oem', '--profile', 'foo', 'system', 'build',
-                '--description', 'foo', '--target-dir', 'xxx'
+                '--description', 'foo', '--target-dir', 'xxx',
+                '--allow-existing-root',
+                '--add-package', 'a', '--add-package', 'b'
             ], True, True, False, None, None
         )
 

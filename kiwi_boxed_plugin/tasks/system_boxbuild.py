@@ -19,6 +19,7 @@
 usage: kiwi-ng system boxbuild -h | --help
        kiwi-ng system boxbuild --box=<name>
            [--box-memory=<vmgb>]
+           [--box-smp-cpus=<number>]
            [--box-debug]
            [--kiwi-version=<version>]
            [--shared-path=<path>]
@@ -49,6 +50,10 @@ options:
     --box-memory=<vmgb>
         Number of GBs to reserve as main memory for the virtual
         machine. By default 8GB will be used.
+
+    --box-smp-cpus=<number>
+        Number of CPUs to use in the SMP setup. By default
+        4 CPUs will be used
 
     --no-update-check
         Skip check for available box update. The option has no
@@ -152,6 +157,7 @@ class SystemBoxbuildTask(CliTask):
             box_build = BoxBuild(
                 boxname=self.command_args.get('--box'),
                 ram=self.command_args.get('--box-memory'),
+                smp=self.command_args.get('--box-smp-cpus'),
                 arch=self._get_box_arch(),
                 machine=self.command_args.get('--machine'),
                 cpu=self.command_args.get('--cpu') or 'host',

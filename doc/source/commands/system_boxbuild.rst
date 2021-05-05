@@ -11,10 +11,17 @@ SYNOPSIS
    kiwi-ng system boxbuild -h | --help
    kiwi-ng system boxbuild --box=<name>
        [--box-memory=<vmgb>]
+       [--box-smp-cpus=<number>]
        [--box-debug]
+       [--kiwi-version=<version>]
+       [--shared-path=<path>]
        [--no-update-check]
-       [--x86_64]
-       <kiwi_build_command_args>...
+       [--no-snapshot]
+       [--9p-sharing | --virtiofs-sharing]
+       [--x86_64 | --aarch64]
+       [--machine=<qemu_machine>]
+       [--cpu=<qemu_cpu>]
+       -- <kiwi_build_command_args>...
    kiwi-ng system boxbuild --list-boxes
    kiwi-ng system boxbuild help
 
@@ -66,12 +73,36 @@ OPTIONS
   Number of GBs to reserve as main memory for the virtual
   machine. By default 8GB will be used.
 
+--box-smp-cpus=<number>
+
+  Number of CPUs to use in the SMP setup. By default
+  4 CPUs will be used
+
 --no-update-check
 
   Skip check for available box update. The option has no
   effect if the selected box does not yet exist on the host.
 
---x86_64
+--no-snapshot
+
+  Run box with snapshot mode switched off. This causes the
+  box disk file to be modified by the build process and allows
+  to keep a persistent package cache as part of the box.
+  The option can be used to increase the build performance
+  due to data stored in the box which doesn't have to be
+  reloaded from the network. On the contrary this option
+  invalidates the immutable box attribute and should be
+  used with care. On update of the box all data stored
+  will be wiped. To prevent this combine the option with
+  the --no-update-check option.
+
+--9p-sharing|--virtiofs-sharing
+
+  Select sharing backend to use for sharing data between the
+  host and the box. This can be either 9p or virtiofs. By
+  default 9p is used
+
+--x86_64|--aarch64
 
   Select box for the x86_64 architecture. If no architecture
   is selected the host architecture is used for selecting
@@ -82,13 +113,47 @@ OPTIONS
 
   In debug mode the started virtual machine will be kept open
 
-<kiwi_build_command_args>...
+--kiwi-version=<version>
 
-  List of command parameters as supported by the kiwi-ng
-  build command. The information given here is passed
-  along to the kiwi-ng system build command running in
-  the virtual machine. See the Example below how to provide
-  options to the build command correctly.
+  Specify a KIWI version to use for the build. The referenced
+  KIWI will be fetched from pip and replaces the box installed
+  KIWI version. Note: If --no-snapshot is used in combination
+  with this option, the change of the KIWI version will be
+  permanently stored in the used box.
+
+--shared-path=<path>
+
+  Optional host path to share with the box. The same path
+  as it is present on the host will also be available inside
+  of the box during build time.
+
+--machine=<qemu_machine>
+
+  Optional machine name used by QEMU. By default no specific
+  value is used here and qemu selects its default machine type.
+  For cross arch builds or for system architectures for which
+  QEMU defines no default like for Arm, it's required to specify
+  a machine name.
+
+  If you don’t care about reproducing the idiosyncrasies of
+  a particular bit of hardware, the best option is to use
+  the 'virt' machine type.
+
+--cpu=<qemu_cpu>
+
+  Optional CPU type used by QEMU. By default the host CPU
+  type is used which is only a good selection if the host
+  and the selected box are from the same architecture. On
+  cross arch builds it's required to specify the CPU
+  emulation the box should use
+
+-- <kiwi_build_command_args>...
+
+   List of command parameters as supported by the kiwi-ng
+   build command. The information given here is passed
+   along to the kiwi-ng system build command running in
+   the virtual machine. See the Example below how to provide
+   options to the build command correctly.
 
 EXAMPLE
 -------

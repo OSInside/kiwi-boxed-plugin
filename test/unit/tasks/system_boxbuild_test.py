@@ -12,7 +12,7 @@ class TestSystemBoxbuildTask:
             sys.argv[0],
             '--profile', 'foo', '--type', 'oem',
             'system', 'boxbuild',
-            '--box', 'suse', '--box-memory', '4', '--',
+            '--box', 'suse', '--box-memory', '4', '--box-smp-cpus', '4', '--',
             '--description', '../data/description',
             '--target-dir', '../data/target_dir'
         ]
@@ -67,7 +67,7 @@ class TestSystemBoxbuildTask:
         mock_BoxBuild.return_value = box_build
         self.task.process()
         mock_BoxBuild.assert_called_once_with(
-            boxname='suse', ram=None, arch=None,
+            boxname='suse', ram=None, smp=None, arch=None,
             machine=None, cpu='host', sharing_backend='9p'
         )
         box_build.run.assert_called_once_with(
@@ -87,7 +87,7 @@ class TestSystemBoxbuildTask:
         mock_BoxBuild.return_value = box_build
         self.task.process()
         mock_BoxBuild.assert_called_once_with(
-            boxname='suse', ram=None, arch='x86_64',
+            boxname='suse', ram=None, smp=None, arch='x86_64',
             machine=None, cpu='host', sharing_backend='9p'
         )
 
@@ -101,7 +101,7 @@ class TestSystemBoxbuildTask:
         mock_BoxBuild.return_value = box_build
         self.task.process()
         mock_BoxBuild.assert_called_once_with(
-            boxname='suse', ram=None, arch='aarch64',
+            boxname='suse', ram=None, smp=None, arch='aarch64',
             machine=None, cpu='host', sharing_backend='9p'
         )
 
@@ -115,7 +115,7 @@ class TestSystemBoxbuildTask:
         mock_BoxBuild.return_value = box_build
         self.task.process()
         mock_BoxBuild.assert_called_once_with(
-            boxname='suse', ram=None, arch=None,
+            boxname='suse', ram=None, smp=None, arch=None,
             machine=None, cpu='host', sharing_backend='9p'
         )
         self.task.command_args['--9p-sharing'] = False
@@ -123,6 +123,6 @@ class TestSystemBoxbuildTask:
         mock_BoxBuild.reset_mock()
         self.task.process()
         mock_BoxBuild.assert_called_once_with(
-            boxname='suse', ram=None, arch=None,
+            boxname='suse', ram=None, smp=None, arch=None,
             machine=None, cpu='host', sharing_backend='virtiofs'
         )

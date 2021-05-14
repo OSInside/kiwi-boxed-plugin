@@ -83,6 +83,7 @@
         <package name="grub2-efi-aa64" arch="aarch64"/>
         <package name="grub2-efi-aa64-modules" arch="aarch64"/>
         <package name="kiwi-systemdeps"/>
+        <package name="jing"/>
     </packages>
     <packages type="bootstrap">
         <package name="filesystem"/>

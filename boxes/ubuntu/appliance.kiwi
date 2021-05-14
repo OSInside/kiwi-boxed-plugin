@@ -85,6 +85,7 @@
         <package name="gcc"/>
         <package name="make"/>
         <package name="kiwi-systemdeps"/>
+        <package name="jing"/>
     </packages>
     <packages type="bootstrap"/>
 </image>

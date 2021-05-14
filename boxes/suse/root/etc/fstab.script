@@ -1,3 +1,0 @@
-#!/bin/bash
-
-echo "/dev/vda1 / ext2 defaults 0 0" > /etc/fstab

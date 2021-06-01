@@ -8,7 +8,8 @@ import kiwi_boxed_plugin.defaults as defaults
 
 from kiwi_boxed_plugin.exceptions import (
     KiwiBoxPluginVirtioFsError,
-    KiwiBoxPluginQEMUBinaryNotFound
+    KiwiBoxPluginQEMUBinaryNotFound,
+    KiwiError
 )
 
 
@@ -32,6 +33,23 @@ class TestBoxBuild:
             boxname='universal', arch='aarch64',
             machine='virt', cpu='cortex-a57'
         )
+
+    @patch('os.environ')
+    @patch('os.system')
+    @patch('kiwi_boxed_plugin.box_build.Path.create')
+    @patch('kiwi_boxed_plugin.box_build.Path.which')
+    def test_raises_on_kiwi_error(
+        self, mock_path_which, mock_path_create,
+        mock_os_system, mock_os_environ
+    ):
+        mock_path_which.return_value = 'qemu-system-x86_64'
+        with raises(KiwiError):
+            self.build.run(
+                [
+                    '--type', 'oem', 'system', 'build',
+                    '--description', 'desc', '--target-dir', '../data/target'
+                ]
+            )
 
     @patch('os.environ')
     @patch('os.system')

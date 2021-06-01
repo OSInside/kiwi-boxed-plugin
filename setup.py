@@ -28,7 +28,8 @@ config = {
         'kiwi>=9.21.21',
         'requests',
         'PyYAML',
-        'cerberus'
+        'cerberus',
+        'wget'
     ],
     'packages': ['kiwi_boxed_plugin'],
     'entry_points': {

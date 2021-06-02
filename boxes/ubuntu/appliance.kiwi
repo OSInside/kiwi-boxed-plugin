@@ -14,7 +14,7 @@
         <profile name="System" description="Provides system for kvm boot"/>
     </profiles>
     <preferences>
-        <version>1.20.4</version>
+        <version>1.20.10</version>
         <packagemanager>apt-get</packagemanager>
         <locale>en_US</locale>
         <keytable>us</keytable>
@@ -37,13 +37,13 @@
         <user password="$1$wYJUgpM5$RXMMeASDc035eX.NbYWFl0" home="/root" name="root" groups="root"/>
     </users>
     <repository type="apt-deb" alias="kiwi-next-generation" priority="1" repository_gpgcheck="false">
-        <source path="obs://Virtualization:Appliances:Builder/xUbuntu_20.04"/>
+        <source path="obs://Virtualization:Appliances:Builder/xUbuntu_20.10"/>
     </repository>
     <repository type="apt-deb" alias="Ubuntu-Focal-Universe" distribution="focal" components="main multiverse restricted universe" repository_gpgcheck="false">
-        <source path="obs://Ubuntu:20.04/universe"/>
+        <source path="obs://Ubuntu:20.10/universe"/>
     </repository>
     <repository type="apt-deb" alias="Ubuntu-Focal" distribution="focal" components="main multiverse restricted universe" repository_gpgcheck="false">
-        <source path="obs://Ubuntu:20.04/standard"/>
+        <source path="obs://Ubuntu:20.10/standard"/>
     </repository>
     <packages type="image">
         <package name="netplan.io"/>

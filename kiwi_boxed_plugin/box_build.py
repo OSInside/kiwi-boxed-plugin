@@ -25,7 +25,10 @@ from kiwi_boxed_plugin.defaults import Defaults
 
 import kiwi_boxed_plugin.defaults as runtime
 
-from kiwi_boxed_plugin.exceptions import KiwiBoxPluginQEMUBinaryNotFound
+from kiwi_boxed_plugin.exceptions import (
+    KiwiBoxPluginQEMUBinaryNotFound,
+    KiwiError
+)
 
 log = logging.getLogger('kiwi')
 
@@ -158,10 +161,21 @@ class BoxBuild:
         )
         for virtiofsd_process in runtime.VIRTIOFSD_PROCESS_LIST:
             virtiofsd_process.terminate()
-        log.info(
-            'Box build done. Find build log at: {0}'.format(
-                os.sep.join([target_dir, 'result.log'])
+
+        exit_code_file = os.sep.join([target_dir, 'result.code'])
+        build_log_file = os.sep.join([target_dir, 'result.log'])
+        kiwi_exit = 0
+        if os.path.exists(exit_code_file):
+            with open(exit_code_file) as exit_code:
+                kiwi_exit = int(exit_code.readline())
+
+        if kiwi_exit != 0:
+            raise KiwiError(
+                f'Box build failed. Find build log at: {build_log_file!r}'
             )
+
+        log.info(
+            f'Box build done. Find build log at: {build_log_file!r}'
         )
 
     def _pop_arg_param(self, arg):

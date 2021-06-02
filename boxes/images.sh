@@ -18,12 +18,15 @@ function run_build {
     # """
     local options
     local logfile=/bundle/result.log
+    local exit_code_file=/bundle/result.code
+    echo 1 > "${exit_code_file}"
     rm -rf /result
     options=$(cut -f2 -d\" /proc/cmdline)
     options="${options} --description /description --target-dir /result"
     if kiwi-ng --logfile "${logfile}" ${options}; then
         kiwi-ng result bundle --id 0 --target-dir /result --bundle-dir /bundle
     fi
+    echo $? > "${exit_code_file}"
 }
 
 function wait_network {

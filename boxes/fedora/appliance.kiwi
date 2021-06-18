@@ -67,7 +67,6 @@
         <package name="make"/>
         <package name="syslinux"/>
         <package name="kiwi-systemdeps"/>
-        <package name="jing"/>
     </packages>
     <packages type="bootstrap">
         <package name="filesystem"/>

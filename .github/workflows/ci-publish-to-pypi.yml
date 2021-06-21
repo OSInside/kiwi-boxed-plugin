@@ -25,7 +25,7 @@ jobs:
         python -m pip install tox
     - name: Prepare
       run: |
-        tox -e release
+        tox -e doc,release
     - name: Publish
       uses: pypa/gh-action-pypi-publish@master
       with:

@@ -16,12 +16,11 @@
 # along with kiwi-boxed-build.  If not, see <http://www.gnu.org/licenses/>
 #
 import os
-import wget
-import contextlib
 import platform
 import logging
 from collections import namedtuple
 from kiwi_boxed_plugin.utils.dir_files import DirFiles
+from kiwi_boxed_plugin.utils.fetch_files import FetchFiles
 from kiwi.command import Command
 from kiwi.utils.checksum import Checksum
 from kiwi.solver.repository import SolverRepository
@@ -68,6 +67,7 @@ class BoxDownload:
 
         :param bool update_check: check for box updates True|False
         """
+        fetcher = FetchFiles()
         download = update_check
         repo_source = self.box_config.get_box_source()
         if repo_source:
@@ -114,11 +114,9 @@ class BoxDownload:
                     box_file_link = os.sep.join(
                         [repo._get_mime_typed_uri(), box_file]
                     )
-                    with BoxDownload._cd(os.path.dirname(local_box_file_tmp)):
-                        wget.download(
-                            url=box_file_link, out=local_box_file_tmp
-                        )
-                    print()
+                    fetcher.wget(
+                        url=box_file_link, filename=local_box_file_tmp
+                    )
 
             if download:
                 self.box_stage.commit()
@@ -171,12 +169,3 @@ class BoxDownload:
             ]
         )
         return os.sep.join([self.box_dir, f'initrd.{self.arch}'])
-
-    @contextlib.contextmanager
-    def _cd(path):
-        CWD = os.getcwd()
-        os.chdir(path)
-        try:
-            yield
-        finally:
-            os.chdir(CWD)

@@ -16,8 +16,6 @@
 # along with kiwi-boxed-build.  If not, see <http://www.gnu.org/licenses/>
 #
 import os
-import wget
-import contextlib
 import platform
 import logging
 from collections import namedtuple
@@ -111,14 +109,9 @@ class BoxDownload:
                     local_box_file_tmp = self.box_stage.register(
                         local_box_file
                     )
-                    box_file_link = os.sep.join(
-                        [repo._get_mime_typed_uri(), box_file]
+                    repo.download_from_repository(
+                        box_file, local_box_file_tmp
                     )
-                    with BoxDownload._cd(os.path.dirname(local_box_file_tmp)):
-                        wget.download(
-                            url=box_file_link, out=local_box_file_tmp
-                        )
-                    print()
 
             if download:
                 self.box_stage.commit()
@@ -171,12 +164,3 @@ class BoxDownload:
             ]
         )
         return os.sep.join([self.box_dir, f'initrd.{self.arch}'])
-
-    @contextlib.contextmanager
-    def _cd(path):
-        CWD = os.getcwd()
-        os.chdir(path)
-        try:
-            yield
-        finally:
-            os.chdir(CWD)

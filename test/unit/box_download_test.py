@@ -12,7 +12,6 @@ class TestBoxDownload:
     @patch('kiwi_boxed_plugin.box_download.DirFiles')
     def setup(self, mock_DirFiles, mock_Path, mock_get_plugin_config_file):
         self.box_stage = Mock()
-        self.box_stage.register.return_value = 'register_file'
         mock_DirFiles.return_value = self.box_stage
         mock_get_plugin_config_file.return_value = \
             '../data/kiwi_boxed_plugin.yml'
@@ -36,18 +35,15 @@ class TestBoxDownload:
     @patch('kiwi_boxed_plugin.box_download.SolverRepository.new')
     @patch('kiwi_boxed_plugin.box_download.Checksum')
     @patch('os.path.exists')
-    @patch('os.chdir')
-    @patch('wget.download')
     def test_fetch_checksum_did_not_match(
-        self, mock_wget_download, mock_os_chdir, mock_os_path_exist,
-        mock_Checksum, mock_SolverRepository, mock_Uri, mock_Command_run
+        self, mock_os_path_exist, mock_Checksum, mock_SolverRepository,
+        mock_Uri, mock_Command_run
     ):
         checksum = Mock()
         checksum.matches.return_value = False
         checksum.sha256.return_value = 'sum'
         mock_Checksum.return_value = checksum
         repo = Mock()
-        repo._get_mime_typed_uri.return_value = 'uri://'
         mock_SolverRepository.return_value = repo
         mock_os_path_exist.return_value = False
         with patch('builtins.open', create=True) as mock_open:
@@ -77,18 +73,18 @@ class TestBoxDownload:
                 self.box_stage.register.return_value, 'w'
             )
             file_handle.write.assert_called_once_with('sum')
-            repo.download_from_repository.assert_called_once_with(
-                'SUSE-Box.x86_64-1.42.1-System-BuildBox.report',
-                self.box_stage.register.return_value
-            )
-            assert mock_wget_download.call_args_list == [
+            assert repo.download_from_repository.call_args_list == [
                 call(
-                    url='uri:///SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz',
-                    out='register_file'
+                    'SUSE-Box.x86_64-1.42.1-System-BuildBox.report',
+                    self.box_stage.register.return_value
                 ),
                 call(
-                    url='uri:///SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2',
-                    out='register_file'
+                    'SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz',
+                    self.box_stage.register.return_value
+                ),
+                call(
+                    'SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2',
+                    self.box_stage.register.return_value
                 )
             ]
             self.box_stage.commit.assert_called_once_with()

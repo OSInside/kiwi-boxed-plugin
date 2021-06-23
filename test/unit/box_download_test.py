@@ -37,11 +37,13 @@ class TestBoxDownload:
     @patch('kiwi_boxed_plugin.box_download.Checksum')
     @patch('os.path.exists')
     @patch('os.chdir')
-    @patch('wget.download')
+    @patch('kiwi_boxed_plugin.box_download.FetchFiles')
     def test_fetch_checksum_did_not_match(
-        self, mock_wget_download, mock_os_chdir, mock_os_path_exist,
+        self, mock_FetchFiles, mock_os_chdir, mock_os_path_exist,
         mock_Checksum, mock_SolverRepository, mock_Uri, mock_Command_run
     ):
+        fetcher = Mock()
+        mock_FetchFiles.return_value = fetcher
         checksum = Mock()
         checksum.matches.return_value = False
         checksum.sha256.return_value = 'sum'
@@ -81,14 +83,14 @@ class TestBoxDownload:
                 'SUSE-Box.x86_64-1.42.1-System-BuildBox.report',
                 self.box_stage.register.return_value
             )
-            assert mock_wget_download.call_args_list == [
+            assert fetcher.wget.call_args_list == [
                 call(
                     url='uri:///SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz',
-                    out='register_file'
+                    filename='register_file'
                 ),
                 call(
                     url='uri:///SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2',
-                    out='register_file'
+                    filename='register_file'
                 )
             ]
             self.box_stage.commit.assert_called_once_with()

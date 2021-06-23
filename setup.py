@@ -29,7 +29,7 @@ config = {
         'requests',
         'PyYAML',
         'cerberus',
-        'wget'
+        'progressbar2'
     ],
     'packages': ['kiwi_boxed_plugin'],
     'entry_points': {

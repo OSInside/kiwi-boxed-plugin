@@ -18,4 +18,4 @@ cerberus
 kiwi
 
 # download with progress info
-wget
+progressbar2

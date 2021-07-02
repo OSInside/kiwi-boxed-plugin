@@ -8,11 +8,6 @@ test -f /.profile && . /.profile
 suseSetupProduct
 
 #======================================
-# Add missing gpg keys to rpm
-#--------------------------------------
-suseImportBuildKey
-
-#======================================
 # Setup default target, multi-user
 #--------------------------------------
 baseSetRunlevel 3

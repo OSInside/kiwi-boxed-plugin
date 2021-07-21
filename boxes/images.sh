@@ -19,6 +19,14 @@ function run_build {
     local options
     local logfile=/bundle/result.log
     local exit_code_file=/bundle/result.code
+    if type setenforce &>/dev/null; then
+        # for SELinux managed systems the enforcing rule
+        # set does not allow to e.g create a new rpm database.
+        # Also other restrictions drives us crazy when building
+        # images. Therefore in the boxes we don't need this
+        # sort of security
+        setenforce 0
+    fi
     echo 1 > "${exit_code_file}"
     rm -rf /result
     options=$(cut -f2 -d\" /proc/cmdline)

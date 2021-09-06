@@ -86,10 +86,10 @@ box:
           - rd.plymouth=0
           - selinux=0
         source: obs://Virtualization:Appliances:SelfContained:universal/images
-        packages_file: Universal-Box.x86_64-1.33.1-System-BuildBox.report
+        packages_file: Universal-Box.x86_64-1.34.1-System-BuildBox.report
         boxfiles:
-          - Universal-Box.x86_64-1.33.1-Kernel-BuildBox.tar.xz
-          - Universal-Box.x86_64-1.33.1-System-BuildBox.qcow2
+          - Universal-Box.x86_64-1.34.1-Kernel-BuildBox.tar.xz
+          - Universal-Box.x86_64-1.34.1-System-BuildBox.qcow2
         use_initrd: true
 
       -
@@ -99,8 +99,8 @@ box:
           - rd.plymouth=0
           - selinux=0
         source: obs://Virtualization:Appliances:SelfContained:universal/images
-        packages_file: Universal-Box.aarch64-1.33.1-System-BuildBox.report
+        packages_file: Universal-Box.aarch64-1.34.1-System-BuildBox.report
         boxfiles:
-          - Universal-Box.aarch64-1.33.1-Kernel-BuildBox.tar.xz
-          - Universal-Box.aarch64-1.33.1-System-BuildBox.qcow2
+          - Universal-Box.aarch64-1.34.1-Kernel-BuildBox.tar.xz
+          - Universal-Box.aarch64-1.34.1-System-BuildBox.qcow2
         use_initrd: true

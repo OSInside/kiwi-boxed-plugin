@@ -4,7 +4,7 @@ KIWI - Boxed Build Plugin
 .. |GitHub CI Action| image:: https://github.com/OSInside/kiwi-boxed-plugin/workflows/CILint/badge.svg
    :target: https://github.com/OSInside/kiwi-boxed-plugin/actions
 
-|GitLab CI Pipeline|
+|GitHub CI Action|
 
 KIWI plugin to provide self contained build support. For further
 details see:

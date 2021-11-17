@@ -1,7 +1,10 @@
+import logging
 from mock import (
     patch, Mock, call
 )
-from pytest import raises
+from pytest import (
+    raises, fixture
+)
 
 from kiwi_boxed_plugin.box_build import BoxBuild
 import kiwi_boxed_plugin.defaults as defaults
@@ -12,8 +15,15 @@ from kiwi_boxed_plugin.exceptions import (
     KiwiError
 )
 
+log = logging.getLogger('kiwi')
+log.setLevel('INFO')
+
 
 class TestBoxBuild:
+    @fixture(autouse=True)
+    def inject_fixtures(self, caplog):
+        self._caplog = caplog
+
     @patch('kiwi_boxed_plugin.box_build.BoxDownload')
     def setup(self, mock_BoxDownload):
         self.box = Mock()
@@ -80,11 +90,11 @@ class TestBoxBuild:
             '-snapshot '
             '-kernel kernel '
             '-append "append kiwi=\\"--type oem system build\\"'
-            ' kiwi-no-halt kiwi-version=_9.22.1_'
-            ' custom-mount=_/var/tmp/repos_'
-            ' sharing-backend=_9p_" '
+            ' kiwi-no-halt kiwi_version=_9.22.1_'
+            ' custom_mount=_/var/tmp/repos_'
+            ' sharing_backend=_9p_" '
             '-drive file=system,if=virtio,driver=qcow2,cache=off,snapshot=on '
-            '-netdev user,id=user0 '
+            '-netdev user,id=user0,hostfwd=tcp::10022-:22 '
             '-device virtio-net-pci,netdev=user0 '
             '-device virtio-serial '
             '-chardev stdio,id=virtiocon0 '
@@ -131,11 +141,11 @@ class TestBoxBuild:
             '-snapshot '
             '-kernel kernel '
             '-append "append kiwi=\\"--type oem system build\\"'
-            ' kiwi-no-halt kiwi-version=_9.22.1_'
-            ' custom-mount=_/var/tmp/repos_'
-            ' sharing-backend=_9p_" '
+            ' kiwi-no-halt kiwi_version=_9.22.1_'
+            ' custom_mount=_/var/tmp/repos_'
+            ' sharing_backend=_9p_" '
             '-drive file=system,if=virtio,driver=qcow2,cache=off,snapshot=on '
-            '-netdev user,id=user0 '
+            '-netdev user,id=user0,hostfwd=tcp::10022-:22 '
             '-device virtio-net-pci,netdev=user0 '
             '-device virtio-serial '
             '-chardev stdio,id=virtiocon0 '
@@ -254,11 +264,11 @@ class TestBoxBuild:
             '-snapshot '
             '-kernel kernel '
             '-append "append kiwi=\\"--type oem system build\\"'
-            ' kiwi-no-halt kiwi-version=_9.22.1_'
-            ' custom-mount=_var/tmp/repos_'
-            ' sharing-backend=_virtiofs_" '
+            ' kiwi-no-halt kiwi_version=_9.22.1_'
+            ' custom_mount=_var/tmp/repos_'
+            ' sharing_backend=_virtiofs_" '
             '-drive file=system,if=virtio,driver=qcow2,cache=off,snapshot=on '
-            '-netdev user,id=user0 '
+            '-netdev user,id=user0,hostfwd=tcp::10022-:22 '
             '-device virtio-net-pci,netdev=user0 '
             '-device virtio-serial '
             '-chardev stdio,id=virtiocon0 '
@@ -309,3 +319,85 @@ class TestBoxBuild:
         ]
         for virtiofsd_process in defaults.VIRTIOFSD_PROCESS_LIST:
             virtiofsd_process.terminate.assert_called_once_with()
+
+    @patch('pwd.getpwuid')
+    @patch('time.sleep')
+    @patch('os.path.isfile')
+    @patch('os.system')
+    @patch('kiwi_boxed_plugin.box_build.Command.run')
+    @patch('kiwi_boxed_plugin.box_build.Path.create')
+    @patch('kiwi_boxed_plugin.defaults.Path.which')
+    def test_run_with_sshfs_sharing(
+        self, mock_path_which, mock_path_create, mock_Command_run,
+        mock_os_system, mock_os_path_isfile, mock_time_sleep,
+        mock_pwd_getpwuid
+    ):
+        def command_run(args, raise_on_error=True):
+            if args[0] == 'ssh':
+                raise Exception
+
+        def path_which(name, lookup=None):
+            if name == 'qemu-system-x86_64':
+                return 'qemu-system-x86_64'
+
+        mock_path_which.side_effect = path_which
+        mock_Command_run.side_effect = command_run
+
+        mock_pwd_getpwuid.return_value.pw_name = 'user'
+        mock_os_path_isfile.return_value = True
+        self.build.sharing_backend = 'sshfs'
+
+        with patch('builtins.open', create=True) as mock_open:
+            with patch.dict('os.environ', {'HOME': '~'}):
+                file_handle = mock_open.return_value.__enter__.return_value
+                file_handle.read.return_value = 'key_type key_value'
+                self.build.run(
+                    [
+                        '--type', 'oem', 'system', 'build',
+                        '--description', 'desc', '--target-dir', 'target'
+                    ],
+                    keep_open=True,
+                    kiwi_version='9.22.1',
+                    custom_shared_path='var/tmp/repos'
+                )
+
+        mock_path_create.assert_called_once_with('target')
+        mock_os_system.assert_called_once_with(
+            'qemu-system-x86_64 '
+            '-m 4096 '
+            '-machine accel=kvm '
+            '-cpu host '
+            '-nographic '
+            '-nodefaults '
+            '-snapshot '
+            '-kernel kernel '
+            '-append "append kiwi=\\"--type oem system build\\"'
+            ' kiwi-no-halt kiwi_version=_9.22.1_'
+            ' custom_mount=_var/tmp/repos_'
+            ' ssh_key=_key_value_'
+            ' ssh_key_type=_key_type_'
+            ' host_kiwidescription=_user@localhost:desc_'
+            ' host_kiwibundle=_user@localhost:target_'
+            ' host_custompath=_user@localhost:var/tmp/repos_'
+            ' sharing_backend=_sshfs_" '
+            '-drive file=system,if=virtio,driver=qcow2,cache=off,snapshot=on '
+            '-netdev user,id=user0,hostfwd=tcp::10022-:22 '
+            '-device virtio-net-pci,netdev=user0 '
+            '-device virtio-serial '
+            '-chardev stdio,id=virtiocon0 '
+            '-device virtconsole,chardev=virtiocon0 '
+            '-initrd initrd '
+            '-smp 4'
+        )
+        assert mock_Command_run.call_args_list[0] == call(
+            [
+                'ssh-keygen', '-R', '[localhost]:10022'
+            ], raise_on_error=False
+        )
+        assert mock_Command_run.call_args_list[1] == call(
+            [
+                'ssh', '-NT', '-o', 'StrictHostKeyChecking=no',
+                'root@localhost', '-p', '10022', '-R',
+                '10000:localhost:22'
+            ]
+        )

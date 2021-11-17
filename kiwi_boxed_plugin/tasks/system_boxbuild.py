@@ -25,7 +25,8 @@ usage: kiwi-ng system boxbuild -h | --help
            [--shared-path=<path>]
            [--no-update-check]
            [--no-snapshot]
-           [--9p-sharing | --virtiofs-sharing]
+           [--9p-sharing | --virtiofs-sharing | --sshfs-sharing]
+           [--ssh-key=<name>]
            [--x86_64 | --aarch64]
            [--machine=<qemu_machine>]
            [--cpu=<qemu_cpu>]
@@ -71,10 +72,14 @@ options:
         will be wiped. To prevent this combine the option with
         the --no-update-check option.
 
-    --9p-sharing|--virtiofs-sharing
+    --9p-sharing|--virtiofs-sharing|--sshfs-sharing
         Select sharing backend to use for sharing data between the
-        host and the box. This can be either 9p or virtiofs. By
-        default 9p is used
+        host and the box. This can be either 9p, virtiofs or sshfs.
+        By default 9p is used
+
+    --ssh-key=<name>
+        Name of ssh key to authorize for connection.
+        By default 'id_rsa' is used.
 
     --x86_64|--aarch64
         Select box for the given architecture. If no architecture
@@ -161,7 +166,8 @@ class SystemBoxbuildTask(CliTask):
                 arch=self._get_box_arch(),
                 machine=self.command_args.get('--machine'),
                 cpu=self.command_args.get('--cpu') or 'host',
-                sharing_backend=self._get_sharing_backend()
+                sharing_backend=self._get_sharing_backend(),
+                ssh_key=self.command_args.get('--ssh-key') or 'id_rsa'
             )
             box_build.run(
                 self._validate_kiwi_build_command(),
@@ -231,6 +237,10 @@ class SystemBoxbuildTask(CliTask):
         return box_arch
 
     def _get_sharing_backend(self):
-        return 'virtiofs' if self.command_args.get(
-            '--virtiofs-sharing'
-        ) else '9p'
+        backend = self.command_args.get('--virtiofs-sharing')
+        if backend:
+            return 'virtiofs'
+        backend = self.command_args.get('--sshfs-sharing')
+        if backend:
+            return 'sshfs'
+        return '9p'

@@ -3,7 +3,9 @@ from mock import (
     patch, Mock, MagicMock, call
 )
 
-from kiwi_boxed_plugin.box_download import BoxDownload
+from kiwi_boxed_plugin.box_download import (
+    BoxDownload, vm_setup_type
+)
 
 
 class TestBoxDownload:
@@ -21,7 +23,7 @@ class TestBoxDownload:
         mock_Path.create.assert_called_once_with(
             'HOME/.kiwi_boxes/suse'
         )
-        self.result = self.box.vm_setup_type(
+        self.result = vm_setup_type(
             system='HOME/.kiwi_boxes/suse/'
             'SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2',
             kernel='HOME/.kiwi_boxes/suse/kernel.x86_64',

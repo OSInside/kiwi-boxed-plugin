@@ -23,6 +23,8 @@ import subprocess
 from kiwi_boxed_plugin.exceptions import KiwiBoxPluginVirtioFsError
 
 VIRTIOFSD_PROCESS_LIST = []
+BOX_SSH_PORT_FORWARDED_TO_HOST = 10022
+HOST_SSH_PORT_FORWARDED_TO_BOX = 10000
 
 
 class Defaults:
@@ -52,22 +54,25 @@ class Defaults:
     @staticmethod
     def get_qemu_network_setup():
         return [
-            '-netdev', 'user,id=user0',
+            '-netdev',
+            f'user,id=user0,hostfwd=tcp::{BOX_SSH_PORT_FORWARDED_TO_HOST}-:22',
             '-device', 'virtio-net-pci,netdev=user0'
         ]
 
     @staticmethod
     def get_qemu_shared_path_setup(
-        index, path, mount_tag, sharing_backend='9p'
-    ):
+        index: int, path: str, mount_tag: str, sharing_backend: str = '9p'
+    ) -> List[str]:
+        shared_setup: List[str] = []
         if sharing_backend == '9p':
-            return Defaults.get_qemu_shared_path_setup_9p(
+            shared_setup = Defaults.get_qemu_shared_path_setup_9p(
                 index, path, mount_tag
             )
-        else:
-            return Defaults.get_qemu_shared_path_setup_virtiofs(
+        if sharing_backend == 'virtiofs':
+            shared_setup = Defaults.get_qemu_shared_path_setup_virtiofs(
                 index, path, mount_tag
             )
+        return shared_setup
 
     @staticmethod
     def get_qemu_shared_path_setup_9p(index, path, mount_tag):

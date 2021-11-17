@@ -65,8 +65,11 @@ class BoxConfig:
     def get_box_packages_file(self):
         return self.box_arch_config.get('packages_file')
 
-    def get_box_packages_shasum_file(self):
-        return self.box_arch_config.get('packages_file') + '.sha256'
+    def get_box_packages_shasum_file(self) -> str:
+        packages_file = self.box_arch_config.get('packages_file') or ''
+        if packages_file:
+            packages_file += '.sha256'
+        return packages_file
 
     def get_box_files(self):
         source_files = []

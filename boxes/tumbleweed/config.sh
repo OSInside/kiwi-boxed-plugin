@@ -24,6 +24,7 @@ systemctl mask systemd-user-sessions.service
 #======================================
 # Activate kiwi service
 #--------------------------------------
+suseInsertService sshd
 suseInsertService kiwi
 
 #======================================

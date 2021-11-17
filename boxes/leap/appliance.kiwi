@@ -71,6 +71,11 @@
         <package name="tack"/>
         <package name="make"/>
         <package name="kiwi-systemdeps"/>
+        <package name="openssh"/>
+        <package name="openssh-server"/>
+        <package name="sshfs"/>
+        <package name="netcat-openbsd"/>
+        <archive name="box-key-unsafe.tgz"/>
     </packages>
     <packages type="bootstrap">
         <package name="udev"/>

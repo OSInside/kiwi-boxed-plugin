@@ -16,9 +16,13 @@
 # along with kiwi-boxed-build.  If not, see <http://www.gnu.org/licenses/>
 #
 import os
+import pwd
+import time
 import logging
 import platform
+from threading import Thread
 from kiwi.path import Path
+from kiwi.command import Command
 
 from kiwi_boxed_plugin.box_download import BoxDownload
 from kiwi_boxed_plugin.defaults import Defaults
@@ -50,7 +54,7 @@ class BoxBuild:
     """
     def __init__(
         self, boxname, ram=None, smp=None, arch=None, machine=None,
-        cpu='host', sharing_backend='9p'
+        cpu='host', sharing_backend='9p', ssh_key='id_rsa'
     ):
         self.ram = ram
         self.smp = smp
@@ -59,6 +63,8 @@ class BoxBuild:
         self.arch = arch or platform.machine()
         self.box = BoxDownload(boxname, arch)
         self.sharing_backend = sharing_backend
+        self.ssh_key = ssh_key
+        self.kiwi_exit = None
 
     def run(
         self, kiwi_build_command, update_check=True,
@@ -99,11 +105,39 @@ class BoxBuild:
         if keep_open:
             vm_append.append('kiwi-no-halt')
         if kiwi_version:
-            vm_append.append('kiwi-version=_{0}_'.format(kiwi_version))
+            vm_append.append('kiwi_version=_{0}_'.format(kiwi_version))
         if custom_shared_path:
-            vm_append.append('custom-mount=_{0}_'.format(custom_shared_path))
+            vm_append.append('custom_mount=_{0}_'.format(custom_shared_path))
+        if self.sharing_backend == 'sshfs':
+            ssh_key_file = os.sep.join(
+                [os.environ.get('HOME'), '.ssh', f'{self.ssh_key}.pub']
+            )
+            if os.path.isfile(ssh_key_file):
+                with open(ssh_key_file) as key_fd:
+                    ssh_key = key_fd.read().split()
+                    key_type = ssh_key[0]
+                    key_value = ssh_key[1]
+                    vm_append.append(f'ssh_key=_{key_value}_')
+                    vm_append.append(f'ssh_key_type=_{key_type}_')
+            user = pwd.getpwuid(os.geteuid()).pw_name
+            vm_append.append(
+                'host_kiwidescription=_{0}_'.format(
+                    f'{user}@localhost:{desc}'
+                )
+            )
+            vm_append.append(
+                'host_kiwibundle=_{0}_'.format(
+                    f'{user}@localhost:{target_dir}'
+                )
+            )
+            if custom_shared_path:
+                vm_append.append(
+                    'host_custompath=_{0}_'.format(
+                        f'{user}@localhost:{custom_shared_path}'
+                    )
+                )
         vm_append.append(
-            'sharing-backend=_{0}_'.format(self.sharing_backend)
+            'sharing_backend=_{0}_'.format(self.sharing_backend)
         )
         vm_machine = [
             '-machine'
@@ -153,6 +187,32 @@ class BoxBuild:
         log.debug(
             'Set TMPDIR: {0}'.format(os.environ['TMPDIR'])
         )
+        if self.sharing_backend == 'sshfs':
+            log.debug('Initiating port forwarding')
+            # delete eventual existing host key for localhost on
+            # the kvm forwared box ssh port BOX_SSH_PORT_FORWARDED_TO_HOST
+            # this is required because the host ssh key changes
+            # with every kvm box run. ssh identifies this as
+            # a potential man-in-the-middle attack and will disable
+            # port forwarding which is required though.
+            Command.run(
+                [
+                    'ssh-keygen', '-R',
+                    '[localhost]:{0}'.format(
+                        runtime.BOX_SSH_PORT_FORWARDED_TO_HOST
+                    )
+                ], raise_on_error=False
+            )
+            # remote forward the host ssh port(22) into the box
+            # at port HOST_SSH_PORT_FORWARDED_TO_BOX using the kvm forwarded
+            # box ssh port BOX_SSH_PORT_FORWARDED_TO_HOST. This action only
+            # completes successfully when the box has started up and is
+            # ready to operate through ssh
+            ssh_forward_thread = Thread(
+                target=self._forward_host_ssh_to_guest,
+                args=()
+            )
+            ssh_forward_thread.start()
         log.debug(
             'Calling Qemu: {0}'.format(vm_run)
         )
@@ -164,12 +224,12 @@ class BoxBuild:
 
         exit_code_file = os.sep.join([target_dir, 'result.code'])
         build_log_file = os.sep.join([target_dir, 'result.log'])
-        kiwi_exit = 0
+        self.kiwi_exit = 0
         if os.path.exists(exit_code_file):
             with open(exit_code_file) as exit_code:
-                kiwi_exit = int(exit_code.readline())
+                self.kiwi_exit = int(exit_code.readline())
 
-        if kiwi_exit != 0:
+        if self.kiwi_exit != 0:
             raise KiwiError(
                 f'Box build failed. Find build log at: {build_log_file!r}'
             )
@@ -180,14 +240,34 @@ class BoxBuild:
 
     def _pop_arg_param(self, arg):
         arg_index = self.kiwi_build_command.index(arg)
+        arg_value = ''
         if arg_index:
-            value = self.kiwi_build_command[arg_index + 1]
+            arg_value = self.kiwi_build_command[arg_index + 1]
             del self.kiwi_build_command[arg_index + 1]
             del self.kiwi_build_command[arg_index]
-            return value
+        return arg_value
 
     def _find_qemu_call_binary(self):
         qemu_by_system = Path.which(f'qemu-system-{self.arch}')
         if qemu_by_system:
             return qemu_by_system
         return Path.which('qemu-kvm') if self.arch == 'x86_64' else None
+
+    def _forward_host_ssh_to_guest(self):
+        while self.kiwi_exit is None:
+            try:
+                Command.run(
+                    [
+                        'ssh', '-NT',
+                        '-o', 'StrictHostKeyChecking=no',
+                        'root@localhost',
+                        '-p', format(runtime.BOX_SSH_PORT_FORWARDED_TO_HOST),
+                        '-R',
+                        '{0}:localhost:22'.format(
+                            runtime.HOST_SSH_PORT_FORWARDED_TO_BOX
+                        )
+                    ]
+                )
+            except Exception as issue:
+                log.debug(issue)
+            time.sleep(2)

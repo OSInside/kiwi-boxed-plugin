@@ -22,6 +22,7 @@ systemctl mask systemd-user-sessions.service
 #======================================
 # Activate kiwi service
 #--------------------------------------
+baseInsertService ssh
 baseInsertService kiwi
 
 #======================================

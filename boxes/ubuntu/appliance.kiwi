@@ -86,6 +86,11 @@
         <package name="make"/>
         <package name="kiwi-systemdeps"/>
         <package name="jing"/>
+        <package name="openssh-client"/>
+        <package name="openssh-server"/>
+        <package name="sshfs"/>
+        <package name="netcat"/>
+        <archive name="box-key-unsafe.tgz"/>
     </packages>
     <packages type="bootstrap"/>
 </image>

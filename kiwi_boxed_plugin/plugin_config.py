@@ -66,4 +66,8 @@ class PluginConfig:
         """
         Return config dump as pretty string for the console
         """
-        return yaml.dump(self.config_data.get('box'))
+        config_dump = ''
+        box_dict = self.config_data.get('box') or {}
+        if box_dict:
+            config_dump = yaml.dump(box_dict)
+        return config_dump

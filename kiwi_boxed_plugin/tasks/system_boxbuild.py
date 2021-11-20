@@ -129,6 +129,7 @@ options:
 import logging
 import os
 from docopt import docopt
+from typing import List
 from kiwi.tasks.base import CliTask
 from kiwi.help import Help
 import kiwi.tasks.system_build
@@ -141,7 +142,7 @@ log = logging.getLogger('kiwi')
 
 
 class SystemBoxbuildTask(CliTask):
-    def process(self):
+    def process(self) -> None:
         self.manual = Help()
         if self.command_args.get('help') is True:
             return self.manual.show('kiwi::system::boxbuild')
@@ -178,7 +179,7 @@ class SystemBoxbuildTask(CliTask):
                 shared_path
             )
 
-    def _validate_kiwi_build_command(self):
+    def _validate_kiwi_build_command(self) -> List[str]:
         # construct build command from given command line
         kiwi_build_command = [
             'system', 'build'
@@ -228,15 +229,15 @@ class SystemBoxbuildTask(CliTask):
         )
         return final_kiwi_build_command
 
-    def _get_box_arch(self):
-        box_arch = None
+    def _get_box_arch(self) -> str:
+        box_arch = ''
         if self.command_args.get('--x86_64'):
             box_arch = 'x86_64'
         elif self.command_args.get('--aarch64'):
             box_arch = 'aarch64'
         return box_arch
 
-    def _get_sharing_backend(self):
+    def _get_sharing_backend(self) -> str:
         backend = self.command_args.get('--virtiofs-sharing')
         if backend:
             return 'virtiofs'

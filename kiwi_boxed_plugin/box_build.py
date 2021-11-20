@@ -21,6 +21,9 @@ import time
 import logging
 import platform
 from threading import Thread
+from typing import (
+    List, Optional
+)
 from kiwi.path import Path
 from kiwi.command import Command
 
@@ -53,9 +56,10 @@ class BoxBuild:
     :param str sharing_backend: guest/host sharing backend type
     """
     def __init__(
-        self, boxname, ram=None, smp=None, arch=None, machine=None,
-        cpu='host', sharing_backend='9p', ssh_key='id_rsa'
-    ):
+        self, boxname: str, ram: str = '', smp: str = '',
+        arch: str = '', machine: str = '', cpu: str = 'host',
+        sharing_backend: str = '9p', ssh_key: str = 'id_rsa'
+    ) -> None:
         self.ram = ram
         self.smp = smp
         self.cpu = cpu
@@ -64,13 +68,13 @@ class BoxBuild:
         self.box = BoxDownload(boxname, arch)
         self.sharing_backend = sharing_backend
         self.ssh_key = ssh_key
-        self.kiwi_exit = None
+        self.kiwi_exit: Optional[int] = None
 
     def run(
-        self, kiwi_build_command, update_check=True,
-        snapshot=True, keep_open=False, kiwi_version=None,
-        custom_shared_path=None
-    ):
+        self, kiwi_build_command: List[str], update_check: bool = True,
+        snapshot: bool = True, keep_open: bool = False,
+        kiwi_version: str = '', custom_shared_path: str = ''
+    ) -> None:
         """
         Start the build process in a box VM using KVM
 
@@ -110,7 +114,7 @@ class BoxBuild:
             vm_append.append('custom_mount=_{0}_'.format(custom_shared_path))
         if self.sharing_backend == 'sshfs':
             ssh_key_file = os.sep.join(
-                [os.environ.get('HOME'), '.ssh', f'{self.ssh_key}.pub']
+                [os.environ.get('HOME') or '~', '.ssh', f'{self.ssh_key}.pub']
             )
             if os.path.isfile(ssh_key_file):
                 with open(ssh_key_file) as key_fd:
@@ -238,7 +242,7 @@ class BoxBuild:
             f'Box build done. Find build log at: {build_log_file!r}'
         )
 
-    def _pop_arg_param(self, arg):
+    def _pop_arg_param(self, arg: str) -> str:
         arg_index = self.kiwi_build_command.index(arg)
         arg_value = ''
         if arg_index:
@@ -247,13 +251,13 @@ class BoxBuild:
             del self.kiwi_build_command[arg_index]
         return arg_value
 
-    def _find_qemu_call_binary(self):
+    def _find_qemu_call_binary(self) -> str:
         qemu_by_system = Path.which(f'qemu-system-{self.arch}')
         if qemu_by_system:
             return qemu_by_system
-        return Path.which('qemu-kvm') if self.arch == 'x86_64' else None
+        return Path.which('qemu-kvm') if self.arch == 'x86_64' else ''
 
-    def _forward_host_ssh_to_guest(self):
+    def _forward_host_ssh_to_guest(self) -> None:
         while self.kiwi_exit is None:
             try:
                 Command.run(

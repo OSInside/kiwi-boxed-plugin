@@ -17,6 +17,7 @@
 #
 import os
 from tempfile import NamedTemporaryFile
+from typing import Dict
 
 from kiwi.path import Path
 from kiwi.command import Command
@@ -30,7 +31,7 @@ class DirFiles:
     and updates the contents of the given directory with
     the registered files in an atomic operation
     """
-    def __init__(self, dirname):
+    def __init__(self, dirname: str) -> None:
         self.dirname = dirname
         self.dirname_tmp = ''.join(
             [self.dirname, '.tmp']
@@ -38,10 +39,10 @@ class DirFiles:
         self.dirname_wipe = ''.join(
             [self.dirname, '.wipe']
         )
-        self.collection = {}
+        self.collection: Dict[str, str] = {}
         Path.wipe(self.dirname_tmp)
 
-    def register(self, filename):
+    def register(self, filename: str) -> str:
         """
         Register given filename to be handled as a temporary
         file. The given filename gets overwritten with the
@@ -58,7 +59,7 @@ class DirFiles:
         self.collection[os.path.basename(filename)] = tmpfile.name
         return tmpfile.name
 
-    def commit(self):
+    def commit(self) -> None:
         """
         Update instance directory with contents of registered files
 

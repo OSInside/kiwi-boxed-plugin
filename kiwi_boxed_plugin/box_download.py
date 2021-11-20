@@ -18,7 +18,7 @@
 import os
 import platform
 import logging
-from collections import namedtuple
+from typing import NamedTuple
 from kiwi_boxed_plugin.utils.dir_files import DirFiles
 from kiwi_boxed_plugin.utils.fetch_files import FetchFiles
 from kiwi.command import Command
@@ -29,6 +29,17 @@ from kiwi.path import Path
 
 from kiwi_boxed_plugin.box_config import BoxConfig
 from kiwi_boxed_plugin.defaults import Defaults
+
+vm_setup_type = NamedTuple(
+    'vm_setup_type', [
+        ('system', str),
+        ('kernel', str),
+        ('initrd', str),
+        ('append', str),
+        ('ram', str),
+        ('smp', str)
+    ]
+)
 
 log = logging.getLogger('kiwi')
 
@@ -43,25 +54,19 @@ class BoxDownload:
     :param string boxname: name of the box from kiwi_boxed_plugin.yml
     :param string arch: arch name for box
     """
-    def __init__(self, boxname, arch=None):
+    def __init__(self, boxname: str, arch: str = '') -> None:
         self.arch = arch or platform.machine()
         self.box_config = BoxConfig(boxname, arch)
         self.box_dir = os.sep.join(
             [Defaults.get_local_box_cache_dir(), boxname]
         )
-        self.vm_setup_type = namedtuple(
-            'vm_setup_type', [
-                'system', 'kernel', 'initrd',
-                'append', 'ram', 'smp'
-            ]
-        )
         self.box_stage = DirFiles(self.box_dir)
-        self.system = None
-        self.kernel = None
-        self.initrd = None
+        self.system = ''
+        self.kernel = ''
+        self.initrd = ''
         Path.create(self.box_dir)
 
-    def fetch(self, update_check=True):
+    def fetch(self, update_check: bool = True) -> vm_setup_type:
         """
         Download box from the open build service
 
@@ -134,7 +139,7 @@ class BoxDownload:
                             local_box_file
                         )
 
-        return self.vm_setup_type(
+        return vm_setup_type(
             system=self.system,
             kernel=self.kernel,
             initrd=self.initrd,
@@ -146,11 +151,11 @@ class BoxDownload:
             smp=self.box_config.get_box_processors()
         )
 
-    def _create_packages_checksum(self, filename, shasum):
+    def _create_packages_checksum(self, filename: str, shasum: str):
         with open(filename, 'w') as sha_file:
             sha_file.write(shasum)
 
-    def _extract_kernel_from_tarball(self, tarfile):
+    def _extract_kernel_from_tarball(self, tarfile: str) -> str:
         Command.run(
             [
                 'tar', '-C', self.box_dir,
@@ -160,7 +165,7 @@ class BoxDownload:
         )
         return os.sep.join([self.box_dir, f'kernel.{self.arch}'])
 
-    def _extract_initrd_from_tarball(self, tarfile):
+    def _extract_initrd_from_tarball(self, tarfile: str) -> str:
         Command.run(
             [
                 'tar', '-C', self.box_dir,

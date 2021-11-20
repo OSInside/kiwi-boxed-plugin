@@ -14,7 +14,7 @@
         <profile name="System" description="Provides system for kvm boot"/>
     </profiles>
     <preferences>
-        <version>1.20.10</version>
+        <version>1.20.11</version>
         <packagemanager>apt-get</packagemanager>
         <locale>en_US</locale>
         <keytable>us</keytable>

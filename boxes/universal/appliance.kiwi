@@ -85,6 +85,7 @@
         <package name="openssh"/>
         <package name="openssh-server"/>
         <package name="sshfs"/>
+        <package name="fuse3"/>
         <package name="netcat"/>
         <archive name="box-key-unsafe.tgz"/>
     </packages>

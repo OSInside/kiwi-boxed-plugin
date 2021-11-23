@@ -28,6 +28,7 @@ class TestSystemBoxbuildTask:
         self.task.command_args['--kiwi-version'] = None
         self.task.command_args['--shared-path'] = None
         self.task.command_args['--9p-sharing'] = None
+        self.task.command_args['--sshfs-sharing'] = None
         self.task.command_args['--virtiofs-sharing'] = None
         self.task.command_args['--cpu'] = None
         self.task.command_args['--machine'] = None
@@ -69,8 +70,9 @@ class TestSystemBoxbuildTask:
         mock_BoxBuild.return_value = box_build
         self.task.process()
         mock_BoxBuild.assert_called_once_with(
-            boxname='suse', ram=None, smp=None, arch=None,
-            machine=None, cpu='host', sharing_backend='9p'
+            boxname='suse', ram=None, smp=None, arch='',
+            machine=None, cpu='host', sharing_backend='9p',
+            ssh_key='id_rsa'
         )
         box_build.run.assert_called_once_with(
             [
@@ -92,7 +94,8 @@ class TestSystemBoxbuildTask:
         self.task.process()
         mock_BoxBuild.assert_called_once_with(
             boxname='suse', ram=None, smp=None, arch='x86_64',
-            machine=None, cpu='host', sharing_backend='9p'
+            machine=None, cpu='host', sharing_backend='9p',
+            ssh_key='id_rsa'
         )
 
     @patch('kiwi_boxed_plugin.tasks.system_boxbuild.BoxBuild')
@@ -106,7 +109,8 @@ class TestSystemBoxbuildTask:
         self.task.process()
         mock_BoxBuild.assert_called_once_with(
             boxname='suse', ram=None, smp=None, arch='aarch64',
-            machine=None, cpu='host', sharing_backend='9p'
+            machine=None, cpu='host', sharing_backend='9p',
+            ssh_key='id_rsa'
         )
 
     @patch('kiwi_boxed_plugin.tasks.system_boxbuild.BoxBuild')
@@ -119,14 +123,26 @@ class TestSystemBoxbuildTask:
         mock_BoxBuild.return_value = box_build
         self.task.process()
         mock_BoxBuild.assert_called_once_with(
-            boxname='suse', ram=None, smp=None, arch=None,
-            machine=None, cpu='host', sharing_backend='9p'
+            boxname='suse', ram=None, smp=None, arch='',
+            machine=None, cpu='host', sharing_backend='9p',
+            ssh_key='id_rsa'
         )
         self.task.command_args['--9p-sharing'] = False
         self.task.command_args['--virtiofs-sharing'] = True
         mock_BoxBuild.reset_mock()
         self.task.process()
         mock_BoxBuild.assert_called_once_with(
-            boxname='suse', ram=None, smp=None, arch=None,
-            machine=None, cpu='host', sharing_backend='virtiofs'
+            boxname='suse', ram=None, smp=None, arch='',
+            machine=None, cpu='host', sharing_backend='virtiofs',
+            ssh_key='id_rsa'
+        )
+        self.task.command_args['--9p-sharing'] = False
+        self.task.command_args['--virtiofs-sharing'] = False
+        self.task.command_args['--sshfs-sharing'] = True
+        mock_BoxBuild.reset_mock()
+        self.task.process()
+        mock_BoxBuild.assert_called_once_with(
+            boxname='suse', ram=None, smp=None, arch='',
+            machine=None, cpu='host', sharing_backend='sshfs',
+            ssh_key='id_rsa'
         )

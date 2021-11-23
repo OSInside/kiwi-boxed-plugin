@@ -14,7 +14,7 @@
         <profile name="System" description="Provides system for kvm boot"/>
     </profiles>
     <preferences>
-        <version>1.20.10</version>
+        <version>1.20.11</version>
         <packagemanager>apt-get</packagemanager>
         <locale>en_US</locale>
         <keytable>us</keytable>
@@ -86,6 +86,11 @@
         <package name="make"/>
         <package name="kiwi-systemdeps"/>
         <package name="jing"/>
+        <package name="openssh-client"/>
+        <package name="openssh-server"/>
+        <package name="sshfs"/>
+        <package name="netcat"/>
+        <archive name="box-key-unsafe.tgz"/>
     </packages>
     <packages type="bootstrap"/>
 </image>

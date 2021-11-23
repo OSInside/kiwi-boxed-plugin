@@ -14,7 +14,7 @@
         <profile name="System" description="Provides system for kvm boot"/>
     </profiles>
     <preferences>
-        <version>1.15.2</version>
+        <version>1.15.3</version>
         <packagemanager>zypper</packagemanager>
         <locale>en_US</locale>
         <keytable>us</keytable>
@@ -71,6 +71,11 @@
         <package name="tack"/>
         <package name="make"/>
         <package name="kiwi-systemdeps"/>
+        <package name="openssh"/>
+        <package name="openssh-server"/>
+        <package name="sshfs"/>
+        <package name="netcat-openbsd"/>
+        <archive name="box-key-unsafe.tgz"/>
     </packages>
     <packages type="bootstrap">
         <package name="udev"/>

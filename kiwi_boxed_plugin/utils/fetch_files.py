@@ -46,7 +46,7 @@ class FetchFiles:
             progressbar.FileTransferSpeed()
         ]
         progress = progressbar.ProgressBar(
-            maxval=int(response.headers.get('Content-Length')),
+            maxval=int(response.headers.get('Content-Length') or ''),
             widgets=widgets
         ).start()
         processed = 0

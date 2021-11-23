@@ -16,6 +16,9 @@
 # along with kiwi-boxed-build.  If not, see <http://www.gnu.org/licenses/>
 #
 from cerberus import Validator
+from typing import (
+    List, Dict
+)
 import logging
 import yaml
 
@@ -36,8 +39,8 @@ class PluginConfig:
     formatted file containing information about available
     virtual disk images usable as build boxes
     """
-    def __init__(self):
-        self.config_data = None
+    def __init__(self) -> None:
+        self.config_data = {}
         plugin_config_file = Defaults.get_plugin_config_file()
         log.info('Reading box plugin config file: {0}'.format(
             plugin_config_file)
@@ -56,14 +59,18 @@ class PluginConfig:
                 )
             )
 
-    def get_config(self):
+    def get_config(self) -> List[Dict]:
         """
         Return config data dictionary
         """
-        return self.config_data.get('box')
+        return self.config_data.get('box') or []
 
-    def dump_config(self):
+    def dump_config(self) -> str:
         """
         Return config dump as pretty string for the console
         """
-        return yaml.dump(self.config_data.get('box'))
+        config_dump = ''
+        box_dict = self.config_data.get('box') or {}
+        if box_dict:
+            config_dump = yaml.dump(box_dict)
+        return config_dump

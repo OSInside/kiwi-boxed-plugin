@@ -14,7 +14,7 @@
         <profile name="System" description="Provides system for kvm boot"/>
     </profiles>
     <preferences>
-        <version>1.34.1</version>
+        <version>1.34.2</version>
         <packagemanager>dnf</packagemanager>
         <locale>en_US</locale>
         <keytable>us</keytable>
@@ -82,6 +82,11 @@
         <package name="grub2-efi-aa64" arch="aarch64"/>
         <package name="grub2-efi-aa64-modules" arch="aarch64"/>
         <package name="kiwi-systemdeps"/>
+        <package name="openssh"/>
+        <package name="openssh-server"/>
+        <package name="sshfs"/>
+        <package name="netcat"/>
+        <archive name="box-key-unsafe.tgz"/>
     </packages>
     <packages type="bootstrap">
         <package name="filesystem"/>

@@ -16,6 +16,7 @@
 # along with kiwi-boxed-build.  If not, see <http://www.gnu.org/licenses/>
 #
 import os
+from typing import List
 from kiwi.path import Path
 from pkg_resources import resource_filename
 import subprocess
@@ -23,6 +24,8 @@ import subprocess
 from kiwi_boxed_plugin.exceptions import KiwiBoxPluginVirtioFsError
 
 VIRTIOFSD_PROCESS_LIST = []
+BOX_SSH_PORT_FORWARDED_TO_HOST = 10022
+HOST_SSH_PORT_FORWARDED_TO_BOX = 10000
 
 
 class Defaults:
@@ -32,17 +35,17 @@ class Defaults:
     Provides static methods for default values and state information
     """
     @staticmethod
-    def get_plugin_config_file():
+    def get_plugin_config_file() -> str:
         return resource_filename(
             'kiwi_boxed_plugin', 'config/kiwi_boxed_plugin.yml'
         )
 
     @staticmethod
-    def get_local_box_cache_dir():
+    def get_local_box_cache_dir() -> str:
         return f'{os.environ.get("HOME")}/.kiwi_boxes'
 
     @staticmethod
-    def get_qemu_generic_setup():
+    def get_qemu_generic_setup() -> List[str]:
         return [
             '-nographic',
             '-nodefaults',
@@ -50,27 +53,32 @@ class Defaults:
         ]
 
     @staticmethod
-    def get_qemu_network_setup():
+    def get_qemu_network_setup() -> List[str]:
         return [
-            '-netdev', 'user,id=user0',
+            '-netdev',
+            f'user,id=user0,hostfwd=tcp::{BOX_SSH_PORT_FORWARDED_TO_HOST}-:22',
             '-device', 'virtio-net-pci,netdev=user0'
         ]
 
     @staticmethod
     def get_qemu_shared_path_setup(
-        index, path, mount_tag, sharing_backend='9p'
-    ):
+        index: int, path: str, mount_tag: str, sharing_backend: str = '9p'
+    ) -> List[str]:
+        shared_setup: List[str] = []
         if sharing_backend == '9p':
-            return Defaults.get_qemu_shared_path_setup_9p(
+            shared_setup = Defaults.get_qemu_shared_path_setup_9p(
                 index, path, mount_tag
             )
-        else:
-            return Defaults.get_qemu_shared_path_setup_virtiofs(
+        if sharing_backend == 'virtiofs':
+            shared_setup = Defaults.get_qemu_shared_path_setup_virtiofs(
                 index, path, mount_tag
             )
+        return shared_setup
 
     @staticmethod
-    def get_qemu_shared_path_setup_9p(index, path, mount_tag):
+    def get_qemu_shared_path_setup_9p(
+        index: int, path: str, mount_tag: str
+    ) -> List[str]:
         return [
             '-fsdev',
             'local,security_model=mapped,id=fsdev{0},path={1}'.format(
@@ -83,7 +91,9 @@ class Defaults:
         ]
 
     @staticmethod
-    def get_qemu_shared_path_setup_virtiofs(index, path, mount_tag):
+    def get_qemu_shared_path_setup_virtiofs(
+        index: int, path: str, mount_tag: str
+    ) -> List[str]:
         virtiofsd_lookup_paths = ['/usr/lib', '/usr/libexec']
         virtiofsd = Path.which(
             'virtiofsd', virtiofsd_lookup_paths
@@ -117,7 +127,7 @@ class Defaults:
         ]
 
     @staticmethod
-    def get_qemu_console_setup():
+    def get_qemu_console_setup() -> List[str]:
         return [
             '-device', 'virtio-serial',
             '-chardev', 'stdio,id=virtiocon0',
@@ -125,7 +135,9 @@ class Defaults:
         ]
 
     @staticmethod
-    def get_qemu_storage_setup(image_file, snapshot=True):
+    def get_qemu_storage_setup(
+        image_file: str, snapshot: bool = True
+    ) -> List[str]:
         return [
             '-drive',
             'file={0},if=virtio,driver=qcow2,cache=off,snapshot={1}'.format(

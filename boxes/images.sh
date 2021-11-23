@@ -70,19 +70,68 @@ function mount_shared_path {
     # """
     local path=$1
     local tag=$2
-    local backend
+    local ssh_host_path
+    declare sharing_backend=${sharing_backend}
+    declare host_kiwidescription=${host_kiwidescription}
+    declare host_kiwibundle=${host_kiwibundle}
+    declare host_custompath=${host_custompath}
     if mountpoint -q "${path}"; then
         return
     fi
     mkdir -p "${path}"
-    backend=$(
-        sed -s "s@.*sharing-backend=_\([a-zA-Z0-9]*\)_.*@\1@" /proc/cmdline
-    )
-    if [ "${backend}" = "virtiofs" ];then
+    if [ "${sharing_backend}" = "virtiofs" ];then
         mount -t virtiofs "${tag}" "${path}"
+    elif [ "${sharing_backend}" = "sshfs" ];then
+        # The kiwi boxbuild code forwards the host ssh port
+        # here to port HOST_SSH_PORT_FORWARDED_TO_BOX(10000)
+        if waitport 10000; then
+            if [ "${tag}" = "kiwidescription" ];then
+                ssh_host_path=${host_kiwidescription}
+            fi
+            if [ "${tag}" = "kiwibundle" ];then
+                ssh_host_path=${host_kiwibundle}
+            fi
+            if [ "${tag}" = "custompath" ];then
+                ssh_host_path=${host_custompath}
+            fi
+            # Without the box pubkey added to the authorized_keys
+            # file on the host, the following call will be
+            # interactively asking for credentials.
+            while ! sshfs -p 10000 \
+                -o "idmap=user" \
+                -o "StrictHostKeyChecking=accept-new" \
+            "${ssh_host_path}" "${path}"; do
+                sleep 2
+            done
+        fi
     else
         mount -t 9p -o "trans=virtio,version=9p2000.L" "${tag}" "${path}"
     fi
+}
+
+function import_box_variables {
+    # """
+    # Box variables are those which uses the =_*_ notation
+    # """
+    # shellcheck disable=SC2002,SC2046
+    eval export $(
+        cat /proc/cmdline | \
+        tr " " "\n" | grep "=_" | sed -e "s@=_@=@" | sed -e "s@_\$@@"
+    )
+}
+
+function import_ssh_pub_key {
+    declare ssh_key=${ssh_key}
+    declare ssh_key_type=${ssh_key_type}
+    if [ -n "${ssh_key}" ];then
+        mkdir -p /root/.ssh
+        echo "${ssh_key_type} ${ssh_key}" >> /root/.ssh/authorized_keys
+        chmod 600 /root/.ssh/authorized_keys
+    fi
+}
+
+function waitport {
+    while ! nc -z localhost $1 ; do sleep 1 ; done
 }
 
 function finish {
@@ -92,7 +141,14 @@ function finish {
 }
 
 # main
+declare custom_mount=${custom_mount}
+declare kiwi_version=${kiwi_version}
+
 trap finish EXIT
+
+import_box_variables
+
+import_ssh_pub_key
 
 wait_network
 
@@ -104,17 +160,13 @@ if ! mount_shared_path "/bundle" "kiwibundle"; then
     exit 1
 fi
 
-if grep -q custom-mount /proc/cmdline; then
-    custom_path=$(
-        sed -s "s@.*custom-mount=_\([a-zA-Z0-9_/\.\-]*\)_.*@\1@" /proc/cmdline
-    )
-    if ! mount_shared_path "${custom_path}" "custompath"; then
+if [ -n "${custom_mount}" ]; then
+    if ! mount_shared_path "${custom_mount}" "custompath"; then
         exit 1
     fi
 fi
 
-if grep -q kiwi-version /proc/cmdline; then
-    kiwi_version=$(sed -s "s@.*kiwi-version=_\([0-9\.]*\)_.*@\1@" /proc/cmdline)
+if [ -n "${kiwi_version}" ]; then
     if ! pip3 install kiwi=="${kiwi_version}"; then
         exit 1
     fi

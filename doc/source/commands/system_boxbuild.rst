@@ -17,7 +17,8 @@ SYNOPSIS
        [--shared-path=<path>]
        [--no-update-check]
        [--no-snapshot]
-       [--9p-sharing | --virtiofs-sharing]
+       [--9p-sharing | --virtiofs-sharing | --sshfs-sharing]
+       [--ssh-key=<name>]
        [--x86_64 | --aarch64]
        [--machine=<qemu_machine>]
        [--cpu=<qemu_cpu>]
@@ -96,11 +97,16 @@ OPTIONS
   will be wiped. To prevent this combine the option with
   the --no-update-check option.
 
---9p-sharing|--virtiofs-sharing
+--9p-sharing|--virtiofs-sharing|--sshfs-sharing
 
   Select sharing backend to use for sharing data between the
-  host and the box. This can be either 9p or virtiofs. By
-  default 9p is used
+  host and the box. This can be either 9p, virtiofs or sshfs.
+  By default 9p is used
+
+--ssh-key=<name>
+
+  Name of ssh key to authorize for connection.
+  By default 'id_rsa' is used.
 
 --x86_64|--aarch64
 

@@ -170,7 +170,7 @@ class BoxDownload:
             [
                 'tar', '-C', self.box_dir,
                 '--transform', f's/.*/initrd.{self.arch}/',
-                '--wildcards', '-xf', tarfile, '*.initrd.xz'
+                '--wildcards', '-xf', tarfile, '*.initrd'
             ]
         )
         return os.sep.join([self.box_dir, f'initrd.{self.arch}'])

@@ -90,6 +90,8 @@
         <package name="openssh-server"/>
         <package name="sshfs"/>
         <package name="netcat"/>
+        <package name="zstd"/>
+        <package name="sfdisk"/>
         <archive name="box-key-unsafe.tgz"/>
     </packages>
     <packages type="bootstrap"/>

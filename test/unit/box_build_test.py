@@ -25,7 +25,7 @@ class TestBoxBuild:
         self._caplog = caplog
 
     @patch('kiwi_boxed_plugin.box_build.BoxDownload')
-    def setup(self, mock_BoxDownload):
+    def setup(self, mock_BoxBuild, mock_BoxDownload):
         self.box = Mock()
         self.vm_setup = Mock()
         self.vm_setup.kernel = 'kernel'

@@ -1,5 +1,8 @@
+import logging
 from mock import patch
-from pytest import raises
+from pytest import (
+    raises, fixture
+)
 
 from kiwi_boxed_plugin.box_config import BoxConfig
 from kiwi_boxed_plugin.exceptions import (
@@ -10,16 +13,18 @@ from kiwi_boxed_plugin.exceptions import (
 
 
 class TestBoxConfig:
+    @fixture(autouse=True)
+    def inject_fixtures(self, caplog):
+        self._caplog = caplog
+
     @patch('kiwi_boxed_plugin.defaults.Defaults.get_plugin_config_file')
     @patch('platform.machine')
-    def setup(
-        self, mock_BoxConfig, mock_platform_machine,
-        mock_get_plugin_config_file
-    ):
+    def setup(self, mock_platform_machine, mock_get_plugin_config_file):
         mock_platform_machine.return_value = 'x86_64'
         mock_get_plugin_config_file.return_value = \
             '../data/kiwi_boxed_plugin.yml'
-        self.box_config = BoxConfig('suse')
+        with self._caplog.at_level(logging.INFO):
+            self.box_config = BoxConfig('suse')
 
     @patch('yaml.safe_load')
     @patch('kiwi_boxed_plugin.defaults.Defaults.get_plugin_config_file')

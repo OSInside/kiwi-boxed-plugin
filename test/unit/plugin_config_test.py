@@ -1,17 +1,25 @@
+import logging
 import yaml
 from mock import patch
-from pytest import raises
+from pytest import (
+    raises, fixture
+)
 
 from kiwi_boxed_plugin.plugin_config import PluginConfig
 from kiwi_boxed_plugin.exceptions import KiwiBoxPluginConfigError
 
 
 class TestPluginConfig:
+    @fixture(autouse=True)
+    def inject_fixtures(self, caplog):
+        self._caplog = caplog
+
     @patch('kiwi_boxed_plugin.defaults.Defaults.get_plugin_config_file')
-    def setup(self, mock_PluginConfig, mock_get_plugin_config_file):
+    def setup(self, mock_get_plugin_config_file):
         mock_get_plugin_config_file.return_value = \
             '../data/kiwi_boxed_plugin.yml'
-        self.plugin_config = PluginConfig()
+        with self._caplog.at_level(logging.INFO):
+            self.plugin_config = PluginConfig()
 
     @patch('kiwi_boxed_plugin.defaults.Defaults.get_plugin_config_file')
     def test_invalid_config(self, mock_get_plugin_config_file):

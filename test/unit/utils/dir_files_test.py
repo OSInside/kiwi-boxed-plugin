@@ -7,7 +7,7 @@ from kiwi_boxed_plugin.utils.dir_files import DirFiles
 
 class TestDirFiles:
     @patch('kiwi_boxed_plugin.utils.dir_files.Path')
-    def setup(self, mockDirFiles, mock_Path):
+    def setup(self, mock_Path):
         self.dir_manager = DirFiles('box_dir')
         mock_Path.wipe.assert_called_once_with('box_dir.tmp')
 

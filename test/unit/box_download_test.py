@@ -12,10 +12,7 @@ class TestBoxDownload:
     @patch('kiwi_boxed_plugin.defaults.Defaults.get_plugin_config_file')
     @patch('kiwi_boxed_plugin.box_download.Path')
     @patch('kiwi_boxed_plugin.box_download.DirFiles')
-    def setup(
-        self, mock_BoxDownload, mock_DirFiles, mock_Path,
-        mock_get_plugin_config_file
-    ):
+    def setup(self, mock_DirFiles, mock_Path, mock_get_plugin_config_file):
         self.box_stage = Mock()
         self.box_stage.register.return_value = 'register_file'
         mock_DirFiles.return_value = self.box_stage

@@ -33,6 +33,14 @@ class TestBoxDownload:
             smp=4
         )
 
+    @patch('kiwi_boxed_plugin.defaults.Defaults.get_plugin_config_file')
+    @patch('kiwi_boxed_plugin.box_download.Path')
+    @patch('kiwi_boxed_plugin.box_download.DirFiles')
+    def setup_method(
+        self, cls, mock_DirFiles, mock_Path, mock_get_plugin_config_file
+    ):
+        self.setup()
+
     @patch('kiwi_boxed_plugin.box_download.Command.run')
     @patch('kiwi_boxed_plugin.box_download.Uri')
     @patch('kiwi_boxed_plugin.box_download.SolverRepository.new')

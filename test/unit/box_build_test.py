@@ -2,9 +2,7 @@ import logging
 from mock import (
     patch, Mock, call
 )
-from pytest import (
-    raises, fixture
-)
+from pytest import raises
 
 from kiwi_boxed_plugin.box_build import BoxBuild
 import kiwi_boxed_plugin.defaults as defaults
@@ -20,10 +18,6 @@ log.setLevel('INFO')
 
 
 class TestBoxBuild:
-    @fixture(autouse=True)
-    def inject_fixtures(self, caplog):
-        self._caplog = caplog
-
     @patch('kiwi_boxed_plugin.box_build.BoxDownload')
     def setup(self, mock_BoxDownload):
         self.box = Mock()
@@ -43,6 +37,10 @@ class TestBoxBuild:
             boxname='universal', arch='aarch64',
             machine='virt', cpu='cortex-a57'
         )
+
+    @patch('kiwi_boxed_plugin.box_build.BoxDownload')
+    def setup_method(self, cls, mock_BoxDownload):
+        self.setup()
 
     @patch('os.environ')
     @patch('os.system')

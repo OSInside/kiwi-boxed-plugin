@@ -10,6 +10,9 @@ class TestFetchFiles:
     def setup(self):
         self.fetcher = FetchFiles()
 
+    def setup_method(self, cls):
+        self.setup()
+
     @patch('kiwi_boxed_plugin.utils.fetch_files.requests')
     @patch('kiwi_boxed_plugin.utils.fetch_files.progressbar')
     def test_wget(self, mock_progressbar, mock_requests):

@@ -18,6 +18,9 @@ class TestSystemBoxbuildTask:
         ]
         self.task = SystemBoxbuildTask()
 
+    def setup_method(self, cls):
+        self.setup()
+
     def _init_command_args(self):
         self.task.command_args = {}
         self.task.command_args['help'] = False

@@ -11,6 +11,10 @@ class TestDirFiles:
         self.dir_manager = DirFiles('box_dir')
         mock_Path.wipe.assert_called_once_with('box_dir.tmp')
 
+    @patch('kiwi_boxed_plugin.utils.dir_files.Path')
+    def setup_method(self, cls, mock_Path):
+        self.setup()
+
     @patch('kiwi_boxed_plugin.utils.dir_files.NamedTemporaryFile')
     def test_register(self, mock_NamedTemporaryFile):
         tmpfile = Mock()

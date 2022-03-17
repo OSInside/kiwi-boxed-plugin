@@ -53,7 +53,7 @@ License:        GPL-3.0-or-later
 Packager:       Marcus Schaefer <ms@suse.de>
 %endif
 Group:          %{pygroup}
-Source:         %{name}.tar.gz
+Source:         python-kiwi-boxed-plugin.tar.gz
 Source1:        %{name}-rpmlintrc
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  python%{python3_pkgversion}-%{develsuffix}

@@ -91,6 +91,7 @@
         <package name="netcat"/>
         <package name="zstd"/>
         <package name="util-linux"/>
+        <package name="sfdisk"/>
         <archive name="box-key-unsafe.tgz"/>
     </packages>
     <packages type="bootstrap"/>

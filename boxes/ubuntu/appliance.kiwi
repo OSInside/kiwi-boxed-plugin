@@ -25,7 +25,7 @@
         <type image="pxe" initrd_system="dracut"/>
     </preferences>
     <preferences profiles="System">
-        <type image="oem" filesystem="ext2" firmware="bios" format="qcow2" formatoptions="preallocation=metadata,compat=1.1,lazy_refcounts=on">
+        <type image="oem" filesystem="ext2" firmware="efi" format="qcow2" formatoptions="preallocation=metadata,compat=1.1,lazy_refcounts=on">
             <oemconfig>
                 <oem-resize>false</oem-resize>
             </oemconfig>
@@ -49,14 +49,17 @@
         <package name="netplan.io"/>
         <package name="networkd-dispatcher"/>
         <package name="net-tools"/>
-        <package name="grub2-themes-ubuntu-mate"/>
         <package name="plymouth-theme-sabily"/>
         <package name="plymouth"/>
-        <package name="grub2"/>
+        <package name="grub-efi-amd64" arch="x86_64"/>
+        <package name="grub-efi-arm64" arch="aarch64"/>
+        <package name="grub-common"/>
+        <package name="grub2-common"/>
+        <package name="grub-pc-bin" arch="x86_64"/>
         <package name="linux-generic"/>
         <package name="isolinux"/>
-        <package name="syslinux"/>
-        <package name="syslinux-common"/>
+        <package name="syslinux" arch="x86_64"/>
+        <package name="syslinux-common" arch="x86_64"/>
         <package name="systemd"/>
         <package name="dracut"/>
         <package name="init"/>

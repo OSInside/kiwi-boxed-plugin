@@ -55,8 +55,8 @@
         <package name="grub2"/>
         <package name="linux-generic"/>
         <package name="isolinux"/>
-        <package name="syslinux"/>
-        <package name="syslinux-common"/>
+        <package name="syslinux" arch="x86_64"/>
+        <package name="syslinux-common" arch="x86_64"/>
         <package name="systemd"/>
         <package name="dracut"/>
         <package name="init"/>

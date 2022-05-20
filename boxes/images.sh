@@ -109,6 +109,15 @@ function mount_shared_path {
     fi
 }
 
+function import_box_overlay_files {
+    # """
+    # Import optional boxroot overlay tree into box system
+    # """
+    if [ -d /description/boxroot ];then
+        rsync -zav /description/boxroot/ /
+    fi
+}
+
 function import_box_variables {
     # """
     # Box variables are those which uses the =_*_ notation
@@ -171,5 +180,7 @@ if [ -n "${kiwi_version}" ]; then
         exit 1
     fi
 fi
+
+import_box_overlay_files
 
 run_build

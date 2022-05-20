@@ -52,7 +52,7 @@
         <package name="plymouth-theme-sabily"/>
         <package name="plymouth"/>
         <package name="grub-efi-amd64" arch="x86_64"/>
-        <package name="grub-efi-aarch64" arch="aarch64"/>
+        <package name="grub-efi-arm64" arch="aarch64"/>
         <package name="grub-common"/>
         <package name="grub2-common"/>
         <package name="grub-pc-bin" arch="x86_64"/>

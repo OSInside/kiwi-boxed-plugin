@@ -32,7 +32,7 @@ types-PyYAML
 types-mock
 
 # for building documentation
-sphinx
+sphinx>=5.0.0
 sphinx_rtd_theme
 
 # for release

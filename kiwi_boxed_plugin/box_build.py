@@ -58,7 +58,8 @@ class BoxBuild:
     def __init__(
         self, boxname: str, ram: str = '', smp: str = '',
         arch: str = '', machine: str = '', cpu: str = 'host',
-        sharing_backend: str = '9p', ssh_key: str = 'id_rsa'
+        sharing_backend: str = '9p', ssh_key: str = 'id_rsa',
+        accel: bool = True
     ) -> None:
         self.ram = ram
         self.smp = smp
@@ -69,6 +70,7 @@ class BoxBuild:
         self.sharing_backend = sharing_backend
         self.ssh_key = ssh_key
         self.kiwi_exit: Optional[int] = None
+        self.accel = accel
 
     def run(
         self, kiwi_build_command: List[str], update_check: bool = True,
@@ -143,14 +145,15 @@ class BoxBuild:
         vm_append.append(
             'sharing_backend=_{0}_'.format(self.sharing_backend)
         )
-        vm_machine = [
-            '-machine'
-        ]
+        vm_machine = []
         if self.machine:
+            vm_machine.append('-machine')
             vm_machine.append(self.machine)
-        if self.arch == 'x86_64':
-            # KVM is only present for Intel and AMD
+
+        if self.accel:
+            vm_machine.append('-accel')
             vm_machine.append('accel=kvm')
+
         vm_machine.append('-cpu')
         vm_machine.append(self.cpu)
         qemu_binary = self._find_qemu_call_binary()

@@ -75,7 +75,7 @@ class TestSystemBoxbuildTask:
         mock_BoxBuild.assert_called_once_with(
             boxname='suse', ram=None, smp=None, arch='',
             machine=None, cpu='host', sharing_backend='9p',
-            ssh_key='id_rsa'
+            ssh_key='id_rsa', accel=True
         )
         box_build.run.assert_called_once_with(
             [
@@ -98,7 +98,7 @@ class TestSystemBoxbuildTask:
         mock_BoxBuild.assert_called_once_with(
             boxname='suse', ram=None, smp=None, arch='x86_64',
             machine=None, cpu='host', sharing_backend='9p',
-            ssh_key='id_rsa'
+            ssh_key='id_rsa', accel=True
         )
 
     @patch('kiwi_boxed_plugin.tasks.system_boxbuild.BoxBuild')
@@ -113,7 +113,7 @@ class TestSystemBoxbuildTask:
         mock_BoxBuild.assert_called_once_with(
             boxname='suse', ram=None, smp=None, arch='aarch64',
             machine=None, cpu='host', sharing_backend='9p',
-            ssh_key='id_rsa'
+            ssh_key='id_rsa', accel=True
         )
 
     @patch('kiwi_boxed_plugin.tasks.system_boxbuild.BoxBuild')
@@ -128,7 +128,7 @@ class TestSystemBoxbuildTask:
         mock_BoxBuild.assert_called_once_with(
             boxname='suse', ram=None, smp=None, arch='',
             machine=None, cpu='host', sharing_backend='9p',
-            ssh_key='id_rsa'
+            ssh_key='id_rsa', accel=True
         )
         self.task.command_args['--9p-sharing'] = False
         self.task.command_args['--virtiofs-sharing'] = True
@@ -137,7 +137,7 @@ class TestSystemBoxbuildTask:
         mock_BoxBuild.assert_called_once_with(
             boxname='suse', ram=None, smp=None, arch='',
             machine=None, cpu='host', sharing_backend='virtiofs',
-            ssh_key='id_rsa'
+            ssh_key='id_rsa', accel=True
         )
         self.task.command_args['--9p-sharing'] = False
         self.task.command_args['--virtiofs-sharing'] = False
@@ -147,5 +147,5 @@ class TestSystemBoxbuildTask:
         mock_BoxBuild.assert_called_once_with(
             boxname='suse', ram=None, smp=None, arch='',
             machine=None, cpu='host', sharing_backend='sshfs',
-            ssh_key='id_rsa'
+            ssh_key='id_rsa', accel=True
         )

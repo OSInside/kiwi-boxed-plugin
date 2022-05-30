@@ -17,6 +17,7 @@ SYNOPSIS
        [--shared-path=<path>]
        [--no-update-check]
        [--no-snapshot]
+       [--no-accel]
        [--9p-sharing | --virtiofs-sharing | --sshfs-sharing]
        [--ssh-key=<name>]
        [--x86_64 | --aarch64]
@@ -96,6 +97,12 @@ OPTIONS
   used with care. On update of the box all data stored
   will be wiped. To prevent this combine the option with
   the --no-update-check option.
+
+--no-accel
+
+  Run box without hardware acceleration. By default KVM
+  acceleration is activated
+
 
 --9p-sharing|--virtiofs-sharing|--sshfs-sharing
 

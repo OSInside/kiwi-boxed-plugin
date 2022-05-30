@@ -70,13 +70,6 @@ pygments_style = 'sphinx'
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
 
-extlinks = {
-    'issue': ('https://github.com/OSInside/kiwi-boxed-plugin/issues/%s', '#'),
-    'pr': ('https://github.com/OSInside/kiwi-boxed-plugin/pull/%s', 'PR #'),
-    'ghkiwi': ('https://github.com/OSInside/kiwi-boxed-plugin/blob/master/%s', '')
-}
-
-
 autosummary_generate = True
 
 # -- Options for HTML output ----------------------------------------------

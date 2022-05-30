@@ -81,7 +81,7 @@ class TestBoxBuild:
         mock_os_system.assert_called_once_with(
             'qemu-system-x86_64 '
             '-m 4096 '
-            '-machine accel=kvm '
+            '-accel accel=kvm '
             '-cpu host '
             '-nographic '
             '-nodefaults '
@@ -133,6 +133,7 @@ class TestBoxBuild:
             'qemu-system-aarch64 '
             '-m 4096 '
             '-machine virt '
+            '-accel accel=kvm '
             '-cpu cortex-a57 '
             '-nographic '
             '-nodefaults '
@@ -255,7 +256,7 @@ class TestBoxBuild:
         mock_os_system.assert_called_once_with(
             'qemu-system-x86_64 '
             '-m 4096 '
-            '-machine accel=kvm '
+            '-accel accel=kvm '
             '-cpu host '
             '-nographic '
             '-nodefaults '
@@ -363,7 +364,7 @@ class TestBoxBuild:
         mock_os_system.assert_called_once_with(
             'qemu-system-x86_64 '
             '-m 4096 '
-            '-machine accel=kvm '
+            '-accel accel=kvm '
             '-cpu host '
             '-nographic '
             '-nodefaults '

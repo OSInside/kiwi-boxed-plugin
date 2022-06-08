@@ -112,10 +112,16 @@ function mount_shared_path {
 function import_box_overlay_files {
     # """
     # Import optional boxroot overlay tree into box system
+    # Also make sure there is .gnupg directory for the root
+    # user created
     # """
     if [ -d /description/boxroot ];then
         rsync -zav /description/boxroot/ /
     fi
+    # make sure it's possible to create a GPG keyring
+    # used for apt repo keys as an example
+    mkdir -p /root/.gnupg
+    chmod 700 /root/.gnupg
 }
 
 function import_box_variables {

@@ -124,6 +124,15 @@ function import_box_overlay_files {
     chmod 700 /root/.gnupg
 }
 
+function import_box_environment {
+    # """
+    # Import optional etc/boxprofile into runtime environment
+    # """
+    if [ -e /etc/boxprofile ];then
+        source /etc/boxprofile
+    fi
+}
+
 function import_box_variables {
     # """
     # Box variables are those which uses the =_*_ notation
@@ -181,12 +190,14 @@ if [ -n "${custom_mount}" ]; then
     fi
 fi
 
+import_box_overlay_files
+
+import_box_environment
+
 if [ -n "${kiwi_version}" ]; then
     if ! pip3 install kiwi=="${kiwi_version}"; then
         exit 1
     fi
 fi
-
-import_box_overlay_files
 
 run_build

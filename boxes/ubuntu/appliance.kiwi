@@ -95,6 +95,7 @@
         <package name="zstd"/>
         <package name="util-linux"/>
         <package name="fdisk"/>
+        <package name="xxd"/>
         <archive name="box-key-unsafe.tgz"/>
     </packages>
     <packages type="bootstrap"/>

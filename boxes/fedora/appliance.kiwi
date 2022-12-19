@@ -73,6 +73,7 @@
         <package name="fuse3"/>
         <package name="fuse-common"/>
         <package name="netcat"/>
+        <package name="systemd-resolved"/>
         <archive name="box-key-unsafe.tgz"/>
     </packages>
     <packages type="bootstrap">

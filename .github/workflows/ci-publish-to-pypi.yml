@@ -8,7 +8,7 @@ on:
 jobs:
   release:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         python-version: [3.6]
@@ -27,6 +27,6 @@ jobs:
       run: |
         tox -e doc,release
     - name: Publish
-      uses: pypa/gh-action-pypi-publish@master
+      uses: pypa/gh-action-pypi-publish@release/v1
       with:
         password: ${{ secrets.PYPI_API_TOKEN }}

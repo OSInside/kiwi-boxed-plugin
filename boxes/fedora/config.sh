@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+set -ex
 
 test -f /.kconfig && . /.kconfig
 test -f /.profile && . /.profile
@@ -24,14 +24,6 @@ systemctl mask systemd-user-sessions.service
 #--------------------------------------
 baseInsertService sshd
 baseInsertService kiwi
-
-#======================================
-# lvmetad sucks for building lvm images
-#--------------------------------------
-systemctl disable lvm2-lvmetad
-systemctl mask lvm2-lvmetad
-systemctl disable lvm2-lvmetad.socket
-systemctl mask lvm2-lvmetad.socket
 
 #======================================
 # Fedora uses systemd-resolved for DNS

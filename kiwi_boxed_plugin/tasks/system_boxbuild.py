@@ -220,6 +220,8 @@ class SystemBoxbuildTask(CliTask):
                     for element in value:
                         kiwi_build_command.extend([option, element])
         final_kiwi_build_command = []
+        if self.global_args.get('--debug'):
+            final_kiwi_build_command.append('--debug')
         if self.global_args.get('--type'):
             final_kiwi_build_command.append('--type')
             final_kiwi_build_command.append(self.global_args.get('--type'))

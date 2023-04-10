@@ -70,7 +70,7 @@ class TestBoxBuild:
         mock_path_which.return_value = 'qemu-system-x86_64'
         self.build.run(
             [
-                '--type', 'oem', 'system', 'build',
+                '--debug', '--type', 'oem', 'system', 'build',
                 '--description', 'desc', '--target-dir', 'target'
             ],
             keep_open=True,
@@ -87,7 +87,7 @@ class TestBoxBuild:
             '-nodefaults '
             '-snapshot '
             '-kernel kernel '
-            '-append "append kiwi=\\"--type oem system build\\"'
+            '-append "append kiwi=\\"--debug --type oem system build\\"'
             ' kiwi-no-halt kiwi_version=_9.22.1_'
             ' custom_mount=_/var/tmp/repos_'
             ' sharing_backend=_9p_" '

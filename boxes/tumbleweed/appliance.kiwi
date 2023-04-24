@@ -70,8 +70,8 @@
         <package name="tack"/>
         <package name="make"/>
         <package name="kiwi-systemdeps"/>
-        <package name="python38-devel"/>
-        <package name="python38-pip"/>
+        <package name="python310-devel"/>
+        <package name="python310-pip"/>
         <package name="openssh"/>
         <package name="openssh-server"/>
         <package name="sshfs"/>

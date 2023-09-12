@@ -10,7 +10,7 @@ version := $(shell \
 )
 
 tox:
-	tox "-n 5"
+	tox
 
 install:
 	# install plugin manual page and license/readme

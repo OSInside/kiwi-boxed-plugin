@@ -47,3 +47,9 @@ class KiwiBoxPluginQEMUBinaryNotFound(KiwiError):
     Exception raised if no QEMU binary for the desired architecture
     could be found
     """
+
+
+class KiwiBoxPluginSSHPortInvalid(KiwiError):
+    """
+    Exception raised if an invalid SSH port is passed as an argument
+    """

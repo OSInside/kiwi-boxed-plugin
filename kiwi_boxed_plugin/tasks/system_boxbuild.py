@@ -28,6 +28,7 @@ usage: kiwi-ng system boxbuild -h | --help
            [--no-accel]
            [--9p-sharing | --virtiofs-sharing | --sshfs-sharing]
            [--ssh-key=<name>]
+           [--ssh-port=<port>]
            [--x86_64 | --aarch64]
            [--machine=<qemu_machine>]
            [--cpu=<qemu_cpu>]
@@ -85,6 +86,10 @@ options:
     --ssh-key=<name>
         Name of ssh key to authorize for connection.
         By default 'id_rsa' is used.
+
+    --ssh-port=<port>
+        Port number to use to forward the guest's SSH port to the host
+        By default '10022' is used.
 
     --x86_64|--aarch64
         Select box for the given architecture. If no architecture
@@ -174,6 +179,7 @@ class SystemBoxbuildTask(CliTask):
                 cpu=self.command_args.get('--cpu') or 'host',
                 sharing_backend=self._get_sharing_backend(),
                 ssh_key=self.command_args.get('--ssh-key') or 'id_rsa',
+                ssh_port=self.command_args.get('--ssh-port') or '',
                 accel=not bool(self.command_args.get('--no-accel'))
             )
             box_build.run(

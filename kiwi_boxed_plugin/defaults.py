@@ -24,7 +24,6 @@ import subprocess
 from kiwi_boxed_plugin.exceptions import KiwiBoxPluginVirtioFsError
 
 VIRTIOFSD_PROCESS_LIST = []
-BOX_SSH_PORT_FORWARDED_TO_HOST = 10022
 HOST_SSH_PORT_FORWARDED_TO_BOX = 10000
 
 
@@ -34,6 +33,8 @@ class Defaults:
 
     Provides static methods for default values and state information
     """
+    box_ssh_port_forwarded_to_host = 10022
+
     @staticmethod
     def get_plugin_config_file() -> str:
         return resource_filename(
@@ -56,7 +57,7 @@ class Defaults:
     def get_qemu_network_setup() -> List[str]:
         return [
             '-netdev',
-            f'user,id=user0,hostfwd=tcp::{BOX_SSH_PORT_FORWARDED_TO_HOST}-:22',
+            f'user,id=user0,hostfwd=tcp::{Defaults.box_ssh_port_forwarded_to_host}-:22',
             '-device', 'virtio-net-pci,netdev=user0'
         ]
 

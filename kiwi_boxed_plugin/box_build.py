@@ -34,6 +34,7 @@ import kiwi_boxed_plugin.defaults as runtime
 
 from kiwi_boxed_plugin.exceptions import (
     KiwiBoxPluginQEMUBinaryNotFound,
+    KiwiBoxPluginSSHPortInvalid,
     KiwiError
 )
 
@@ -54,12 +55,13 @@ class BoxBuild:
     :param str machine: machine emulaton type for the box
     :param str cpu: CPU emulation type
     :param str sharing_backend: guest/host sharing backend type
+    :param str ssh_port: host port number to use to forward the guest's SSH port
     """
     def __init__(
         self, boxname: str, ram: str = '', smp: str = '',
         arch: str = '', machine: str = '', cpu: str = 'host',
         sharing_backend: str = '9p', ssh_key: str = 'id_rsa',
-        accel: bool = True
+        ssh_port: str = '', accel: bool = True
     ) -> None:
         self.ram = ram
         self.smp = smp
@@ -69,6 +71,7 @@ class BoxBuild:
         self.box = BoxDownload(boxname, arch)
         self.sharing_backend = sharing_backend
         self.ssh_key = ssh_key
+        self.ssh_port = ssh_port
         self.kiwi_exit: Optional[int] = None
         self.accel = accel
 
@@ -154,6 +157,14 @@ class BoxBuild:
             vm_machine.append('-accel')
             vm_machine.append('accel=kvm')
 
+        if len(self.ssh_port) > 0:
+            if not self.ssh_port.isdigit():
+                raise KiwiBoxPluginSSHPortInvalid(
+                    f'Invalid SSH port: {self.ssh_port} (must be a positive \
+                    integer)'
+                )
+            Defaults.box_ssh_port_forwarded_to_host = int(self.ssh_port)
+
         vm_machine.append('-cpu')
         vm_machine.append(self.cpu)
         qemu_binary = self._find_qemu_call_binary()
@@ -197,7 +208,7 @@ class BoxBuild:
         if self.sharing_backend == 'sshfs':
             log.debug('Initiating port forwarding')
             # delete eventual existing host key for localhost on
-            # the kvm forwared box ssh port BOX_SSH_PORT_FORWARDED_TO_HOST
+            # the kvm forwared box ssh port box_ssh_port_forwarded_to_host
             # this is required because the host ssh key changes
             # with every kvm box run. ssh identifies this as
             # a potential man-in-the-middle attack and will disable
@@ -206,13 +217,13 @@ class BoxBuild:
                 [
                     'ssh-keygen', '-R',
                     '[localhost]:{0}'.format(
-                        runtime.BOX_SSH_PORT_FORWARDED_TO_HOST
+                        runtime.Defaults.box_ssh_port_forwarded_to_host
                     )
                 ], raise_on_error=False
             )
             # remote forward the host ssh port(22) into the box
             # at port HOST_SSH_PORT_FORWARDED_TO_BOX using the kvm forwarded
-            # box ssh port BOX_SSH_PORT_FORWARDED_TO_HOST. This action only
+            # box ssh port box_ssh_port_forwarded_to_host. This action only
             # completes successfully when the box has started up and is
             # ready to operate through ssh
             ssh_forward_thread = Thread(
@@ -268,7 +279,8 @@ class BoxBuild:
                         'ssh', '-NT',
                         '-o', 'StrictHostKeyChecking=no',
                         'root@localhost',
-                        '-p', format(runtime.BOX_SSH_PORT_FORWARDED_TO_HOST),
+                        '-p',
+                        format(runtime.Defaults.box_ssh_port_forwarded_to_host),
                         '-R',
                         '{0}:localhost:22'.format(
                             runtime.HOST_SSH_PORT_FORWARDED_TO_BOX

@@ -10,6 +10,7 @@ import kiwi_boxed_plugin.defaults as defaults
 from kiwi_boxed_plugin.exceptions import (
     KiwiBoxPluginVirtioFsError,
     KiwiBoxPluginQEMUBinaryNotFound,
+    KiwiBoxPluginSSHPortInvalid,
     KiwiError
 )
 
@@ -56,6 +57,24 @@ class TestBoxBuild:
                 [
                     '--type', 'oem', 'system', 'build',
                     '--description', 'desc', '--target-dir', '../data/target'
+                ]
+            )
+
+    @patch('os.environ')
+    @patch('os.system')
+    @patch('kiwi_boxed_plugin.box_build.Path.create')
+    @patch('kiwi_boxed_plugin.box_build.Path.which')
+    def test_raises_on_invalid_ssh_port(
+        self, mock_path_which, mock_path_create,
+        mock_os_system, mock_os_environ
+    ):
+        mock_path_which.return_value = 'qemu-system-x86_64'
+        self.build.ssh_port = 'bogus'
+        with raises(KiwiBoxPluginSSHPortInvalid):
+            self.build.run(
+                [
+                    '--debug', '--type', 'oem', 'system', 'build',
+                    '--description', 'desc', '--target-dir', 'target'
                 ]
             )
 
@@ -345,6 +364,7 @@ class TestBoxBuild:
         mock_pwd_getpwuid.return_value.pw_name = 'user'
         mock_os_path_isfile.return_value = True
         self.build.sharing_backend = 'sshfs'
+        self.build.ssh_port = '10022'
 
         with patch('builtins.open', create=True) as mock_open:
             with patch.dict('os.environ', {'HOME': '~'}):

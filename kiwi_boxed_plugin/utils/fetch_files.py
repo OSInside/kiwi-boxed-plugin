@@ -16,7 +16,10 @@
 # along with kiwi-boxed-build.  If not, see <http://www.gnu.org/licenses/>
 #
 import requests
-import progressbar
+try:
+    import progressbar2 as progressbar
+except ImportError:
+    import progressbar
 import requests.packages.urllib3
 
 

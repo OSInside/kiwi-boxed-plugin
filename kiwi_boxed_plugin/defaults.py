@@ -60,9 +60,9 @@ class Defaults:
             return cfg_p
 
         # Local Kiwi config
-        cfg_p = pathlib.Path.home().joinpath(f".config/kiwi/{cfg_n}")
-        if cfg_p.exists():
-            return cfg_p.as_posix()
+        cfg_pth: pathlib.Path = pathlib.Path.home().joinpath(f".config/kiwi/{cfg_n}")
+        if cfg_pth.exists():
+            return cfg_pth.as_posix()
 
         cfg_p = f"/etc/{cfg_n}"
         if os.path.exists(cfg_p):

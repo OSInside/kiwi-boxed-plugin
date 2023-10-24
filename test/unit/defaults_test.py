@@ -2,6 +2,26 @@ from pkg_resources import resource_filename
 from kiwi_boxed_plugin.defaults import Defaults
 from mock import patch, Mock
 import os
+import pathlib
+
+
+class MockedPath:
+    def __init__(self):
+        self.p: str | None = None
+
+    def home(self):
+        return self
+
+    @staticmethod
+    def exists():
+        return True
+
+    def joinpath(self, f: str):
+        self.p = os.path.join("/home/zoidberg", f)
+        return self
+
+    def as_posix(self):
+        return self.p
 
 
 class TestDefaults:
@@ -21,3 +41,8 @@ class TestDefaults:
     def test_get_plugin_config_file_currdir(self):
         assert Defaults.get_plugin_config_file() == "/highway/to/hell.conf", \
             "Should contain absolute path to the config"
+
+    @patch("pathlib.Path", MockedPath())
+    def test_get_plugin_config_file_local_kiwi(self):
+        assert Defaults.get_plugin_config_file() == "/home/zoidberg/.config/kiwi/kiwi_boxed_plugin.yml", \
+            "Should contain local Kiwi config"

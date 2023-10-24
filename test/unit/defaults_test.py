@@ -15,3 +15,9 @@ class TestDefaults:
     def test_get_plugin_config_file_env(self):
         assert Defaults.get_plugin_config_file() == "aarchderwelt.conf", \
             "aarch64 aonfiguration from the environment variable do not match"
+
+    @patch("os.path.abspath", lambda f: "/highway/to/hell.conf")
+    @patch("os.path.exists", lambda f: True)
+    def test_get_plugin_config_file_currdir(self):
+        assert Defaults.get_plugin_config_file() == "/highway/to/hell.conf", \
+            "Should contain absolute path to the config"

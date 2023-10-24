@@ -45,4 +45,9 @@ class TestDefaults:
     @patch("pathlib.Path", MockedPath())
     def test_get_plugin_config_file_local_kiwi(self):
         assert Defaults.get_plugin_config_file() == "/home/zoidberg/.config/kiwi/kiwi_boxed_plugin.yml", \
-            "Should contain local Kiwi config"
+            "Should contain local Kiwi Box config"
+
+    @patch("os.path.exists", lambda f: f == "/etc/kiwi_boxed_plugin.yml")
+    def test_get_plugin_config_file_etc(self):
+        assert Defaults.get_plugin_config_file() == "/etc/kiwi_boxed_plugin.yml", \
+            "Should contain Kiwi Box config in /etc dir"

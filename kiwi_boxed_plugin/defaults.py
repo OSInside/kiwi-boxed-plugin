@@ -16,6 +16,7 @@
 # along with kiwi-boxed-build.  If not, see <http://www.gnu.org/licenses/>
 #
 import os
+import pathlib
 from typing import List
 from kiwi.path import Path
 from pkg_resources import resource_filename
@@ -37,8 +38,38 @@ class Defaults:
 
     @staticmethod
     def get_plugin_config_file() -> str:
+        """
+        Config file name: `kiwi_boxed_plugin.yml`
+        Locations are searched in this order:
+            1. Environment variable "KIWI_BOXED_PLUGIN_CFG" (full path, name can be different)
+            2. Current directory
+            3. $HOME/.config/kiwi/kiwi_boxed_plugin.yml
+            4. /etc/kiwi_boxed_plugin.yml
+            5. Resource (default config, coming with the package)
+        """
+        cfg_n = "kiwi_boxed_plugin.yml"
+
+        # Path via env. Here is no limit what name/path of the cfg
+        cfg_p: str | None = os.environ.get("KIWI_BOXED_PLUGIN_CFG")
+        if cfg_p is not None and os.path.exists(cfg_p):
+            return cfg_p
+
+        # Curr dir
+        cfg_p = os.path.abspath(cfg_n)
+        if os.path.exists(cfg_p):
+            return cfg_p
+
+        # Local Kiwi config
+        cfg_pth: pathlib.Path = pathlib.Path.home().joinpath(f".config/kiwi/{cfg_n}")
+        if cfg_pth.exists():
+            return cfg_pth.as_posix()
+
+        cfg_p = f"/etc/{cfg_n}"
+        if os.path.exists(cfg_p):
+            return cfg_p
+
         return resource_filename(
-            'kiwi_boxed_plugin', 'config/kiwi_boxed_plugin.yml'
+            'kiwi_boxed_plugin', f'config/{cfg_n}'
         )
 
     @staticmethod

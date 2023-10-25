@@ -1,8 +1,7 @@
 from pkg_resources import resource_filename
 from kiwi_boxed_plugin.defaults import Defaults
-from mock import patch, Mock
+from mock import patch
 import os
-import pathlib
 
 
 class MockedPath:

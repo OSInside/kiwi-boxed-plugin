@@ -41,35 +41,40 @@ class Defaults:
         """
         Config file name: `kiwi_boxed_plugin.yml`
         Locations are searched in this order:
-            1. Environment variable "KIWI_BOXED_PLUGIN_CFG" (full path, name can be different)
-            2. Current directory
+            1. ENV variable: $KIWI_BOXED_PLUGIN_CFG
+               full path to file, name is freely selectable
+            2. $PWD/kiwi_boxed_plugin.yml
             3. $HOME/.config/kiwi/kiwi_boxed_plugin.yml
             4. /etc/kiwi_boxed_plugin.yml
             5. Resource (default config, coming with the package)
         """
-        cfg_n = "kiwi_boxed_plugin.yml"
+        config_name = "kiwi_boxed_plugin.yml"
 
-        # Path via env. Here is no limit what name/path of the cfg
-        cfg_p: str | None = os.environ.get("KIWI_BOXED_PLUGIN_CFG")
-        if cfg_p is not None and os.path.exists(cfg_p):
-            return cfg_p
+        # 1.
+        config_path_env: str | None = os.environ.get("KIWI_BOXED_PLUGIN_CFG")
+        if config_path_env is not None and os.path.exists(config_path_env):
+            return config_path_env
 
-        # Curr dir
-        cfg_p = os.path.abspath(cfg_n)
-        if os.path.exists(cfg_p):
-            return cfg_p
+        # 2.
+        config_path_pwd = os.path.abspath(config_name)
+        if os.path.exists(config_path_pwd):
+            return config_path_pwd
 
-        # Local Kiwi config
-        cfg_pth: pathlib.Path = pathlib.Path.home().joinpath(f".config/kiwi/{cfg_n}")
-        if cfg_pth.exists():
-            return cfg_pth.as_posix()
+        # 3.
+        config_path_home: pathlib.Path = pathlib.Path.home().joinpath(
+            f'.config/kiwi/{config_name}'
+        )
+        if config_path_home.exists():
+            return config_path_home.as_posix()
 
-        cfg_p = f"/etc/{cfg_n}"
-        if os.path.exists(cfg_p):
-            return cfg_p
+        # 4.
+        config_path_system = f'/etc/{config_name}'
+        if os.path.exists(config_path_system):
+            return config_path_system
 
+        # 5.
         return resource_filename(
-            'kiwi_boxed_plugin', f'config/{cfg_n}'
+            'kiwi_boxed_plugin', f'config/{config_name}'
         )
 
     @staticmethod

@@ -11,6 +11,7 @@ SYNOPSIS
    kiwi-ng system boxbuild -h | --help
    kiwi-ng system boxbuild --box=<name>
        [--box-memory=<vmgb>]
+       [--box-console=<ttyname>]
        [--box-smp-cpus=<number>]
        [--box-debug]
        [--kiwi-version=<version>]
@@ -74,6 +75,11 @@ OPTIONS
 
   Number of GBs to reserve as main memory for the virtual
   machine. By default 8GB will be used.
+
+--box-console=<ttyname>
+
+  Name of console in the kernel settings for the virtual
+  machine. By default set to hvc0.
 
 --box-smp-cpus=<number>
 

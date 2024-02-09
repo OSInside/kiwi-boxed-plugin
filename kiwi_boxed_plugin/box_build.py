@@ -50,6 +50,7 @@ class BoxBuild:
 
     :param str boxname: name of the box from kiwi_boxed_plugin.yml
     :param str ram: amount of main memory to use for the box
+    :param str console: console name for the box kernel
     :param str smp: number of CPUs to use in the SMP setup for the box
     :param str arch: arch name for box
     :param str machine: machine emulaton type for the box
@@ -58,12 +59,13 @@ class BoxBuild:
     :param str ssh_port: host port number to use to forward the guest's SSH port
     """
     def __init__(
-        self, boxname: str, ram: str = '', smp: str = '',
+        self, boxname: str, ram: str = '', console: str = '', smp: str = '',
         arch: str = '', machine: str = '', cpu: str = 'host',
         sharing_backend: str = '9p', ssh_key: str = 'id_rsa',
         ssh_port: str = '', accel: bool = True
     ) -> None:
         self.ram = ram
+        self.console = console
         self.smp = smp
         self.cpu = cpu
         self.machine = machine
@@ -111,6 +113,10 @@ class BoxBuild:
             vm_setup.append,
             'kiwi=\\"{0}\\"'.format(' '.join(self.kiwi_build_command))
         ]
+        if self.console:
+            vm_append[0] = vm_append[0].replace(
+                f'console={vm_setup.console}', f'console={self.console}'
+            )
         if keep_open:
             vm_append.append('kiwi-no-halt')
         if kiwi_version:

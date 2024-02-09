@@ -12,7 +12,11 @@ class TestSystemBoxbuildTask:
             sys.argv[0],
             '--debug', '--profile', 'foo', '--type', 'oem',
             'system', 'boxbuild',
-            '--box', 'suse', '--box-memory', '4', '--box-smp-cpus', '4', '--',
+            '--box', 'universal',
+            '--box-memory', '4',
+            '--box-console', 'ttyAMA0',
+            '--box-smp-cpus', '4',
+            '--',
             '--description', '../data/description',
             '--target-dir', '../data/target_dir'
         ]
@@ -69,12 +73,12 @@ class TestSystemBoxbuildTask:
     def test_process_system_boxbuild(self, mock_BoxBuild):
         self._init_command_args()
         self.task.command_args['boxbuild'] = True
-        self.task.command_args['--box'] = 'suse'
+        self.task.command_args['--box'] = 'universal'
         box_build = Mock()
         mock_BoxBuild.return_value = box_build
         self.task.process()
         mock_BoxBuild.assert_called_once_with(
-            boxname='suse', ram=None, smp=None, arch='',
+            boxname='universal', ram=None, console=None, smp=None, arch='',
             machine=None, cpu='host', sharing_backend='9p',
             ssh_key='id_rsa', ssh_port='22', accel=True
         )
@@ -92,13 +96,14 @@ class TestSystemBoxbuildTask:
     def test_process_system_boxbuild_for_x86_64(self, mock_BoxBuild):
         self._init_command_args()
         self.task.command_args['boxbuild'] = True
-        self.task.command_args['--box'] = 'suse'
+        self.task.command_args['--box'] = 'universal'
         self.task.command_args['--x86_64'] = True
         box_build = Mock()
         mock_BoxBuild.return_value = box_build
         self.task.process()
         mock_BoxBuild.assert_called_once_with(
-            boxname='suse', ram=None, smp=None, arch='x86_64',
+            boxname='universal',
+            ram=None, console=None, smp=None, arch='x86_64',
             machine=None, cpu='host', sharing_backend='9p',
             ssh_key='id_rsa', ssh_port='22', accel=True
         )
@@ -107,13 +112,14 @@ class TestSystemBoxbuildTask:
     def test_process_system_boxbuild_for_aarch64(self, mock_BoxBuild):
         self._init_command_args()
         self.task.command_args['boxbuild'] = True
-        self.task.command_args['--box'] = 'suse'
+        self.task.command_args['--box'] = 'universal'
         self.task.command_args['--aarch64'] = True
         box_build = Mock()
         mock_BoxBuild.return_value = box_build
         self.task.process()
         mock_BoxBuild.assert_called_once_with(
-            boxname='suse', ram=None, smp=None, arch='aarch64',
+            boxname='universal',
+            ram=None, console=None, smp=None, arch='aarch64',
             machine=None, cpu='host', sharing_backend='9p',
             ssh_key='id_rsa', ssh_port='22', accel=True
         )
@@ -122,13 +128,13 @@ class TestSystemBoxbuildTask:
     def test_process_system_boxbuild_with_sharing_backend(self, mock_BoxBuild):
         self._init_command_args()
         self.task.command_args['boxbuild'] = True
-        self.task.command_args['--box'] = 'suse'
+        self.task.command_args['--box'] = 'universal'
         self.task.command_args['--9p-sharing'] = True
         box_build = Mock()
         mock_BoxBuild.return_value = box_build
         self.task.process()
         mock_BoxBuild.assert_called_once_with(
-            boxname='suse', ram=None, smp=None, arch='',
+            boxname='universal', ram=None, console=None, smp=None, arch='',
             machine=None, cpu='host', sharing_backend='9p',
             ssh_key='id_rsa', ssh_port='22', accel=True
         )
@@ -137,7 +143,7 @@ class TestSystemBoxbuildTask:
         mock_BoxBuild.reset_mock()
         self.task.process()
         mock_BoxBuild.assert_called_once_with(
-            boxname='suse', ram=None, smp=None, arch='',
+            boxname='universal', ram=None, console=None, smp=None, arch='',
             machine=None, cpu='host', sharing_backend='virtiofs',
             ssh_key='id_rsa', ssh_port='22', accel=True
         )
@@ -147,7 +153,7 @@ class TestSystemBoxbuildTask:
         mock_BoxBuild.reset_mock()
         self.task.process()
         mock_BoxBuild.assert_called_once_with(
-            boxname='suse', ram=None, smp=None, arch='',
+            boxname='universal', ram=None, console=None, smp=None, arch='',
             machine=None, cpu='host', sharing_backend='sshfs',
             ssh_key='id_rsa', ssh_port='22', accel=True
         )

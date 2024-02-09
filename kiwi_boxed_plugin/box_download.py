@@ -36,6 +36,7 @@ vm_setup_type = NamedTuple(
         ('kernel', str),
         ('initrd', str),
         ('append', str),
+        ('console', str),
         ('ram', str),
         ('smp', str)
     ]
@@ -147,6 +148,7 @@ class BoxDownload:
                 self.box_config.get_box_console(),
                 self.box_config.get_box_kernel_cmdline()
             ),
+            console=self.box_config.get_box_console(),
             ram=self.box_config.get_box_memory_mbytes(),
             smp=self.box_config.get_box_processors()
         )

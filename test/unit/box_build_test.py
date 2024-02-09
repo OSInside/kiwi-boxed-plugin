@@ -24,9 +24,10 @@ class TestBoxBuild:
         self.box = Mock()
         self.vm_setup = Mock()
         self.vm_setup.kernel = 'kernel'
-        self.vm_setup.append = 'append'
+        self.vm_setup.append = 'console=hvc0'
         self.vm_setup.system = 'system'
         self.vm_setup.initrd = 'initrd'
+        self.vm_setup.console = 'hvc0'
         self.vm_setup.ram = 4096
         self.vm_setup.smp = 4
         self.box.fetch.return_value = self.vm_setup
@@ -36,7 +37,8 @@ class TestBoxBuild:
         )
         self.build_arm = BoxBuild(
             boxname='universal', arch='aarch64',
-            machine='virt', cpu='cortex-a57'
+            machine='virt', cpu='cortex-a57',
+            console='ttyAMA0'
         )
 
     @patch('kiwi_boxed_plugin.box_build.BoxDownload')
@@ -106,7 +108,7 @@ class TestBoxBuild:
             '-nodefaults '
             '-snapshot '
             '-kernel kernel '
-            '-append "append kiwi=\\"--debug --type oem system build\\"'
+            '-append "console=hvc0 kiwi=\\"--debug --type oem system build\\"'
             ' kiwi-no-halt kiwi_version=_9.22.1_'
             ' custom_mount=_/var/tmp/repos_'
             ' sharing_backend=_9p_" '
@@ -158,7 +160,7 @@ class TestBoxBuild:
             '-nodefaults '
             '-snapshot '
             '-kernel kernel '
-            '-append "append kiwi=\\"--type oem system build\\"'
+            '-append "console=ttyAMA0 kiwi=\\"--type oem system build\\"'
             ' kiwi-no-halt kiwi_version=_9.22.1_'
             ' custom_mount=_/var/tmp/repos_'
             ' sharing_backend=_9p_" '
@@ -281,7 +283,7 @@ class TestBoxBuild:
             '-nodefaults '
             '-snapshot '
             '-kernel kernel '
-            '-append "append kiwi=\\"--type oem system build\\"'
+            '-append "console=hvc0 kiwi=\\"--type oem system build\\"'
             ' kiwi-no-halt kiwi_version=_9.22.1_'
             ' custom_mount=_var/tmp/repos_'
             ' sharing_backend=_virtiofs_" '
@@ -390,7 +392,7 @@ class TestBoxBuild:
             '-nodefaults '
             '-snapshot '
             '-kernel kernel '
-            '-append "append kiwi=\\"--type oem system build\\"'
+            '-append "console=hvc0 kiwi=\\"--type oem system build\\"'
             ' kiwi-no-halt kiwi_version=_9.22.1_'
             ' custom_mount=_var/tmp/repos_'
             ' ssh_key=_key_value_'

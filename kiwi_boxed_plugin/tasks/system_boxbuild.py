@@ -215,7 +215,7 @@ class SystemBoxbuildTask(CliTask):
             )
         )
         validated_build_command = docopt(
-            doc=kiwi.tasks.system_build.__doc__,
+            kiwi.tasks.system_build.__doc__,
             argv=kiwi_build_command
         )
         # rebuild kiwi build command from validated docopt parser result

@@ -15,7 +15,7 @@
     </profiles>
     <preferences>
         <version>1.22.04</version>
-        <packagemanager>apt-get</packagemanager>
+        <packagemanager>apt</packagemanager>
         <locale>en_US</locale>
         <keytable>us</keytable>
         <timezone>UTC</timezone>

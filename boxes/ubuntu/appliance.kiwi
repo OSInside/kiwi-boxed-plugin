@@ -96,6 +96,7 @@
         <package name="util-linux"/>
         <package name="fdisk"/>
         <package name="xxd"/>
+        <package name="language-pack-en"/>
         <archive name="box-key-unsafe.tgz"/>
     </packages>
     <packages type="bootstrap"/>

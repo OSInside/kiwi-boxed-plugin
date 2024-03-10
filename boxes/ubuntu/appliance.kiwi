@@ -97,6 +97,7 @@
         <package name="fdisk"/>
         <package name="xxd"/>
         <package name="language-pack-en"/>
+        <package name="python3-solv"/>
         <archive name="box-key-unsafe.tgz"/>
     </packages>
     <packages type="bootstrap"/>

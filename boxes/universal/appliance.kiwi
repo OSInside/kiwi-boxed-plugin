@@ -90,6 +90,7 @@
         <package name="netcat"/>
         <package name="zstd"/>
         <package name="systemd-resolved"/>
+        <package name="audit"/>
         <archive name="box-key-unsafe.tgz"/>
     </packages>
     <packages type="bootstrap">

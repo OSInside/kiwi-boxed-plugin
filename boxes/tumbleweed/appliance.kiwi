@@ -60,7 +60,7 @@
         <package name="checkmedia"/>
         <package name="jing"/>
         <package name="iproute2"/>
-        <package name="gfxboot"/>
+        <package name="gfxboot" arch="x86_64"/>
         <package name="dracut-kiwi-oem-repart"/>
         <package name="dracut-kiwi-oem-dump"/>
         <package name="libxml2-devel"/>

@@ -30,6 +30,19 @@ box:
           - TumbleWeed-Box.x86_64-1.43.2-System-BuildBox.qcow2
         use_initrd: true
 
+      -
+        name: s390x
+        cmdline:
+          - root=/dev/vda1
+          - rd.plymouth=0
+          - selinux=0
+        source: obs://Virtualization:Appliances:SelfContained:tumbleweed/images
+        packages_file: TumbleWeed-Box.x86_64-1.43.2-System-BuildBox.report
+        boxfiles:
+          - TumbleWeed-Box.x86_64-1.43.2-Kernel-BuildBox.tar.xz
+          - TumbleWeed-Box.x86_64-1.43.2-System-BuildBox.qcow2
+        use_initrd: true
+
   -
     name: leap
     mem_mb: 8096

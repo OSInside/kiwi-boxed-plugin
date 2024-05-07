@@ -8,13 +8,26 @@ box:
       -
         name: x86_64
         cmdline:
-          - root=/dev/vda1
+          - root=/dev/vda3
           - rd.plymouth=0
         source: obs://Virtualization:Appliances:SelfContained:tumbleweed/images
-        packages_file: TumbleWeed-Box.x86_64-1.42.2-System-BuildBox.report
+        packages_file: TumbleWeed-Box.x86_64-1.43.2-System-BuildBox.report
         boxfiles:
-          - TumbleWeed-Box.x86_64-1.42.2-Kernel-BuildBox.tar.xz
-          - TumbleWeed-Box.x86_64-1.42.2-System-BuildBox.qcow2
+          - TumbleWeed-Box.x86_64-1.43.2-Kernel-BuildBox.tar.xz
+          - TumbleWeed-Box.x86_64-1.43.2-System-BuildBox.qcow2
+        use_initrd: true
+
+      -
+        name: aarch64
+        cmdline:
+          - root=/dev/vda2
+          - rd.plymouth=0
+          - selinux=0
+        source: obs://Virtualization:Appliances:SelfContained:tumbleweed/images
+        packages_file: TumbleWeed-Box.x86_64-1.43.2-System-BuildBox.report
+        boxfiles:
+          - TumbleWeed-Box.x86_64-1.43.2-Kernel-BuildBox.tar.xz
+          - TumbleWeed-Box.x86_64-1.43.2-System-BuildBox.qcow2
         use_initrd: true
 
   -

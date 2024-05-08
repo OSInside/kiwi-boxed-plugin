@@ -82,6 +82,7 @@
         <package name="gcc"/>
         <package name="make"/>
         <package name="s390utils" arch="s390x"/>
+        <package name="mariadb-connector-c-config" arch="s390x"/>
         <package name="syslinux" arch="x86_64"/>
         <package name="shim" arch="x86_64"/>
         <package name="grub2-efi-x64-modules" arch="x86_64"/>

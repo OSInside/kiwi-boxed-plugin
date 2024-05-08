@@ -145,6 +145,7 @@ function import_box_variables {
 }
 
 function import_ssh_pub_key {
+    rm -f /run/nologin
     declare ssh_key=${ssh_key}
     declare ssh_key_type=${ssh_key_type}
     if [ -n "${ssh_key}" ];then

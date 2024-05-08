@@ -92,9 +92,8 @@ class Defaults:
     @staticmethod
     def get_qemu_network_setup() -> List[str]:
         return [
-            '-netdev',
-            f'user,id=user0,hostfwd=tcp::{Defaults.box_ssh_port_forwarded_to_host}-:22',
-            '-device', 'virtio-net-pci,netdev=user0'
+            '-nic',
+            f'user,model=virtio,hostfwd=tcp::{Defaults.box_ssh_port_forwarded_to_host}-:22'
         ]
 
     @staticmethod

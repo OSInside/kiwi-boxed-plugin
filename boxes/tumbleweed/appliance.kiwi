@@ -26,7 +26,7 @@
         <type image="pxe" initrd_system="dracut"/>
     </preferences>
     <preferences profiles="System" arch="s390x">
-        <type image="oem" filesystem="ext4" bootpartition="false" format="qcow2" formatoptions="preallocation=metadata,compat=1.1,lazy_refcounts=on">
+        <type image="oem" filesystem="ext4" bootpartition="false" format="qcow2" kernelcmdline="console=ttyS0">
             <oemconfig>
                 <oem-resize>false</oem-resize>
             </oemconfig>

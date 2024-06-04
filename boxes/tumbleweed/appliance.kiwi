@@ -87,6 +87,7 @@
         <package name="sshfs"/>
         <package name="netcat-openbsd"/>
         <package name="s390-tools" arch="s390x"/>
+        <package name="distribution-gpg-keys"/>
         <archive name="box-key-unsafe.tgz"/>
     </packages>
     <packages type="bootstrap">

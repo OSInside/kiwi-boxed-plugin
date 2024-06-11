@@ -173,6 +173,7 @@ class BoxBuild:
 
         vm_machine.append('-cpu')
         vm_machine.append(self.cpu)
+        vm_memory = format(self.ram or vm_setup.ram)
         qemu_binary = self._find_qemu_call_binary()
         if not qemu_binary:
             raise KiwiBoxPluginQEMUBinaryNotFound(
@@ -180,7 +181,7 @@ class BoxBuild:
             )
         vm_run = [
             qemu_binary,
-            '-m', format(self.ram or vm_setup.ram)
+            '-m', vm_memory
         ] + vm_machine + [
         ] + Defaults.get_qemu_generic_setup() + [
             '-kernel', vm_setup.kernel,
@@ -199,7 +200,7 @@ class BoxBuild:
         if self.sharing_backend == 'virtiofs':
             vm_run += [
                 '-object', '{0},id=mem,size={1},mem-path={2},share=on'.format(
-                    'memory-backend-file', self.ram or vm_setup.ram, '/dev/shm'
+                    'memory-backend-file', vm_memory, '/dev/shm'
                 ),
                 '-numa', 'node,memdev=mem'
             ]

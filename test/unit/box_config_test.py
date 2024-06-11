@@ -56,7 +56,7 @@ class TestBoxConfig:
         assert self.box_config.get_box_arch() == 'x86_64'
 
     def test_get_box_memory_mbytes(self):
-        assert self.box_config.get_box_memory_mbytes() == 8096
+        assert self.box_config.get_box_memory_mbytes() == '8096M'
 
     def test_get_box_console(self):
         assert self.box_config.get_box_console() == 'hvc0'

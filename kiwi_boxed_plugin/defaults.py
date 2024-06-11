@@ -130,7 +130,7 @@ class Defaults:
     def get_qemu_shared_path_setup_virtiofs(
         index: int, path: str, mount_tag: str
     ) -> List[str]:
-        virtiofsd_lookup_paths = ['/usr/lib', '/usr/libexec']
+        virtiofsd_lookup_paths = ['/usr/lib/virtiofsd', '/usr/libexec']
         virtiofsd = Path.which(
             'virtiofsd', virtiofsd_lookup_paths
         )
@@ -143,9 +143,12 @@ class Defaults:
                 [
                     virtiofsd,
                     '--socket-path=/tmp/vhostqemu_{0}'.format(index),
-                    '-o', 'allow_root',
-                    '-o', 'source={0}'.format(os.path.abspath(path)),
-                    '-o', 'cache=always'
+                    '--shared-dir', os.path.abspath(path),
+                    '--sandbox', 'namespace',
+                    '--cache', 'always',
+                    '--allow-direct-io',
+                    '--posix-acl',
+                    '--xattr'
                 ], close_fds=True
             )
         except Exception as issue:

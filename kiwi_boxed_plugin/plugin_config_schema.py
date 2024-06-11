@@ -11,7 +11,7 @@ schema = {
                     'empty': False
                 },
                 'mem_mb': {
-                    'type': 'number',
+                    'type': 'string',
                     'required': True,
                     'empty': False
                 },

@@ -29,7 +29,7 @@ class TestPluginConfig:
         assert self.plugin_config.get_config() == [
             {
                 'name': 'suse',
-                'mem_mb': 8096,
+                'mem_mb': '8096M',
                 'processors': 4,
                 'console': 'hvc0',
                 'arch': [
@@ -51,7 +51,7 @@ class TestPluginConfig:
             },
             {
                 'name': 'universal',
-                'mem_mb': 8096,
+                'mem_mb': '8096M',
                 'processors': 4,
                 'console': 'hvc0',
                 'arch': [

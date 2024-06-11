@@ -310,27 +310,36 @@ class TestBoxBuild:
                 [
                     '/usr/libexec/virtiofsd',
                     '--socket-path=/tmp/vhostqemu_0',
-                    '-o', 'allow_root',
-                    '-o', 'source=abspath/desc',
-                    '-o', 'cache=always'
+                    '--shared-dir', 'abspath/desc',
+                    '--sandbox', 'namespace',
+                    '--cache', 'always',
+                    '--allow-direct-io',
+                    '--posix-acl',
+                    '--xattr'
                 ], close_fds=True
             ),
             call(
                 [
                     '/usr/libexec/virtiofsd',
                     '--socket-path=/tmp/vhostqemu_1',
-                    '-o', 'allow_root',
-                    '-o', 'source=abspath/target',
-                    '-o', 'cache=always'
+                    '--shared-dir', 'abspath/target',
+                    '--sandbox', 'namespace',
+                    '--cache', 'always',
+                    '--allow-direct-io',
+                    '--posix-acl',
+                    '--xattr'
                 ], close_fds=True
             ),
             call(
                 [
                     '/usr/libexec/virtiofsd',
                     '--socket-path=/tmp/vhostqemu_2',
-                    '-o', 'allow_root',
-                    '-o', 'source=abspath/var/tmp/repos',
-                    '-o', 'cache=always'
+                    '--shared-dir', 'abspath/var/tmp/repos',
+                    '--sandbox', 'namespace',
+                    '--cache', 'always',
+                    '--allow-direct-io',
+                    '--posix-acl',
+                    '--xattr'
                 ], close_fds=True
             )
         ]

@@ -1,7 +1,7 @@
 box:
   -
     name: tumbleweed
-    mem_mb: 8096
+    mem_mb: 8096M
     processors: 4
     console: hvc0
     arch:
@@ -45,7 +45,7 @@ box:
 
   -
     name: leap
-    mem_mb: 8096
+    mem_mb: 8096M
     processors: 4
     console: hvc0
     arch:
@@ -63,7 +63,7 @@ box:
 
   -
     name: fedora
-    mem_mb: 8096
+    mem_mb: 8096M
     processors: 4
     console: hvc0
     arch:
@@ -82,7 +82,7 @@ box:
 
   -
     name: ubuntu
-    mem_mb: 8096
+    mem_mb: 8096M
     processors: 4
     console: hvc0
     arch:
@@ -114,7 +114,7 @@ box:
 
   -
     name: universal
-    mem_mb: 8096
+    mem_mb: 8096M
     processors: 4
     console: hvc0
     arch:

@@ -30,7 +30,7 @@ class TestBoxDownload:
             initrd='HOME/.kiwi_boxes/suse/initrd.x86_64',
             append='console=hvc0 root=/dev/vda1 rd.plymouth=0',
             console='hvc0',
-            ram=8096,
+            ram='8096M',
             smp=4
         )
 

@@ -47,10 +47,6 @@
     </repository>
     <packages type="image">
         <package name="libpam-runtime"/>
-        <package name="gawk"/>
-        <package name="apt-utils"/>
-        <package name="debconf"/>
-        <package name="dialog"/>
         <package name="netplan.io"/>
         <package name="networkd-dispatcher"/>
         <package name="net-tools"/>
@@ -86,6 +82,7 @@
         <package name="dracut-kiwi-oem-dump"/>
         <package name="usrmerge"/>
         <package name="mawk"/>
+        <package name="gawk"/>
         <package name="python3-dev"/>
         <package name="libxml2-dev"/>
         <package name="libxslt-dev"/>
@@ -105,16 +102,5 @@
         <package name="python3-solv"/>
         <archive name="box-key-unsafe.tgz"/>
     </packages>
-    <packages type="bootstrap">
-        <package name="locales"/>
-        <package name="coreutils"/>
-        <package name="language-pack-en"/>
-        <package name="passwd"/>
-        <package name="base-passwd"/>
-        <package name="adduser"/>
-        <package name="debconf"/>
-        <package name="ca-certificates"/>
-        <package name="apt-utils"/>
-        <package name="debconf-i18n"/>
-    </packages>
+    <packages type="bootstrap"/>
 </image>

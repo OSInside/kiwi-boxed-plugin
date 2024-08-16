@@ -33,7 +33,16 @@
             <bootloader name="zipl" timeout="10"/>
         </type>
     </preferences>
-    <preferences profiles="System" arch="x86_64,aarch64,ppc64le">
+    <preferences profiles="System" arch="ppc64le">
+        <type image="oem" filesystem="ext2" firmware="ofw" format="qcow2" formatoptions="preallocation=metadata,compat=1.1,lazy_refcounts=on">
+            <oemconfig>
+                <oem-resize>false</oem-resize>
+            </oemconfig>
+            <bootloader name="grub2"/>
+            <size unit="G">50</size>
+        </type>
+    </preferences>
+    <preferences profiles="System" arch="x86_64,aarch64">
         <type image="oem" filesystem="ext2" firmware="uefi" format="qcow2" formatoptions="preallocation=metadata,compat=1.1,lazy_refcounts=on">
             <oemconfig>
                 <oem-resize>false</oem-resize>

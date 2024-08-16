@@ -156,3 +156,16 @@ box:
           - Universal-Box.s390x-1.41.1-Kernel-BuildBox.tar.xz
           - Universal-Box.s390x-1.41.1-System-BuildBox.qcow2
         use_initrd: true
+
+      -
+        name: ppc64le
+        cmdline:
+          - root=/dev/vda2
+          - rd.plymouth=0
+          - selinux=0
+        source: obs://Virtualization:Appliances:SelfContained:universal/images
+        packages_file: Universal-Box.ppc64le-1.41.1-System-BuildBox.report
+        boxfiles:
+          - Universal-Box.ppc64le-1.41.1-Kernel-BuildBox.tar.xz
+          - Universal-Box.ppc64le-1.41.1-System-BuildBox.qcow2
+        use_initrd: true

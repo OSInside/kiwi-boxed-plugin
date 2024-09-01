@@ -34,7 +34,7 @@ schema = {
                             'name': {
                                 'type': 'string',
                                 'allowed':
-                                    ['x86_64', 's390x', 'aarch64', 'ppc64'],
+                                    ['x86_64', 's390x', 'aarch64', 'ppc64', 'ppc64le'],
                                 'required': True,
                                 'empty': False
                             },

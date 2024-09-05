@@ -202,7 +202,7 @@ import_box_overlay_files
 import_box_environment
 
 if [ -n "${kiwi_version}" ]; then
-    if ! pip3 install kiwi=="${kiwi_version}"; then
+    if ! pip3 install --break-system-packages kiwi=="${kiwi_version}"; then
         exit 1
     fi
 fi

@@ -27,6 +27,12 @@ function run_build {
         # sort of security
         setenforce 0
     fi
+    if [ -e /var/lib/dpkg/status ];then
+        # An existing status file confuses apt-get when called
+        # in the bootstrap phase. In the box we can simply
+        # empty the file to fix this.
+        cat > /var/lib/dpkg/status < /dev/null
+    fi
     echo 1 > "${exit_code_file}"
     rm -rf /result
     options=$(cut -f2 -d\" /proc/cmdline)

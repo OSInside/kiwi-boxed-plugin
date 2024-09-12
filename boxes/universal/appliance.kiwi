@@ -110,6 +110,7 @@
         <package name="zstd"/>
         <package name="systemd-resolved"/>
         <package name="audit"/>
+        <package name="eif_build"/>
         <package name="distribution-gpg-keys"/>
         <archive name="box-key-unsafe.tgz"/>
     </packages>

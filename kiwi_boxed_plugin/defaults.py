@@ -130,7 +130,9 @@ class Defaults:
     def get_qemu_shared_path_setup_virtiofs(
         index: int, path: str, mount_tag: str
     ) -> List[str]:
-        virtiofsd_lookup_paths = ['/usr/lib/virtiofsd', '/usr/libexec']
+        virtiofsd_lookup_paths = {
+            'PATH': '/usr/libexec:/usr/lib/virtiofsd:/usr/lib/qemu/virtiofsd'
+        }
         virtiofsd = Path.which(
             'virtiofsd', virtiofsd_lookup_paths
         )

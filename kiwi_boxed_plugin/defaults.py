@@ -79,6 +79,9 @@ class Defaults:
 
     @staticmethod
     def get_local_box_cache_dir() -> str:
+        local_box_cache_dir_env: str | None = os.environ.get("KIWI_BOXED_CACHE_DIR")
+        if local_box_cache_dir_env is not None and os.path.exists(local_box_cache_dir_env):
+            return local_box_cache_dir_env
         return f'{os.environ.get("HOME")}/.kiwi_boxes'
 
     @staticmethod

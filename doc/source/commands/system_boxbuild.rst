@@ -174,6 +174,15 @@ OPTIONS
    the virtual machine. See the Example below how to provide
    options to the build command correctly.
 
+ENVIRONMENT
+-----------
+
+KIWI_BOXED_CACHE_DIR
+   By default, VM disk images used as build environment are
+   stored in $HOME/.kiwi_boxes directory. To override this
+   location, KIWI_BOXED_CACHE_DIR environment variable should
+   be set to a different absolute path.
+
 EXAMPLE
 -------
 

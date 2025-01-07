@@ -17,7 +17,9 @@
 #
 import os
 import pathlib
-from typing import List
+from typing import (
+    List, Optional
+)
 from kiwi.path import Path
 from pkg_resources import resource_filename
 import subprocess
@@ -79,6 +81,11 @@ class Defaults:
 
     @staticmethod
     def get_local_box_cache_dir() -> str:
+        local_box_cache_dir_env: Optional[str] = os.environ.get(
+            'KIWI_BOXED_CACHE_DIR'
+        )
+        if local_box_cache_dir_env and os.path.isdir(local_box_cache_dir_env):
+            return local_box_cache_dir_env
         return f'{os.environ.get("HOME")}/.kiwi_boxes'
 
     @staticmethod

@@ -42,6 +42,25 @@ class TestBoxDownload:
     ):
         self.setup()
 
+    @patch('kiwi_boxed_plugin.defaults.Defaults.get_plugin_config_file')
+    @patch('kiwi_boxed_plugin.box_download.Path')
+    @patch('kiwi_boxed_plugin.box_download.DirFiles')
+    @patch('os.path.isdir')
+    def test_custom_box_cache_dir(
+        self, mock_os_path_isdir, mock_DirFiles, mock_Path,
+        mock_get_plugin_config_file
+    ):
+        mock_os_path_isdir.return_value = True
+        mock_DirFiles.return_value = \
+            Mock().register.return_value = 'register_file'
+        mock_get_plugin_config_file.return_value = \
+            '../data/kiwi_boxed_plugin.yml'
+        with patch.dict('os.environ', {'KIWI_BOXED_CACHE_DIR': '/some/custom/dir'}):
+            BoxDownload('suse', 'x86_64')
+        mock_Path.create.assert_called_once_with(
+            '/some/custom/dir/suse'
+        )
+
     @patch('kiwi_boxed_plugin.box_download.Command.run')
     @patch('kiwi_boxed_plugin.box_download.Uri')
     @patch('kiwi_boxed_plugin.box_download.SolverRepository.new')

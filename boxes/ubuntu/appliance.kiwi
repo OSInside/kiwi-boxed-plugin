@@ -70,7 +70,6 @@
         <package name="iproute2"/>
         <package name="iptables"/>
         <package name="iputils-ping"/>
-        <package name="ifupdown"/>
         <package name="isc-dhcp-client"/>
         <package name="netbase"/>
         <package name="dbus"/>

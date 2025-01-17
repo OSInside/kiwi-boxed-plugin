@@ -64,6 +64,7 @@
         <package name="syslinux" arch="x86_64"/>
         <package name="syslinux-common" arch="x86_64"/>
         <package name="systemd"/>
+        <package name="systemd-resolved"/>
         <package name="dracut"/>
         <package name="init"/>
         <package name="gnupg"/>

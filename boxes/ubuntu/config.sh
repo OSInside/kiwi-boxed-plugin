@@ -42,3 +42,4 @@ baseInsertService symlink-resolvconf
 # Enable systemd networking services
 #--------------------------------------
 baseInsertService systemd-networkd
+baseInsertService systemd-resolved

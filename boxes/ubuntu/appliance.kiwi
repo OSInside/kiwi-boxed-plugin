@@ -64,13 +64,13 @@
         <package name="syslinux" arch="x86_64"/>
         <package name="syslinux-common" arch="x86_64"/>
         <package name="systemd"/>
+        <package name="systemd-resolved"/>
         <package name="dracut"/>
         <package name="init"/>
         <package name="gnupg"/>
         <package name="iproute2"/>
         <package name="iptables"/>
         <package name="iputils-ping"/>
-        <package name="ifupdown"/>
         <package name="isc-dhcp-client"/>
         <package name="netbase"/>
         <package name="dbus"/>

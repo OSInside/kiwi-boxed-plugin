@@ -34,6 +34,7 @@ systemctl disable lvm2-lvmetad.socket
 systemctl mask lvm2-lvmetad.socket
 
 #======================================
-# Enable firstboot resolv.conf setting
+# Enable systemd networking services
 #--------------------------------------
-baseInsertService symlink-resolvconf
+baseInsertService systemd-networkd
+baseInsertService systemd-resolved

@@ -31,6 +31,7 @@ function run_build {
     rm -rf /result
     options=$(cut -f2 -d\" /proc/cmdline)
     options="${options} --description /description --target-dir /result"
+    export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin
     if kiwi-ng --logfile "${logfile}" ${options}; then
         kiwi-ng result bundle --id 0 --target-dir /result --bundle-dir /bundle
     fi

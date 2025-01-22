@@ -14,7 +14,7 @@
         <profile name="System" description="Provides system for kvm boot"/>
     </profiles>
     <preferences>
-        <version>1.43.2</version>
+        <version>1.43.3</version>
         <packagemanager>zypper</packagemanager>
         <locale>en_US</locale>
         <keytable>us</keytable>

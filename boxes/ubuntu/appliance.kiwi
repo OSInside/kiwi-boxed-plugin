@@ -14,7 +14,7 @@
         <profile name="System" description="Provides system for kvm boot"/>
     </profiles>
     <preferences>
-        <version>1.24.04</version>
+        <version>1.24.4</version>
         <packagemanager>apt</packagemanager>
         <locale>en_US</locale>
         <timezone>UTC</timezone>

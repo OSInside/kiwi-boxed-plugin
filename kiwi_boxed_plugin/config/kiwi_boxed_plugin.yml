@@ -11,10 +11,10 @@ box:
           - root=/dev/vda3
           - rd.plymouth=0
         source: obs://Virtualization:Appliances:SelfContained:tumbleweed/images
-        packages_file: TumbleWeed-Box.x86_64-1.43.3-System-BuildBox.report
+        packages_file: TumbleWeed-Box.x86_64-System.json
         boxfiles:
-          - TumbleWeed-Box.x86_64-1.43.3-Kernel-BuildBox.tar.xz
-          - TumbleWeed-Box.x86_64-1.43.3-System-BuildBox.qcow2
+          - TumbleWeed-Box.x86_64-Kernel.tar.xz
+          - TumbleWeed-Box.x86_64-System.qcow2
         use_initrd: true
 
       -
@@ -24,10 +24,10 @@ box:
           - rd.plymouth=0
           - selinux=0
         source: obs://Virtualization:Appliances:SelfContained:tumbleweed/images
-        packages_file: TumbleWeed-Box.x86_64-1.43.3-System-BuildBox.report
+        packages_file: TumbleWeed-Box.x86_64-System.json
         boxfiles:
-          - TumbleWeed-Box.x86_64-1.43.3-Kernel-BuildBox.tar.xz
-          - TumbleWeed-Box.x86_64-1.43.3-System-BuildBox.qcow2
+          - TumbleWeed-Box.x86_64-Kernel.tar.xz
+          - TumbleWeed-Box.x86_64-System.qcow2
         use_initrd: true
 
       -
@@ -37,10 +37,10 @@ box:
           - rd.plymouth=0
           - selinux=0
         source: obs://Virtualization:Appliances:SelfContained:tumbleweed/images
-        packages_file: TumbleWeed-Box.s390x-1.43.3-System-BuildBox.report
+        packages_file: TumbleWeed-Box.s390x-System.json
         boxfiles:
-          - TumbleWeed-Box.s390x-1.43.3-Kernel-BuildBox.tar.xz
-          - TumbleWeed-Box.s390x-1.43.3-System-BuildBox.qcow2
+          - TumbleWeed-Box.s390x-Kernel.tar.xz
+          - TumbleWeed-Box.s390x-System.qcow2
         use_initrd: true
 
   -
@@ -55,10 +55,10 @@ box:
           - root=/dev/vda1
           - rd.plymouth=0
         source: obs://Virtualization:Appliances:SelfContained:leap/images
-        packages_file: Leap-Box.x86_64-1.15.5-System-BuildBox.report
+        packages_file: Leap-Box.x86_64-System.json
         boxfiles:
-          - Leap-Box.x86_64-1.15.5-Kernel-BuildBox.tar.xz
-          - Leap-Box.x86_64-1.15.5-System-BuildBox.qcow2
+          - Leap-Box.x86_64-Kernel.tar.xz
+          - Leap-Box.x86_64-System.qcow2
         use_initrd: true
 
   -
@@ -74,10 +74,10 @@ box:
           - rd.plymouth=0
           - selinux=0
         source: obs://Virtualization:Appliances:SelfContained:fedora/images
-        packages_file: Fedora-Box.x86_64-1.39.1-System-BuildBox.report
+        packages_file: Fedora-Box.x86_64-System.json
         boxfiles:
-          - Fedora-Box.x86_64-1.39.1-Kernel-BuildBox.tar.xz
-          - Fedora-Box.x86_64-1.39.1-System-BuildBox.qcow2
+          - Fedora-Box.x86_64-Kernel.tar.xz
+          - Fedora-Box.x86_64-System.qcow2
         use_initrd: true
 
   -
@@ -93,10 +93,10 @@ box:
           - rd.plymouth=0
           - selinux=0
         source: obs://Virtualization:Appliances:SelfContained:ubuntu/images
-        packages_file: Ubuntu-Box.x86_64-1.24.4-System-BuildBox.report
+        packages_file: Ubuntu-Box.x86_64-System.json
         boxfiles:
-          - Ubuntu-Box.x86_64-1.24.4-Kernel-BuildBox.tar.xz
-          - Ubuntu-Box.x86_64-1.24.4-System-BuildBox.qcow2
+          - Ubuntu-Box.x86_64-Kernel.tar.xz
+          - Ubuntu-Box.x86_64-System.qcow2
         use_initrd: true
 
       -
@@ -106,10 +106,10 @@ box:
           - rd.plymouth=0
           - selinux=0
         source: obs://Virtualization:Appliances:SelfContained:ubuntu/images
-        packages_file: Ubuntu-Box.aarch64-1.24.4-System-BuildBox.report
+        packages_file: Ubuntu-Box.aarch64-System.json
         boxfiles:
-          - Ubuntu-Box.aarch64-1.24.4-Kernel-BuildBox.tar.xz
-          - Ubuntu-Box.aarch64-1.24.4-System-BuildBox.qcow2
+          - Ubuntu-Box.aarch64-Kernel.tar.xz
+          - Ubuntu-Box.aarch64-System.qcow2
         use_initrd: true
 
   -
@@ -125,10 +125,10 @@ box:
           - rd.plymouth=0
           - selinux=0
         source: obs://Virtualization:Appliances:SelfContained:universal/images
-        packages_file: Universal-Box.x86_64-1.41.2-System-BuildBox.report
+        packages_file: Universal-Box.x86_64-System.json
         boxfiles:
-          - Universal-Box.x86_64-1.41.2-Kernel-BuildBox.tar.xz
-          - Universal-Box.x86_64-1.41.2-System-BuildBox.qcow2
+          - Universal-Box.x86_64-Kernel.tar.xz
+          - Universal-Box.x86_64-System.qcow2
         use_initrd: true
 
       -
@@ -138,10 +138,10 @@ box:
           - rd.plymouth=0
           - selinux=0
         source: obs://Virtualization:Appliances:SelfContained:universal/images
-        packages_file: Universal-Box.aarch64-1.41.2-System-BuildBox.report
+        packages_file: Universal-Box.aarch64-System.json
         boxfiles:
-          - Universal-Box.aarch64-1.41.2-Kernel-BuildBox.tar.xz
-          - Universal-Box.aarch64-1.41.2-System-BuildBox.qcow2
+          - Universal-Box.aarch64-Kernel.tar.xz
+          - Universal-Box.aarch64-System.qcow2
         use_initrd: true
 
       -
@@ -151,10 +151,10 @@ box:
           - rd.plymouth=0
           - selinux=0
         source: obs://Virtualization:Appliances:SelfContained:universal/images
-        packages_file: Universal-Box.s390x-1.41.2-System-BuildBox.report
+        packages_file: Universal-Box.s390x-System.json
         boxfiles:
-          - Universal-Box.s390x-1.41.2-Kernel-BuildBox.tar.xz
-          - Universal-Box.s390x-1.41.2-System-BuildBox.qcow2
+          - Universal-Box.s390x-Kernel.tar.xz
+          - Universal-Box.s390x-System.qcow2
         use_initrd: true
 
       -
@@ -164,8 +164,8 @@ box:
           - rd.plymouth=0
           - selinux=0
         source: obs://Virtualization:Appliances:SelfContained:universal/images
-        packages_file: Universal-Box.ppc64le-1.41.2-System-BuildBox.report
+        packages_file: Universal-Box.ppc64le-System.json
         boxfiles:
-          - Universal-Box.ppc64le-1.41.2-Kernel-BuildBox.tar.xz
-          - Universal-Box.ppc64le-1.41.2-System-BuildBox.qcow2
+          - Universal-Box.ppc64le-Kernel.tar.xz
+          - Universal-Box.ppc64le-System.qcow2
         use_initrd: true

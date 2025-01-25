@@ -59,15 +59,40 @@ Summary:        KIWI - Boxed Build Plugin
 License:        GPL-3.0-or-later
 %if "%{_vendor}" == "debbuild"
 # Needed to set Maintainer in output debs
-Packager:       Marcus Schaefer <ms@suse.de>
+Packager:       Marcus Schaefer <marcus.schaefer@suse.com>
 %endif
 Group:          %{pygroup}
 Source:         python-kiwi-boxed-plugin.tar.gz
 Source1:        %{name}-rpmlintrc
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+# Main build requirements
 BuildRequires:  python%{python3_pkgversion}-%{develsuffix}
-BuildRequires:  python%{python3_pkgversion}-setuptools
+BuildRequires:  python%{python3_pkgversion}-build
+BuildRequires:  python%{python3_pkgversion}-installer
+BuildRequires:  python%{python3_pkgversion}-poetry-core >= 1.2.0
+BuildRequires:  python%{python3_pkgversion}-wheel
+# doc build requirements
+%if ! (0%{?fedora} >= 41 || 0%{?rhel} >= 10)
+BuildRequires:  python%{python3_pkgversion}-docopt >= 0.6.2
+%else
+BuildRequires:  python%{python3_pkgversion}-docopt-ng
+%endif
+BuildRequires:  python%{python3_pkgversion}-requests
+%if 0%{?suse_version}
+BuildRequires:  python%{python3_pkgversion}-Sphinx
+%else
+BuildRequires:  python%{python3_pkgversion}-sphinx
+%endif
+%if 0%{?debian} || 0%{?ubuntu}
+BuildRequires:  python%{python3_pkgversion}-sphinx-rtd-theme
+BuildRequires:  python%{python3_pkgversion}-yaml
+%else
+BuildRequires:  python%{python3_pkgversion}-sphinx_rtd_theme
+BuildRequires:  python%{python3_pkgversion}-PyYAML
+%endif
+%if 0%{?fedora} || 0%{?suse_version}
 BuildRequires:  fdupes
+%endif
 BuildArch:      noarch
 
 %description
@@ -77,11 +102,11 @@ of images based on fast booting VM images
 # python3-kiwi_boxed_plugin
 %package -n python%{python3_pkgversion}-kiwi_boxed_plugin
 Summary:        KIWI - Boxed Build Plugin
-Group:          Development/Languages/Python
+Group:          %{pygroup}
+Requires:       python%{python3_pkgversion} >= 3.9
 Requires:       python%{python3_pkgversion}-docopt
 Requires:       python%{python3_pkgversion}-kiwi >= 9.21.21
 Requires:       python%{python3_pkgversion}-requests
-Requires:       python%{python3_pkgversion}-setuptools
 Requires:       python%{python3_pkgversion}-progressbar2
 %if 0%{?ubuntu} || 0%{?debian}
 Requires:       python%{python3_pkgversion}-yaml
@@ -104,13 +129,27 @@ of images based on fast booting VM images
 %prep
 %setup -q -n kiwi_boxed_plugin-%{version}
 
-%build
-# Build Python 3 version
-%{__python3} setup.py build
+# Temporarily switch things back to docopt for everything but Fedora 41+
+# FIXME: Drop this hack as soon as we can...
+%if ! (0%{?fedora} >= 41 || 0%{?rhel} >= 10)
+sed -e 's/docopt-ng.*/docopt = ">=0.6.2"/' -i pyproject.toml
+%endif
+
+# Build documentation
+make -C doc man
+
+# Build application wheel
+%{__python3} -m build --no-isolation --wheel
 
 %install
-# Install Python 3 version
-%{__python3} setup.py install --prefix=%{_prefix} --root=%{buildroot} %{?is_deb:--install-layout=deb}
+# Install plugin
+%{__python3} -m installer --destdir %{buildroot} %{?is_deb:--no-compile-bytecode} dist/*.whl
+
+%if 0%{?is_deb}
+# Fix where files were installed
+mv %{buildroot}%{_prefix}/local/* %{buildroot}%{_prefix}
+mv %{buildroot}%{_prefix}/lib/python3* %{buildroot}%{_prefix}/lib/python3
+%endif
 
 # Install man pages and package documentation
 make buildroot=%{buildroot}/ docdir=%{_defaultdocdir}/ install

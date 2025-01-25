@@ -18,9 +18,14 @@ sys.path.insert(0, _path)
 # -- General configuration ------------------------------------------------
 
 extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
     'sphinx.ext.extlinks',
+    'sphinx.ext.todo',
+    'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
-    'sphinx.ext.intersphinx'
+    'sphinx.ext.autodoc',
+    'sphinx_rtd_theme'
 ]
 
 # Add any paths that contain templates here, relative to this directory.

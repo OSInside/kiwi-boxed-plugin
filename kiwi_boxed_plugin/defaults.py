@@ -53,8 +53,8 @@ class Defaults:
         config_name = "kiwi_boxed_plugin.yml"
 
         # 1.
-        config_path_env: str | None = os.environ.get("KIWI_BOXED_PLUGIN_CFG")
-        if config_path_env is not None and os.path.exists(config_path_env):
+        config_path_env: str = os.environ.get("KIWI_BOXED_PLUGIN_CFG") or ''
+        if config_path_env and os.path.exists(config_path_env):
             return config_path_env
 
         # 2.

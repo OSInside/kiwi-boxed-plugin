@@ -69,7 +69,6 @@ pytest-container = {version = "*", optional = true}
 mypy = ">=0.971"
 types-requests = "*"
 types-PyYAML = "*"
-types-mock = "*"
 
 [tool.poetry.group.style]
 [tool.poetry.group.style.dependencies]

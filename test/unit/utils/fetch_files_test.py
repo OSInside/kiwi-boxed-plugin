@@ -1,5 +1,5 @@
 import io
-from mock import (
+from unittest.mock import (
     Mock, MagicMock, patch
 )
 

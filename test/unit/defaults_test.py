@@ -1,6 +1,6 @@
 from pkg_resources import resource_filename
 from kiwi_boxed_plugin.defaults import Defaults
-from mock import patch
+from unittest.mock import patch
 import os
 
 

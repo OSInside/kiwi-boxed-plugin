@@ -1,5 +1,5 @@
 import yaml
-from mock import patch
+from unittest.mock import patch
 from pytest import raises
 
 from kiwi_boxed_plugin.plugin_config import PluginConfig

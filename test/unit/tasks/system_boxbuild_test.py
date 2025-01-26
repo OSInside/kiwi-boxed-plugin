@@ -1,6 +1,6 @@
 import sys
 
-from mock import (
+from unittest.mock import (
     Mock, patch
 )
 from kiwi_boxed_plugin.tasks.system_boxbuild import SystemBoxbuildTask

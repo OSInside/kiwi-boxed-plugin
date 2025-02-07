@@ -29,6 +29,7 @@ from kiwi.path import Path
 
 from kiwi_boxed_plugin.box_config import BoxConfig
 from kiwi_boxed_plugin.defaults import Defaults
+from kiwi_boxed_plugin.exceptions import KiwiBoxPluginChecksumError
 
 vm_setup_type = NamedTuple(
     'vm_setup_type', [
@@ -103,6 +104,7 @@ class BoxDownload:
                 shasum = checksum.sha256()
                 if checksum.matches(shasum, local_packages_shasum_file):
                     download = False
+                    self.box_stage.deregister(local_packages_shasum_file)
                 else:
                     self._create_packages_checksum(
                         local_packages_shasum_file_tmp, shasum
@@ -130,8 +132,16 @@ class BoxDownload:
             for box_file in self.box_config.get_box_files():
                 local_box_file = os.sep.join([self.box_dir, box_file])
                 if box_file.endswith('.qcow2'):
+                    if not self._checksum_ok(local_box_file):
+                        raise KiwiBoxPluginChecksumError(
+                            'Checksum failed for {local_box_file}'
+                        )
                     self.system = local_box_file
                 if box_file.endswith('.tar.xz'):
+                    if not self._checksum_ok(local_box_file):
+                        raise KiwiBoxPluginChecksumError(
+                            'Checksum failed for {local_box_file}'
+                        )
                     self.kernel = self._extract_kernel_from_tarball(
                         local_box_file
                     )
@@ -152,6 +162,15 @@ class BoxDownload:
             ram=self.box_config.get_box_memory_mbytes(),
             smp=self.box_config.get_box_processors()
         )
+
+    def _checksum_ok(self, filename: str) -> bool:
+        checksum = Checksum(filename)
+        shasum = checksum.sha256()
+        sumfile = f'{filename}.sha256'
+        log.info(
+            'Checksum test {} -> {}'.format(filename, sumfile)
+        )
+        return checksum.matches(shasum, sumfile)
 
     def _create_packages_checksum(self, filename: str, shasum: str):
         with open(filename, 'w') as sha_file:

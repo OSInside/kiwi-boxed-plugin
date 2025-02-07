@@ -25,6 +25,22 @@ class TestDirFiles:
             'file_a': 'tmp_a'
         }
 
+    @patch('kiwi_boxed_plugin.utils.dir_files.NamedTemporaryFile')
+    def test_deregister(self, mock_NamedTemporaryFile):
+        tmpfile = Mock()
+        tmpfile.name = 'tmp_a'
+        mock_NamedTemporaryFile.return_value = tmpfile
+        self.dir_manager.register('/some/path/to/file_a')
+        assert self.dir_manager.collection == {
+            'file_a': 'tmp_a'
+        }
+        self.dir_manager.deregister('/some/path/to/some/not/present')
+        assert self.dir_manager.collection == {
+            'file_a': 'tmp_a'
+        }
+        self.dir_manager.deregister('/some/path/to/file_a')
+        assert self.dir_manager.collection == {}
+
     @patch('kiwi_boxed_plugin.utils.dir_files.Path')
     @patch('kiwi_boxed_plugin.utils.dir_files.Command.run')
     def test_commit(self, mock_Command_run, mock_Path):

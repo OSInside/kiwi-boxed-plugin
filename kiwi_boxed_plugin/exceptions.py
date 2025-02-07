@@ -53,3 +53,9 @@ class KiwiBoxPluginSSHPortInvalid(KiwiError):
     """
     Exception raised if an invalid SSH port is passed as an argument
     """
+
+
+class KiwiBoxPluginChecksumError(KiwiError):
+    """
+    Exception raised in case of a checksum error
+    """

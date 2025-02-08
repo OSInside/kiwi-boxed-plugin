@@ -78,6 +78,7 @@ class BoxConfig:
         source_files = []
         for vm_file in self.box_arch_config.get('boxfiles') or []:
             source_files.append(vm_file)
+            source_files.append(f'{vm_file}.sha256')
         return source_files
 
     def use_initrd(self) -> bool:

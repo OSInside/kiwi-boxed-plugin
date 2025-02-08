@@ -1,8 +1,10 @@
 import io
+from pytest import raises
 from unittest.mock import (
     patch, Mock, MagicMock, call
 )
 
+from kiwi_boxed_plugin.exceptions import KiwiBoxPluginChecksumError
 from kiwi_boxed_plugin.box_download import (
     BoxDownload, vm_setup_type
 )
@@ -68,10 +70,65 @@ class TestBoxDownload:
     @patch('os.path.exists')
     @patch('os.chdir')
     @patch('kiwi_boxed_plugin.box_download.FetchFiles')
-    def test_fetch_checksum_did_not_match(
-        self, mock_FetchFiles, mock_os_chdir, mock_os_path_exist,
-        mock_Checksum, mock_SolverRepository, mock_Uri, mock_Command_run
+    def test_fetch_image_checksum_failed(
+        self, mock_FetchFiles, mock_os_chdir,
+        mock_os_path_exist, mock_Checksum, mock_SolverRepository,
+        mock_Uri, mock_Command_run
     ):
+
+        def matches(shasum, filename):
+            if filename.endswith('.qcow2.sha256'):
+                return False
+            return True
+
+        checksum = Mock()
+        checksum.matches.side_effect = matches
+        checksum.sha256.return_value = 'sum'
+        mock_Checksum.return_value = checksum
+        with patch('builtins.open', create=True):
+            with raises(KiwiBoxPluginChecksumError):
+                self.box.fetch(update_check=False)
+
+    @patch('kiwi_boxed_plugin.box_download.Command.run')
+    @patch('kiwi_boxed_plugin.box_download.Uri')
+    @patch('kiwi_boxed_plugin.box_download.SolverRepository.new')
+    @patch('kiwi_boxed_plugin.box_download.Checksum')
+    @patch('os.path.exists')
+    @patch('os.chdir')
+    @patch('kiwi_boxed_plugin.box_download.FetchFiles')
+    def test_fetch_kernel_checksum_failed(
+        self, mock_FetchFiles, mock_os_chdir,
+        mock_os_path_exist, mock_Checksum, mock_SolverRepository,
+        mock_Uri, mock_Command_run
+    ):
+
+        def matches(shasum, filename):
+            if filename.endswith('.tar.xz.sha256'):
+                return False
+            return True
+
+        checksum = Mock()
+        checksum.matches.side_effect = matches
+        checksum.sha256.return_value = 'sum'
+        mock_Checksum.return_value = checksum
+        with patch('builtins.open', create=True):
+            with raises(KiwiBoxPluginChecksumError):
+                self.box.fetch(update_check=False)
+
+    @patch('kiwi_boxed_plugin.box_download.Command.run')
+    @patch('kiwi_boxed_plugin.box_download.Uri')
+    @patch('kiwi_boxed_plugin.box_download.SolverRepository.new')
+    @patch('kiwi_boxed_plugin.box_download.Checksum')
+    @patch('os.path.exists')
+    @patch('os.chdir')
+    @patch('kiwi_boxed_plugin.box_download.FetchFiles')
+    @patch.object(BoxDownload, '_checksum_ok')
+    def test_fetch_sbom_checksum_did_not_match(
+        self, mock__checksum_ok, mock_FetchFiles, mock_os_chdir,
+        mock_os_path_exist, mock_Checksum, mock_SolverRepository,
+        mock_Uri, mock_Command_run
+    ):
+        mock__checksum_ok.return_value = True
         fetcher = Mock()
         mock_FetchFiles.return_value = fetcher
         checksum = Mock()
@@ -102,7 +159,15 @@ class TestBoxDownload:
                 ),
                 call(
                     'HOME/.kiwi_boxes/suse/'
+                    'SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz.sha256'
+                ),
+                call(
+                    'HOME/.kiwi_boxes/suse/'
                     'SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2'
+                ),
+                call(
+                    'HOME/.kiwi_boxes/suse/'
+                    'SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2.sha256'
                 )
             ]
             mock_open.assert_called_once_with(
@@ -119,7 +184,15 @@ class TestBoxDownload:
                     filename='register_file'
                 ),
                 call(
+                    url='uri:///SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz.sha256',
+                    filename='register_file'
+                ),
+                call(
                     url='uri:///SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2',
+                    filename='register_file'
+                ),
+                call(
+                    url='uri:///SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2.sha256',
                     filename='register_file'
                 )
             ]

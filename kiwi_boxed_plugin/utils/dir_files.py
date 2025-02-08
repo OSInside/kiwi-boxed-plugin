@@ -59,6 +59,16 @@ class DirFiles:
         self.collection[os.path.basename(filename)] = tmpfile.name
         return tmpfile.name
 
+    def deregister(self, filename: str) -> bool:
+        """
+        Deregister filename from collection if present
+        """
+        base_file_name = os.path.basename(filename)
+        if self.collection.get(base_file_name):
+            del self.collection[base_file_name]
+            return True
+        return False
+
     def commit(self) -> None:
         """
         Update instance directory with contents of registered files

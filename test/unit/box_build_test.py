@@ -8,6 +8,7 @@ from kiwi_boxed_plugin.box_build import BoxBuild
 import kiwi_boxed_plugin.defaults as defaults
 
 from kiwi_boxed_plugin.exceptions import (
+    KiwiBoxPluginDownloadError,
     KiwiBoxPluginVirtioFsError,
     KiwiBoxPluginQEMUBinaryNotFound,
     KiwiBoxPluginSSHPortInvalid,
@@ -73,6 +74,24 @@ class TestBoxBuild:
         mock_path_which.return_value = 'qemu-system-x86_64'
         self.build.ssh_port = 'bogus'
         with raises(KiwiBoxPluginSSHPortInvalid):
+            self.build.run(
+                [
+                    '--debug', '--type', 'oem', 'system', 'build',
+                    '--description', 'desc', '--target-dir', 'target'
+                ]
+            )
+
+    @patch('os.environ')
+    @patch('os.system')
+    @patch('kiwi_boxed_plugin.box_build.Path.create')
+    @patch('kiwi_boxed_plugin.box_build.Path.which')
+    def test_raises_on_download_error(
+        self, mock_path_which, mock_path_create,
+        mock_os_system, mock_os_environ
+    ):
+        mock_path_which.return_value = 'qemu-system-x86_64'
+        self.box.fetch.side_effect = Exception('error')
+        with raises(KiwiBoxPluginDownloadError):
             self.build.run(
                 [
                     '--debug', '--type', 'oem', 'system', 'build',

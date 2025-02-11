@@ -3,6 +3,7 @@ python_version = 3
 python_lookup_name = python$(python_version)
 python = $(shell which $(python_lookup_name))
 docdir = /usr/share/doc/packages
+sc_disable = SC1091,SC2086,SC2317
 
 version := $(shell \
 	$(python) -c \
@@ -29,6 +30,8 @@ docs: setup
 	poetry run make -C doc man
 
 check: setup
+	# shell code checks
+	bash -c 'shellcheck -e ${sc_disable} boxes/images.sh -s bash'
 	# python flake tests
 	poetry run flake8 --statistics -j auto --count kiwi_boxed_plugin
 	poetry run flake8 --statistics -j auto --count test/unit

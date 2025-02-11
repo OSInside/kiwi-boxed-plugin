@@ -12,6 +12,7 @@
     <profiles>
         <profile name="Kernel" description="Provides kernel for kvm boot"/>
         <profile name="System" description="Provides system for kvm boot"/>
+        <profile name="Container" description="Provides system for podman"/>
     </profiles>
     <preferences>
         <version>1.15.5</version>
@@ -21,6 +22,13 @@
         <timezone>UTC</timezone>
         <rpm-excludedocs>true</rpm-excludedocs>
         <rpm-check-signatures>false</rpm-check-signatures>
+    </preferences>
+    <preferences profiles="Container">
+        <type image="docker">
+            <containerconfig name="leap">
+                <entrypoint execute="/usr/lib/systemd/systemd"/>
+            </containerconfig>
+        </type>
     </preferences>
     <preferences profiles="Kernel">
         <type image="pxe" initrd_system="dracut"/>
@@ -42,10 +50,9 @@
     </repository>
     <packages type="image">
         <package name="patterns-base-minimal_base"/>
-        <package name="wicked"/>
-        <package name="wicked-service"/>
         <package name="plymouth-scripts"/>
         <package name="timezone"/>
+        <package name="systemd-network"/>
         <package name="systemd"/>
         <package name="grub2"/>
         <package name="grub2-i386-pc"/>

@@ -1,6 +1,6 @@
 [Unit]
 Description=Start kiwi build process
-After=network.target
+After=network-online.target
 Requires=network-online.target
 
 [Service]

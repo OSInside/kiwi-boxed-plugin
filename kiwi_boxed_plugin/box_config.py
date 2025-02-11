@@ -65,6 +65,9 @@ class BoxConfig:
     def get_box_source(self) -> str:
         return self.box_arch_config.get('source') or ''
 
+    def get_box_container(self) -> str:
+        return self.box_arch_config.get('container') or ''
+
     def get_box_packages_file(self) -> str:
         return self.box_arch_config.get('packages_file') or ''
 

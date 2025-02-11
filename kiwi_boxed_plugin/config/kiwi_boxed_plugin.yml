@@ -15,6 +15,7 @@ box:
         boxfiles:
           - TumbleWeed-Box.x86_64-Kernel.tar.xz
           - TumbleWeed-Box.x86_64-System.qcow2
+        container: registry.opensuse.org/virtualization/appliances/selfcontained/tumbleweed/images/tumbleweed:latest
         use_initrd: true
 
       -
@@ -28,6 +29,7 @@ box:
         boxfiles:
           - TumbleWeed-Box.x86_64-Kernel.tar.xz
           - TumbleWeed-Box.x86_64-System.qcow2
+        container: registry.opensuse.org/virtualization/appliances/selfcontained/tumbleweed/images/tumbleweed:latest
         use_initrd: true
 
       -
@@ -41,6 +43,7 @@ box:
         boxfiles:
           - TumbleWeed-Box.s390x-Kernel.tar.xz
           - TumbleWeed-Box.s390x-System.qcow2
+        container: registry.opensuse.org/virtualization/appliances/selfcontained/tumbleweed/images/tumbleweed:latest
         use_initrd: true
 
   -
@@ -59,6 +62,7 @@ box:
         boxfiles:
           - Leap-Box.x86_64-Kernel.tar.xz
           - Leap-Box.x86_64-System.qcow2
+        container: registry.opensuse.org/virtualization/appliances/selfcontained/leap/images/leap:latest
         use_initrd: true
 
   -
@@ -78,6 +82,7 @@ box:
         boxfiles:
           - Fedora-Box.x86_64-Kernel.tar.xz
           - Fedora-Box.x86_64-System.qcow2
+        container: registry.opensuse.org/virtualization/appliances/selfcontained/fedora/images/fedora:latest
         use_initrd: true
 
   -
@@ -97,6 +102,7 @@ box:
         boxfiles:
           - Ubuntu-Box.x86_64-Kernel.tar.xz
           - Ubuntu-Box.x86_64-System.qcow2
+        container: registry.opensuse.org/virtualization/appliances/selfcontained/ubuntu/images/ubuntu:latest
         use_initrd: true
 
       -
@@ -110,6 +116,7 @@ box:
         boxfiles:
           - Ubuntu-Box.aarch64-Kernel.tar.xz
           - Ubuntu-Box.aarch64-System.qcow2
+        container: registry.opensuse.org/virtualization/appliances/selfcontained/ubuntu/images/ubuntu:latest
         use_initrd: true
 
   -
@@ -129,6 +136,7 @@ box:
         boxfiles:
           - Universal-Box.x86_64-Kernel.tar.xz
           - Universal-Box.x86_64-System.qcow2
+        container: registry.opensuse.org/virtualization/appliances/selfcontained/universal/images/universal:latest
         use_initrd: true
 
       -
@@ -142,6 +150,7 @@ box:
         boxfiles:
           - Universal-Box.aarch64-Kernel.tar.xz
           - Universal-Box.aarch64-System.qcow2
+        container: registry.opensuse.org/virtualization/appliances/selfcontained/universal/images/universal:latest
         use_initrd: true
 
       -
@@ -155,6 +164,7 @@ box:
         boxfiles:
           - Universal-Box.s390x-Kernel.tar.xz
           - Universal-Box.s390x-System.qcow2
+        container: registry.opensuse.org/virtualization/appliances/selfcontained/universal/images/universal:latest
         use_initrd: true
 
       -
@@ -168,4 +178,5 @@ box:
         boxfiles:
           - Universal-Box.ppc64le-Kernel.tar.xz
           - Universal-Box.ppc64le-System.qcow2
+        container: registry.opensuse.org/virtualization/appliances/selfcontained/universal/images/universal:latest
         use_initrd: true

@@ -10,7 +10,21 @@ exit $?
 
 set -x
 
-exec &>/dev/console
+function is_container {
+    test -e /container.cmdline
+}
+
+if ! is_container; then
+    exec &>/dev/console
+fi
+
+function get_cmdline_file {
+    if is_container; then
+        echo "/container.cmdline"
+    else
+        echo "/proc/cmdline"
+    fi
+}
 
 function run_build {
     # """
@@ -19,6 +33,8 @@ function run_build {
     local options
     local logfile=/bundle/result.log
     local exit_code_file=/bundle/result.code
+    local cmdline_file
+    cmdline_file=$(get_cmdline_file)
     if type setenforce &>/dev/null; then
         # for SELinux managed systems the enforcing rule
         # set does not allow to e.g create a new rpm database.
@@ -28,12 +44,23 @@ function run_build {
         setenforce 0
     fi
     echo 1 > "${exit_code_file}"
-    rm -rf /result
-    options=$(cut -f2 -d\" /proc/cmdline)
-    options="${options} --description /description --target-dir /result"
+    options=$(cut -f2 -d\" "${cmdline_file}")
+    if is_container; then
+        # directly create all target image files in the shared
+        # volume path. Do not call the bundler later
+        rm -rf /bundle
+        options="${options} --description /description --target-dir /bundle"
+    else
+        # keep target files inside the VM because I/O between
+        # guest and host is expensive. Call the bundler later
+        rm -rf /result
+        options="${options} --description /description --target-dir /result"
+    fi
     export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin
     if kiwi-ng --logfile "${logfile}" ${options}; then
-        kiwi-ng result bundle --id 0 --target-dir /result --bundle-dir /bundle
+        if ! is_container; then
+            kiwi-ng result bundle --id 0 --target-dir /result --bundle-dir /bundle
+        fi
     fi
     echo $? > "${exit_code_file}"
 }
@@ -140,7 +167,7 @@ function import_box_variables {
     # """
     # shellcheck disable=SC2002,SC2046
     eval export $(
-        cat /proc/cmdline | \
+        cat "$(get_cmdline_file)" | \
         tr " " "\n" | grep "=_" | sed -e "s@=_@=@" | sed -e "s@_\$@@"
     )
 }
@@ -161,8 +188,12 @@ function waitport {
 }
 
 function finish {
-    if ! grep -q kiwi-no-halt /proc/cmdline; then
-        halt -p
+    if ! grep -q kiwi-no-halt "$(get_cmdline_file)"; then
+        if ! is_container; then
+            halt -p
+        else
+            reboot -f
+        fi
     fi
 }
 
@@ -178,17 +209,19 @@ import_ssh_pub_key
 
 wait_network
 
-if ! mount_shared_path "/description" "kiwidescription"; then
-    exit 1
-fi
-
-if ! mount_shared_path "/bundle" "kiwibundle"; then
-    exit 1
-fi
-
-if [ -n "${custom_mount}" ]; then
-    if ! mount_shared_path "${custom_mount}" "custompath"; then
+if ! is_container; then
+    if ! mount_shared_path "/description" "kiwidescription"; then
         exit 1
+    fi
+
+    if ! mount_shared_path "/bundle" "kiwibundle"; then
+        exit 1
+    fi
+
+    if [ -n "${custom_mount}" ]; then
+        if ! mount_shared_path "${custom_mount}" "custompath"; then
+            exit 1
+        fi
     fi
 fi
 

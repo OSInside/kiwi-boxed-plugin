@@ -48,7 +48,7 @@ function run_build {
     if is_container; then
         # directly create all target image files in the shared
         # volume path. Do not call the bundler later
-        rm -rf /bundle
+        rm -rf /bundle/*
         options="${options} --description /description --target-dir /bundle"
     else
         # keep target files inside the VM because I/O between

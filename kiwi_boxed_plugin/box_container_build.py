@@ -73,11 +73,11 @@ class BoxContainerBuild:
         :param str custom_shared_path: make this path available in the container
         """
         self.kiwi_build_command = kiwi_build_command
-        desc = self._pop_arg_param(
-            '--description'
+        desc = os.path.abspath(
+            self._pop_arg_param('--description')
         )
-        target_dir = self._pop_arg_param(
-            '--target-dir'
+        target_dir = os.path.abspath(
+            self._pop_arg_param('--target-dir')
         )
         Path.create(target_dir)
 
@@ -93,8 +93,18 @@ class BoxContainerBuild:
                 'kiwi_version=_{0}_'.format(kiwi_version)
             )
         if custom_shared_path:
+            custom_shared_path = os.path.abspath(custom_shared_path)
+            if not os.path.exists(custom_shared_path):
+                raise KiwiError(
+                    f'Custom share path {custom_shared_path} does not exist'
+                )
             container_cmdline.append(
                 'custom_mount=_{0}_'.format(custom_shared_path)
+            )
+
+        if not os.path.exists(desc):
+            raise KiwiError(
+                f'Image description {desc} does not exist'
             )
 
         self.cmdline = NamedTemporaryFile(prefix='cmdline')

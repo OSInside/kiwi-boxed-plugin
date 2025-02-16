@@ -25,32 +25,123 @@ class TestBoxContainerBuild:
     def setup_method(self, cls, mock_BoxDownload):
         self.setup()
 
+    @patch('os.path.exists')
     @patch('os.environ')
     @patch('os.system')
     @patch('kiwi_boxed_plugin.box_container_build.Path.create')
-    def test_raises_on_kiwi_error(
-        self, mock_path_create, mock_os_system, mock_os_environ
+    def test_run_shared_path_does_not_exist(
+        self, mock_path_create, mock_os_system,
+        mock_os_environ, mock_os_path_exists
     ):
+        def exists(path):
+            if path.endswith('/var/tmp/repos'):
+                return False
+            return True
+
+        mock_os_path_exists.side_effect = exists
         with raises(KiwiError):
             self.build.run(
                 [
-                    '--type', 'oem', 'system', 'build',
-                    '--description', 'desc', '--target-dir', '../data/target'
-                ]
+                    '--debug', '--type', 'oem', 'system', 'build',
+                    '--description', 'desc', '--target-dir', 'target'
+                ],
+                keep_open=True,
+                kiwi_version='9.22.1',
+                custom_shared_path='/var/tmp/repos'
             )
 
+    @patch('os.path.exists')
+    @patch('os.environ')
+    @patch('os.system')
+    @patch('kiwi_boxed_plugin.box_container_build.Path.create')
+    def test_run_image_description_does_not_exist(
+        self, mock_path_create, mock_os_system,
+        mock_os_environ, mock_os_path_exists
+    ):
+        def exists(path):
+            if path.endswith('desc'):
+                return False
+            return True
+
+        mock_os_path_exists.side_effect = exists
+        with raises(KiwiError):
+            self.build.run(
+                [
+                    '--debug', '--type', 'oem', 'system', 'build',
+                    '--description', 'desc', '--target-dir', 'target'
+                ],
+                keep_open=True,
+                kiwi_version='9.22.1',
+                custom_shared_path='/var/tmp/repos'
+            )
+
+    @patch('os.path.exists')
+    @patch('os.environ')
+    @patch('os.system')
+    @patch('kiwi_boxed_plugin.box_container_build.Path.create')
+    @patch('kiwi_boxed_plugin.box_container_build.NamedTemporaryFile')
+    def test_run_build_failed(
+        self, mock_NamedTemporaryFile, mock_path_create,
+        mock_os_system, mock_os_environ, mock_os_path_exists
+    ):
+        def exists(path):
+            if path.endswith('target/result.code'):
+                return True
+            if path.endswith('/var/tmp/repos'):
+                return True
+            if path.endswith('desc'):
+                return True
+            return False
+
+        mock_os_path_exists.side_effect = exists
+        tmpfile = Mock()
+        tmpfile.name = 'tmpfile'
+        mock_NamedTemporaryFile.return_value = tmpfile
+        with patch('builtins.open', create=True) as mock_open:
+            file_handle = mock_open.return_value.__enter__.return_value
+            file_handle.readline.return_value = '1'
+            with raises(KiwiError):
+                self.build.run(
+                    [
+                        '--debug', '--type', 'oem', 'system', 'build',
+                        '--description', 'desc', '--target-dir', 'target'
+                    ],
+                    keep_open=True,
+                    kiwi_version='9.22.1',
+                    custom_shared_path='/var/tmp/repos'
+                )
+
+    @patch('os.path.abspath')
+    @patch('os.path.exists')
     @patch('os.environ')
     @patch('os.system')
     @patch('kiwi_boxed_plugin.box_container_build.Path.create')
     @patch('kiwi_boxed_plugin.box_container_build.NamedTemporaryFile')
     def test_run(
         self, mock_NamedTemporaryFile, mock_path_create,
-        mock_os_system, mock_os_environ
+        mock_os_system, mock_os_environ, mock_os_path_exists,
+        mock_os_abspath
     ):
+        def abspath(path):
+            return path
+
+        def exists(path):
+            if path == 'target/result.code':
+                return True
+            if path == '/var/tmp/repos':
+                return True
+            if path == 'desc':
+                return True
+            return False
+
+        mock_os_abspath.side_effect = abspath
+        mock_os_path_exists.side_effect = exists
         tmpfile = Mock()
         tmpfile.name = 'tmpfile'
         mock_NamedTemporaryFile.return_value = tmpfile
-        with patch('builtins.open', create=True):
+        with patch('builtins.open', create=True) as mock_open:
+            file_handle = mock_open.return_value.__enter__.return_value
+            file_handle.readline.return_value = '0'
             self.build.run(
                 [
                     '--debug', '--type', 'oem', 'system', 'build',

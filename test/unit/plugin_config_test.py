@@ -25,7 +25,6 @@ class TestPluginConfig:
             PluginConfig()
 
     def test_get_config(self):
-        print(self.plugin_config.get_config())
         assert self.plugin_config.get_config() == [
             {
                 'name': 'suse',
@@ -45,6 +44,7 @@ class TestPluginConfig:
                             'SUSE-Box.x86_64-1.42.1-Kernel-BuildBox.tar.xz',
                             'SUSE-Box.x86_64-1.42.1-System-BuildBox.qcow2'
                         ],
+                        'container': 'some',
                         'use_initrd': True
                     }
                 ]
@@ -69,6 +69,7 @@ class TestPluginConfig:
                             'Universal-Box.x86_64-1.1.2-Kernel-BuildBox.tar.xz',
                             'Universal-Box.x86_64-1.1.2-System-BuildBox.qcow2'
                         ],
+                        'container': 'some',
                         'use_initrd': True
                     },
                     {
@@ -87,6 +88,7 @@ class TestPluginConfig:
                             'Universal-Box.aarch64-1.1.2-'
                             'System-BuildBox.qcow2'
                         ],
+                        'container': 'some',
                         'use_initrd': True
                     }
                 ]

@@ -58,6 +58,11 @@ schema = {
                                 'required': True,
                                 'nullable': False
                             },
+                            'container': {
+                                'type': 'string',
+                                'required': True,
+                                'nullable': False
+                            },
                             'use_initrd': {
                                 'type': 'boolean',
                                 'required': True

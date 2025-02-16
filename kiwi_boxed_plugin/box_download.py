@@ -29,7 +29,9 @@ from kiwi.path import Path
 
 from kiwi_boxed_plugin.box_config import BoxConfig
 from kiwi_boxed_plugin.defaults import Defaults
-from kiwi_boxed_plugin.exceptions import KiwiBoxPluginChecksumError
+from kiwi_boxed_plugin.exceptions import (
+    KiwiBoxPluginChecksumError
+)
 
 vm_setup_type = NamedTuple(
     'vm_setup_type', [
@@ -67,6 +69,20 @@ class BoxDownload:
         self.kernel = ''
         self.initrd = ''
         Path.create(self.box_dir)
+
+    def fetch_container(self) -> str:
+        """
+        Download container box from the open build service
+        """
+        container_source = self.box_config.get_box_container()
+        if container_source:
+            container_pull = [
+                'sudo', 'podman', 'pull', container_source
+            ]
+            os.system(
+                ' '.join(container_pull)
+            )
+        return container_source
 
     def fetch(self, update_check: bool = True) -> vm_setup_type:
         """

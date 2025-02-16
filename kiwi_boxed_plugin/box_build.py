@@ -33,6 +33,7 @@ from kiwi_boxed_plugin.defaults import Defaults
 import kiwi_boxed_plugin.defaults as runtime
 
 from kiwi_boxed_plugin.exceptions import (
+    KiwiBoxPluginDownloadError,
     KiwiBoxPluginQEMUBinaryNotFound,
     KiwiBoxPluginSSHPortInvalid,
     KiwiError
@@ -108,7 +109,12 @@ class BoxBuild:
             '--target-dir'
         )
         Path.create(target_dir)
-        vm_setup = self.box.fetch(update_check)
+        try:
+            vm_setup = self.box.fetch(update_check)
+        except Exception as issue:
+            raise KiwiBoxPluginDownloadError(
+                f'Failed to fetch box file(s): {issue}'
+            )
         vm_append = [
             vm_setup.append,
             'kiwi=\\"{0}\\"'.format(' '.join(self.kiwi_build_command))

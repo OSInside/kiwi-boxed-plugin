@@ -59,3 +59,9 @@ class KiwiBoxPluginChecksumError(KiwiError):
     """
     Exception raised in case of a checksum error
     """
+
+
+class KiwiBoxPluginDownloadError(KiwiError):
+    """
+    Exception raised in case of a download issue
+    """

@@ -4,7 +4,9 @@ from unittest.mock import (
     patch, Mock, MagicMock, call
 )
 
-from kiwi_boxed_plugin.exceptions import KiwiBoxPluginChecksumError
+from kiwi_boxed_plugin.exceptions import (
+    KiwiBoxPluginChecksumError
+)
 from kiwi_boxed_plugin.box_download import (
     BoxDownload, vm_setup_type
 )
@@ -57,7 +59,9 @@ class TestBoxDownload:
             Mock().register.return_value = 'register_file'
         mock_get_plugin_config_file.return_value = \
             '../data/kiwi_boxed_plugin.yml'
-        with patch.dict('os.environ', {'KIWI_BOXED_CACHE_DIR': '/some/custom/dir'}):
+        with patch.dict(
+            'os.environ', {'KIWI_BOXED_CACHE_DIR': '/some/custom/dir'}
+        ):
             BoxDownload('suse', 'x86_64')
         mock_Path.create.assert_called_once_with(
             '/some/custom/dir/suse'
@@ -253,3 +257,8 @@ class TestBoxDownload:
     ):
         mock_os_path_exist.return_value = True
         assert self.box.fetch(update_check=False) == self.result
+
+    @patch('os.system')
+    def test_fetch_container(self, mock_os_system):
+        assert self.box.fetch_container() == 'some'
+        mock_os_system.assert_called_once_with('sudo podman pull some')

@@ -22,6 +22,7 @@ usage: kiwi-ng system boxbuild -h | --help
            [--box-console=<ttyname>]
            [--box-smp-cpus=<number>]
            [--box-debug]
+           [--container]
            [--kiwi-version=<version>]
            [--shared-path=<path>]
            [--no-update-check]
@@ -62,6 +63,10 @@ options:
     --box-smp-cpus=<number>
         Number of CPUs to use in the SMP setup. By default
         4 CPUs will be used
+
+    --container
+        Build in container instead of a VM. Options related to
+        building in a VM will have no effect.
 
     --no-update-check
         Skip check for available box update. The option has no
@@ -150,6 +155,7 @@ from kiwi.help import Help
 import kiwi.tasks.system_build
 
 from kiwi_boxed_plugin.box_build import BoxBuild
+from kiwi_boxed_plugin.box_container_build import BoxContainerBuild
 from kiwi_boxed_plugin.plugin_config import PluginConfig
 
 
@@ -166,36 +172,49 @@ class SystemBoxbuildTask(CliTask):
             print(PluginConfig().dump_config())
 
         elif self.command_args.get('--box'):
-            request_update_check = not self.command_args.get(
-                '--no-update-check'
-            )
-            request_snapshot_mode = not self.command_args.get(
-                '--no-snapshot'
-            )
             keep_open = self.command_args.get('--box-debug')
             kiwi_version = self.command_args.get('--kiwi-version')
             shared_path = self.command_args.get('--shared-path')
-            box_build = BoxBuild(
-                boxname=self.command_args.get('--box'),
-                ram=self.command_args.get('--box-memory'),
-                console=self.command_args.get('--box-console'),
-                smp=self.command_args.get('--box-smp-cpus'),
-                arch=self._get_box_arch(),
-                machine=self.command_args.get('--machine'),
-                cpu=self.command_args.get('--cpu') or 'host',
-                sharing_backend=self._get_sharing_backend(),
-                ssh_key=self.command_args.get('--ssh-key') or 'id_rsa',
-                ssh_port=self.command_args.get('--ssh-port') or '',
-                accel=not bool(self.command_args.get('--no-accel'))
-            )
-            box_build.run(
-                self._validate_kiwi_build_command(),
-                request_update_check,
-                request_snapshot_mode,
-                keep_open,
-                kiwi_version,
-                shared_path
-            )
+
+            if self.command_args.get('--container'):
+                box_container_build = BoxContainerBuild(
+                    boxname=self.command_args.get('--box'),
+                    arch=self._get_box_arch()
+                )
+                box_container_build.run(
+                    self._validate_kiwi_build_command(),
+                    keep_open,
+                    kiwi_version,
+                    shared_path
+                )
+            else:
+                request_update_check = not self.command_args.get(
+                    '--no-update-check'
+                )
+                request_snapshot_mode = not self.command_args.get(
+                    '--no-snapshot'
+                )
+                box_build = BoxBuild(
+                    boxname=self.command_args.get('--box'),
+                    ram=self.command_args.get('--box-memory'),
+                    console=self.command_args.get('--box-console'),
+                    smp=self.command_args.get('--box-smp-cpus'),
+                    arch=self._get_box_arch(),
+                    machine=self.command_args.get('--machine'),
+                    cpu=self.command_args.get('--cpu') or 'host',
+                    sharing_backend=self._get_sharing_backend(),
+                    ssh_key=self.command_args.get('--ssh-key') or 'id_rsa',
+                    ssh_port=self.command_args.get('--ssh-port') or '',
+                    accel=not bool(self.command_args.get('--no-accel'))
+                )
+                box_build.run(
+                    self._validate_kiwi_build_command(),
+                    request_update_check,
+                    request_snapshot_mode,
+                    keep_open,
+                    kiwi_version,
+                    shared_path
+                )
 
     def _validate_kiwi_build_command(self) -> List[str]:
         # construct build command from given command line

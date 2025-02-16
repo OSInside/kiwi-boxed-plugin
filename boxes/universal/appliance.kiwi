@@ -12,6 +12,7 @@
     <profiles>
         <profile name="Kernel" description="Provides kernel for kvm boot"/>
         <profile name="System" description="Provides system for kvm boot"/>
+        <profile name="Container" description="Provides system for podman"/>
     </profiles>
     <preferences>
         <version>1.41.2</version>
@@ -21,6 +22,13 @@
         <timezone>UTC</timezone>
         <rpm-excludedocs>true</rpm-excludedocs>
         <rpm-check-signatures>false</rpm-check-signatures>
+    </preferences>
+    <preferences profiles="Container">
+        <type image="docker">
+            <containerconfig name="universal">
+                <entrypoint execute="/usr/lib/systemd/systemd"/>
+            </containerconfig>
+        </type>
     </preferences>
     <preferences profiles="Kernel">
         <type image="pxe" initrd_system="dracut"/>
@@ -65,7 +73,6 @@
         <package name="dhclient"/>
         <package name="glibc-all-langpacks"/>
         <package name="tzdata"/>
-        <package name="NetworkManager"/>
         <package name="dbus-daemon"/>
         <package name="lvm2"/>
         <package name="xfsprogs"/>
@@ -109,6 +116,7 @@
         <package name="netcat"/>
         <package name="zstd"/>
         <package name="systemd-resolved"/>
+        <package name="systemd-networkd"/>
         <package name="audit"/>
         <package name="eif_build"/>
         <package name="distribution-gpg-keys"/>

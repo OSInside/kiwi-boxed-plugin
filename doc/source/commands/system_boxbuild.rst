@@ -14,6 +14,7 @@ SYNOPSIS
        [--box-console=<ttyname>]
        [--box-smp-cpus=<number>]
        [--box-debug]
+       [--container]
        [--kiwi-version=<version>]
        [--shared-path=<path>]
        [--no-update-check]
@@ -21,6 +22,7 @@ SYNOPSIS
        [--no-accel]
        [--9p-sharing | --virtiofs-sharing | --sshfs-sharing]
        [--ssh-key=<name>]
+       [--ssh-port=<port>]
        [--x86_64 | --aarch64]
        [--machine=<qemu_machine>]
        [--cpu=<qemu_cpu>]
@@ -86,6 +88,11 @@ OPTIONS
   Number of CPUs to use in the SMP setup. By default
   4 CPUs will be used
 
+--container
+
+  Build in container instead of a VM. Options related to
+  building in a VM will have no effect.
+
 --no-update-check
 
   Skip check for available box update. The option has no
@@ -120,6 +127,11 @@ OPTIONS
 
   Name of ssh key to authorize for connection.
   By default 'id_rsa' is used.
+
+--ssh-port=<port>
+
+  Port number to use to forward the guest's SSH port to the host
+  By default '10022' is used.
 
 --x86_64|--aarch64
 

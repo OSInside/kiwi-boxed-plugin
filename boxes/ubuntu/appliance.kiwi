@@ -12,6 +12,7 @@
     <profiles>
         <profile name="Kernel" description="Provides kernel for kvm boot"/>
         <profile name="System" description="Provides system for kvm boot"/>
+        <profile name="Container" description="Provides system for podman"/>
     </profiles>
     <preferences>
         <version>1.24.4</version>
@@ -19,6 +20,13 @@
         <locale>en_US</locale>
         <timezone>UTC</timezone>
         <rpm-check-signatures>false</rpm-check-signatures>
+    </preferences>
+    <preferences profiles="Container">
+        <type image="docker">
+            <containerconfig name="ubuntu">
+                <entrypoint execute="/usr/lib/systemd/systemd"/>
+            </containerconfig>
+        </type>
     </preferences>
     <preferences profiles="Kernel">
         <type image="pxe" initrd_system="dracut"/>

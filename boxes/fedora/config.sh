@@ -54,6 +54,7 @@ for profile in ${kiwi_profiles//,/ }; do
         systemctl disable systemd-resolved
 
         # Mask services not useful in a container
+        systemctl mask sound.target
         systemctl mask sys-kernel-config.mount
         systemctl mask sys-kernel-debug.mount
         systemctl mask sys-kernel-tracing.mount

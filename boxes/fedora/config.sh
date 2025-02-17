@@ -13,9 +13,6 @@ systemctl mask systemd-user-sessions.service
 #======================================
 # Activate kiwi service
 #--------------------------------------
-systemctl enable systemd-networkd
-systemctl enable systemd-resolved
-systemctl enable sshd
 systemctl enable kiwi
 
 #======================================
@@ -28,6 +25,18 @@ systemctl mask lvm2-lvmetad.socket
 
 #======================================
 # Setup container
+# Setup for System/Kernel
+#--------------------------------------
+for profile in ${kiwi_profiles//,/ }; do
+    if [ ! "${profile}" = "Container" ]; then
+        systemctl enable systemd-networkd
+        systemctl enable systemd-resolved
+        systemctl enable sshd
+    fi
+done
+
+#======================================
+# Setup for container
 #--------------------------------------
 for profile in ${kiwi_profiles//,/ }; do
     if [ "${profile}" = "Container" ]; then
@@ -48,18 +57,11 @@ for profile in ${kiwi_profiles//,/ }; do
 		EOF
         chmod 755 /etc/bashrc
 
-        # Disable services not useful in a container
-        systemctl disable sshd
-        systemctl disable systemd-networkd
-        systemctl disable systemd-resolved
-
         # Mask services not useful in a container
         systemctl mask sound.target
         systemctl mask sys-kernel-config.mount
         systemctl mask sys-kernel-debug.mount
         systemctl mask sys-kernel-tracing.mount
-        systemctl mask systemd-resolved
-        systemctl mask systemd-networkd
         systemctl mask systemd-modules-load
     fi
 done

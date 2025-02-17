@@ -66,9 +66,6 @@
         <source path="obsrepositories:/"/>
     </repository>
     <packages type="image">
-        <package name="grub2" arch="x86_64,aarch64,ppc64le"/>
-        <package name="grubby"/>
-        <package name="kernel"/>
         <package name="selinux-policy-targeted"/>
         <package name="dhclient"/>
         <package name="glibc-all-langpacks"/>
@@ -86,11 +83,9 @@
         <package name="pacman"/>
         <package name="dpkg"/>
         <package name="apt"/>
-        <package name="debootstrap"/>
+        <package name="procps"/>
         <package name="buildah"/>
         <package name="skopeo"/>
-        <package name="dracut-kiwi-oem-repart"/>
-        <package name="dracut-kiwi-oem-dump"/>
         <package name="python3-devel"/>
         <package name="libxml2-devel"/>
         <package name="libxslt-devel"/>
@@ -101,26 +96,34 @@
         <package name="s390utils" arch="s390x"/>
         <package name="mariadb-connector-c-config" arch="s390x"/>
         <package name="syslinux" arch="x86_64"/>
+        <package name="kiwi-systemdeps"/>
+        <package name="fuse3"/>
+        <package name="fuse-common"/>
+        <package name="netcat"/>
+        <package name="zstd"/>
+        <package name="audit"/>
+        <package name="eif_build"/>
+        <package name="distribution-gpg-keys"/>
+        <package name="kbd"/>
+        <archive name="box-key-unsafe.tgz"/>
+    </packages>
+    <packages type="image" profiles="Kernel,System">
+        <package name="grub2" arch="x86_64,aarch64,ppc64le"/>
+        <package name="grubby"/>
+        <package name="kernel"/>
+        <package name="dracut-kiwi-oem-repart"/>
+        <package name="dracut-kiwi-oem-dump"/>
         <package name="shim" arch="x86_64"/>
         <package name="grub2-efi-x64-modules" arch="x86_64"/>
         <package name="grub2-efi-x64" arch="x86_64"/>
         <package name="shim-signed-aa64" arch="aarch64"/>
         <package name="grub2-efi-aa64" arch="aarch64"/>
         <package name="grub2-efi-aa64-modules" arch="aarch64"/>
-        <package name="kiwi-systemdeps"/>
         <package name="openssh"/>
         <package name="openssh-server"/>
         <package name="sshfs"/>
-        <package name="fuse3"/>
-        <package name="fuse-common"/>
-        <package name="netcat"/>
-        <package name="zstd"/>
         <package name="systemd-resolved"/>
         <package name="systemd-networkd"/>
-        <package name="audit"/>
-        <package name="eif_build"/>
-        <package name="distribution-gpg-keys"/>
-        <archive name="box-key-unsafe.tgz"/>
     </packages>
     <packages type="bootstrap">
         <package name="filesystem"/>

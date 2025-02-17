@@ -61,24 +61,17 @@
         <package name="aaa_base"/>
         <package name="plymouth-scripts"/>
         <package name="timezone"/>
-        <package name="systemd-network"/>
         <package name="systemd"/>
-        <package name="grub2"/>
-        <package name="shim" arch="x86_64"/>
-        <package name="grub2-x86_64-efi" arch="x86_64"/>
-        <package name="grub2-arm64-efi" arch="aarch64"/>
         <package name="lvm2"/>
         <package name="xfsprogs"/>
         <package name="e2fsprogs"/>
         <package name="btrfsprogs"/>
-        <package name="kernel-default"/>
         <package name="python3-kiwi"/>
         <package name="checkmedia"/>
         <package name="jing"/>
         <package name="iproute2"/>
+        <package name="procps"/>
         <package name="gfxboot" arch="x86_64"/>
-        <package name="dracut-kiwi-oem-repart"/>
-        <package name="dracut-kiwi-oem-dump"/>
         <package name="libxml2-devel"/>
         <package name="libxslt-devel"/>
         <package name="glibc-devel"/>
@@ -89,13 +82,23 @@
         <package name="kiwi-systemdeps"/>
         <package name="python3-devel"/>
         <package name="python3-pip"/>
-        <package name="openssh"/>
-        <package name="openssh-server"/>
-        <package name="sshfs"/>
         <package name="netcat-openbsd"/>
         <package name="s390-tools" arch="s390x"/>
         <package name="distribution-gpg-keys"/>
         <archive name="box-key-unsafe.tgz"/>
+    </packages>
+    <packages type="image" profiles="Kernel,System">
+        <package name="systemd-network"/>
+        <package name="grub2"/>
+        <package name="shim" arch="x86_64"/>
+        <package name="grub2-x86_64-efi" arch="x86_64"/>
+        <package name="grub2-arm64-efi" arch="aarch64"/>
+        <package name="kernel-default"/>
+        <package name="openssh"/>
+        <package name="openssh-server"/>
+        <package name="sshfs"/>
+        <package name="dracut-kiwi-oem-repart"/>
+        <package name="dracut-kiwi-oem-dump"/>
     </packages>
     <packages type="bootstrap">
         <package name="udev"/>

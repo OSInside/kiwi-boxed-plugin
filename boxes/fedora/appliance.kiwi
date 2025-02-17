@@ -49,12 +49,8 @@
         <source path="obsrepositories:/"/>
     </repository>
     <packages type="image">
-        <package name="grub2"/>
-        <package name="grubby"/>
-        <package name="kernel"/>
-        <package name="selinux-policy-targeted"/>
-        <package name="dhclient"/>
         <package name="glibc-all-langpacks"/>
+        <package name="iproute"/>
         <package name="tzdata"/>
         <package name="dbus-daemon"/>
         <package name="lvm2"/>
@@ -63,8 +59,6 @@
         <package name="btrfs-progs"/>
         <package name="python3-kiwi"/>
         <package name="python3-pip"/>
-        <package name="dracut-kiwi-oem-repart"/>
-        <package name="dracut-kiwi-oem-dump"/>
         <package name="python3-devel"/>
         <package name="libxml2-devel"/>
         <package name="libxslt-devel"/>
@@ -73,21 +67,30 @@
         <package name="gcc"/>
         <package name="make"/>
         <package name="syslinux"/>
-        <package name="shim" arch="x86_64"/>
-        <package name="grub2-efi-x64-modules" arch="x86_64"/>
-        <package name="grub2-efi-x64" arch="x86_64"/>
         <package name="kiwi-systemdeps"/>
-        <package name="openssh"/>
-        <package name="openssh-server"/>
-        <package name="sshfs"/>
         <package name="fuse3"/>
         <package name="fuse-common"/>
         <package name="netcat"/>
-        <package name="systemd-resolved"/>
-        <package name="systemd-networkd"/>
         <package name="audit"/>
         <package name="distribution-gpg-keys"/>
         <archive name="box-key-unsafe.tgz"/>
+    </packages>
+    <packages type="image" profiles="Kernel,System">
+        <package name="grub2"/>
+        <package name="grubby"/>
+        <package name="kernel"/>
+        <package name="selinux-policy-targeted"/>
+        <package name="dhclient"/>
+        <package name="dracut-kiwi-oem-repart"/>
+        <package name="dracut-kiwi-oem-dump"/>
+        <package name="shim" arch="x86_64"/>
+        <package name="grub2-efi-x64-modules" arch="x86_64"/>
+        <package name="grub2-efi-x64" arch="x86_64"/>
+        <package name="openssh"/>
+        <package name="openssh-server"/>
+        <package name="sshfs"/>
+        <package name="systemd-resolved"/>
+        <package name="systemd-networkd"/>
     </packages>
     <packages type="bootstrap">
         <package name="filesystem"/>

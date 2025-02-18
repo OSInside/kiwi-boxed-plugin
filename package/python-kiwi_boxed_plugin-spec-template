@@ -103,9 +103,13 @@ of images based on fast booting VM images
 %package -n python%{python3_pkgversion}-kiwi_boxed_plugin
 Summary:        KIWI - Boxed Build Plugin
 Group:          %{pygroup}
+%if 0%{?ubuntu} || 0%{?debian}
+Requires:       kiwi >= 9.21.21
+%else
+Requires:       python%{python3_pkgversion}-kiwi >= 9.21.21
+%endif
 Requires:       python%{python3_pkgversion} >= 3.9
 Requires:       python%{python3_pkgversion}-docopt
-Requires:       python%{python3_pkgversion}-kiwi >= 9.21.21
 Requires:       python%{python3_pkgversion}-requests
 Requires:       python%{python3_pkgversion}-progressbar2
 %if 0%{?ubuntu} || 0%{?debian}
@@ -118,7 +122,11 @@ Requires:       python%{python3_pkgversion}-Cerberus
 %else
 Requires:       python%{python3_pkgversion}-cerberus
 %endif
+%if 0%{?ubuntu} || 0%{?debian}
+Requires:       qemu-kvm
+%else
 Requires:       qemu
+%endif
 Recommends:     sshfs
 Recommends:     virtiofsd >= 1.10
 

@@ -90,6 +90,9 @@ function wait_network {
         check=$((check + 1))
         sleep "${sleep_timeout}"
     done
+    if [ -e /run/systemd/resolve/stub-resolv.conf ];then
+        ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+    fi
 }
 
 function mount_shared_path {

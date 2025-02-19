@@ -94,6 +94,8 @@
         <package name="openSUSE-release"/>
     </packages>
     <packages type="delete" profiles="Kernel,System">
+        <package name="sysconfig-netconfig"/>
+        <package name="wicked"/>
         <package name="dracut-kiwi-oem-repart"/>
         <package name="dracut-kiwi-oem-dump"/>
         <package name="plymouth"/>

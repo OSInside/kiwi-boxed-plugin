@@ -16,12 +16,6 @@ systemctl mask systemd-user-sessions.service
 systemctl enable kiwi
 
 #======================================
-# create correct resolver link
-#--------------------------------------
-rm -f /etc/resolv.conf
-ln -s /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
-
-#======================================
 # lvmetad sucks for building lvm images
 #--------------------------------------
 systemctl disable lvm2-lvmetad

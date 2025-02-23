@@ -91,7 +91,7 @@ class TestBoxDownload:
         mock_Checksum.return_value = checksum
         with patch('builtins.open', create=True):
             with raises(KiwiBoxPluginChecksumError):
-                self.box.fetch(update_check=False)
+                self.box.fetch(update_check=True)
 
     @patch('kiwi_boxed_plugin.box_download.Command.run')
     @patch('kiwi_boxed_plugin.box_download.Uri')
@@ -117,7 +117,7 @@ class TestBoxDownload:
         mock_Checksum.return_value = checksum
         with patch('builtins.open', create=True):
             with raises(KiwiBoxPluginChecksumError):
-                self.box.fetch(update_check=False)
+                self.box.fetch(update_check=True)
 
     @patch('kiwi_boxed_plugin.box_download.Command.run')
     @patch('kiwi_boxed_plugin.box_download.Uri')

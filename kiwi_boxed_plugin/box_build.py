@@ -110,7 +110,7 @@ class BoxBuild:
         )
         Path.create(target_dir)
         try:
-            vm_setup = self.box.fetch(update_check)
+            vm_setup = self.box.fetch(update_check, snapshot)
         except Exception as issue:
             raise KiwiBoxPluginDownloadError(
                 f'Failed to fetch box file(s): {issue}'

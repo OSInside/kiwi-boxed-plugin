@@ -84,7 +84,9 @@ class BoxDownload:
             )
         return container_source
 
-    def fetch(self, update_check: bool = True) -> vm_setup_type:
+    def fetch(
+        self, update_check: bool = True, snapshot: bool = True
+    ) -> vm_setup_type:
         """
         Download box from the open build service
 
@@ -148,13 +150,15 @@ class BoxDownload:
             for box_file in self.box_config.get_box_files():
                 local_box_file = os.sep.join([self.box_dir, box_file])
                 if box_file.endswith('.qcow2'):
-                    if not self._checksum_ok(local_box_file):
+                    if update_check and snapshot and not self._checksum_ok(
+                        local_box_file
+                    ):
                         raise KiwiBoxPluginChecksumError(
                             'Checksum failed for {local_box_file}'
                         )
                     self.system = local_box_file
                 if box_file.endswith('.tar.xz'):
-                    if not self._checksum_ok(local_box_file):
+                    if update_check and not self._checksum_ok(local_box_file):
                         raise KiwiBoxPluginChecksumError(
                             'Checksum failed for {local_box_file}'
                         )

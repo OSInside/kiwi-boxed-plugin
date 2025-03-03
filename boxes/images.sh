@@ -58,11 +58,12 @@ function run_build {
     fi
     export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin
     if kiwi-ng --logfile "${logfile}" ${options}; then
+        echo 0 > "${exit_code_file}"
         if ! is_container; then
             kiwi-ng result bundle --id 0 --target-dir /result --bundle-dir /bundle
+            echo $? > "${exit_code_file}"
         fi
     fi
-    echo $? > "${exit_code_file}"
 }
 
 function wait_network {

@@ -23,6 +23,8 @@ from typing import (
     List, Optional
 )
 from kiwi.path import Path
+from kiwi.command import Command
+from kiwi.defaults import Defaults as KiwiDefaults
 
 from kiwi_boxed_plugin.box_download import BoxDownload
 from kiwi_boxed_plugin.exceptions import (
@@ -45,6 +47,7 @@ class BoxContainerBuild:
     def __init__(
         self, boxname: str, arch: str = ''
     ) -> None:
+        self.kiwi_cache = f'/{KiwiDefaults.get_shared_cache_location()}'
         self.arch = arch or platform.machine()
         self.box = BoxDownload(boxname, arch)
         self.kiwi_exit: Optional[int] = None
@@ -112,7 +115,8 @@ class BoxContainerBuild:
             cmdline.write('{0}'.format(' '.join(container_cmdline)))
             cmdline.write(os.linesep)
 
-        Path.create('/var/cache/kiwi')
+        if not os.path.isdir(self.kiwi_cache):
+            Command.run(['sudo', 'mkdir', '-p', self.kiwi_cache])
         container_run = [
             'sudo', 'podman', 'run',
             '--rm',

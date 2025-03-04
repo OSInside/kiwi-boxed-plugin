@@ -164,6 +164,7 @@ class TestBoxContainerBuild:
             '--volume target:/bundle '
             '--volume desc:/description '
             '--volume /dev:/dev '
+            '--arch x86_64 '
             '--volume /var/tmp/repos:/var/tmp/repos '
             'some'
         )

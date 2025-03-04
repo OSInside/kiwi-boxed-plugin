@@ -261,4 +261,6 @@ class TestBoxDownload:
     @patch('os.system')
     def test_fetch_container(self, mock_os_system):
         assert self.box.fetch_container() == 'some'
-        mock_os_system.assert_called_once_with('sudo podman pull some')
+        mock_os_system.assert_called_once_with(
+            'sudo podman pull --arch x86_64 some'
+        )

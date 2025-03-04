@@ -129,6 +129,9 @@ class BoxContainerBuild:
             '--volume', f'{desc}:/description',
             '--volume', '/dev:/dev'
         ]
+        if self.arch:
+            container_run.append('--arch')
+            container_run.append(self.arch)
         if custom_shared_path:
             container_run.append('--volume')
             container_run.append(f'{custom_shared_path}:{custom_shared_path}')

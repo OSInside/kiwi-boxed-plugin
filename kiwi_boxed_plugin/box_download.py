@@ -77,8 +77,12 @@ class BoxDownload:
         container_source = self.box_config.get_box_container()
         if container_source:
             container_pull = [
-                'sudo', 'podman', 'pull', container_source
+                'sudo', 'podman', 'pull'
             ]
+            if self.arch:
+                container_pull.append('--arch')
+                container_pull.append(self.arch)
+            container_pull.append(container_source)
             os.system(
                 ' '.join(container_pull)
             )

@@ -105,6 +105,7 @@
         <package name="eif_build"/>
         <package name="distribution-gpg-keys"/>
         <package name="kbd"/>
+        <package name="systemd-udev"/>
         <archive name="box-key-unsafe.tgz"/>
     </packages>
     <packages type="image" profiles="Kernel,System">

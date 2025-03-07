@@ -75,6 +75,7 @@ class TestBoxContainerBuild:
                 custom_shared_path='/var/tmp/repos'
             )
 
+    @patch('os.path.isdir')
     @patch('os.path.exists')
     @patch('os.environ')
     @patch('os.system')
@@ -82,7 +83,8 @@ class TestBoxContainerBuild:
     @patch('kiwi_boxed_plugin.box_container_build.NamedTemporaryFile')
     def test_run_build_failed(
         self, mock_NamedTemporaryFile, mock_path_create,
-        mock_os_system, mock_os_environ, mock_os_path_exists
+        mock_os_system, mock_os_environ, mock_os_path_exists,
+        mock_os_path_isdir
     ):
         def exists(path):
             if path.endswith('target/result.code'):
@@ -93,6 +95,7 @@ class TestBoxContainerBuild:
                 return True
             return False
 
+        mock_os_path_isdir.return_value = True
         mock_os_path_exists.side_effect = exists
         tmpfile = Mock()
         tmpfile.name = 'tmpfile'
@@ -111,16 +114,17 @@ class TestBoxContainerBuild:
                     custom_shared_path='/var/tmp/repos'
                 )
 
+    @patch('os.path.isdir')
     @patch('os.path.abspath')
     @patch('os.path.exists')
     @patch('os.environ')
     @patch('os.system')
-    @patch('kiwi_boxed_plugin.box_container_build.Path.create')
     @patch('kiwi_boxed_plugin.box_container_build.NamedTemporaryFile')
+    @patch('kiwi_boxed_plugin.box_container_build.Command.run')
     def test_run(
-        self, mock_NamedTemporaryFile, mock_path_create,
+        self, mock_Command_run, mock_NamedTemporaryFile,
         mock_os_system, mock_os_environ, mock_os_path_exists,
-        mock_os_abspath
+        mock_os_abspath, mock_os_path_isdir
     ):
         def abspath(path):
             return path
@@ -134,6 +138,7 @@ class TestBoxContainerBuild:
                 return True
             return False
 
+        mock_os_path_isdir.return_value = False
         mock_os_abspath.side_effect = abspath
         mock_os_path_exists.side_effect = exists
         tmpfile = Mock()
@@ -151,6 +156,9 @@ class TestBoxContainerBuild:
                 kiwi_version='9.22.1',
                 custom_shared_path='/var/tmp/repos'
             )
+        mock_Command_run.assert_called_once_with(
+            ['sudo', 'mkdir', '-p', '/var/cache/kiwi']
+        )
         mock_os_system.assert_called_once_with(
             'sudo podman run --rm -ti '
             '--privileged '

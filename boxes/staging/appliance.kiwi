@@ -66,6 +66,7 @@
         <source path="obsrepositories:/"/>
     </repository>
     <packages type="image">
+        <package name="apk-tools"/>
         <package name="selinux-policy-targeted"/>
         <package name="dhclient"/>
         <package name="glibc-all-langpacks"/>

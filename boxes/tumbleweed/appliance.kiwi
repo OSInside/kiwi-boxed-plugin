@@ -89,6 +89,7 @@
     </packages>
     <packages type="image" profiles="Kernel,System">
         <package name="systemd-network"/>
+        <package name="systemd-resolved"/>
         <package name="grub2"/>
         <package name="shim" arch="x86_64"/>
         <package name="grub2-x86_64-efi" arch="x86_64"/>

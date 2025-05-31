@@ -1,7 +1,9 @@
 [run]
 omit =
     */version.py
+    */cli.py
 
 [report]
 omit =
     */version.py
+    */cli.py

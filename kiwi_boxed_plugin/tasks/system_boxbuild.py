@@ -217,27 +217,32 @@ class SystemBoxbuildTask(CliTask):
                 )
 
     def _validate_kiwi_build_command(self) -> List[str]:
-        # construct build command from given command line
-        kiwi_build_command = [
-            'system', 'build'
-        ]
-        kiwi_build_command += self.command_args.get(
-            '<kiwi_build_command_args>'
-        )
-        if '--' in kiwi_build_command:
-            kiwi_build_command.remove('--')
-        # validate build command through docopt from the original
-        # kiwi.tasks.system_build docopt information
-        log.info(
-            'Validating kiwi_build_command_args:{0}    {1}'.format(
-                os.linesep, kiwi_build_command
+        if self.command_args.get('<kiwi_build_command_args>'):
+            # construct build command from docopt command line
+            kiwi_build_command = [
+                'system', 'build'
+            ]
+            kiwi_build_command += self.command_args.get(
+                '<kiwi_build_command_args>'
             )
-        )
-        validated_build_command = docopt(
-            kiwi.tasks.system_build.__doc__,
-            argv=kiwi_build_command
-        )
-        # rebuild kiwi build command from validated docopt parser result
+            if '--' in kiwi_build_command:
+                kiwi_build_command.remove('--')
+            # validate build command through docopt from the original
+            # kiwi.tasks.system_build docopt information
+            log.info(
+                'Validating kiwi_build_command_args:{0}    {1}'.format(
+                    os.linesep, kiwi_build_command
+                )
+            )
+            validated_build_command = docopt(
+                kiwi.tasks.system_build.__doc__,
+                argv=kiwi_build_command
+            )
+        else:
+            # construct build command from typer command line
+            validated_build_command = self.command_args.get('system_build')
+
+        # rebuild kiwi build command from validated parser result
         kiwi_build_command = [
             'system', 'build'
         ]

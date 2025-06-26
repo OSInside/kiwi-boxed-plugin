@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "kiwi_boxed_plugin"
-version = "0.2.52"
+version = "0.2.53"
 description = "KIWI - Boxed Build Plugin"
 license = "GPL-3.0-or-later"
 readme = "README.rst"

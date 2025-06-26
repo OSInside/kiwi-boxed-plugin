@@ -1,4 +1,5 @@
-from pkg_resources import resource_filename
+import importlib
+from importlib.resources import as_file
 from kiwi_boxed_plugin.defaults import Defaults
 from kiwi_boxed_plugin.exceptions import KiwiBoxPluginTargetPathError
 from pytest import raises

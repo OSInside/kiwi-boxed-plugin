@@ -21,7 +21,8 @@ from typing import (
     List, Optional
 )
 from kiwi.path import Path
-from pkg_resources import resource_filename
+import importlib
+from importlib.resources import as_file
 import subprocess
 
 from kiwi_boxed_plugin.exceptions import (
@@ -80,9 +81,8 @@ class Defaults:
             return config_path_system
 
         # 5.
-        return resource_filename(
-            'kiwi_boxed_plugin', f'config/{config_name}'
-        )
+        with as_file(importlib.resources.files('kiwi_boxed_plugin')) as path:
+            return f'{path}/config/{config_name}'
 
     @staticmethod
     def get_local_box_cache_dir() -> str:

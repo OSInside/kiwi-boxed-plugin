@@ -108,7 +108,7 @@ class BoxBuild:
         target_dir = self._pop_arg_param(
             '--target-dir'
         )
-        Path.create(target_dir)
+        Defaults.create_build_target_dir(target_dir)
         try:
             vm_setup = self.box.fetch(update_check, snapshot)
         except Exception as issue:
@@ -253,8 +253,12 @@ class BoxBuild:
         for virtiofsd_process in runtime.VIRTIOFSD_PROCESS_LIST:
             virtiofsd_process.terminate()
 
-        exit_code_file = os.sep.join([target_dir, 'result.code'])
-        build_log_file = os.sep.join([target_dir, 'result.log'])
+        exit_code_file = os.sep.join(
+            [target_dir, Defaults.result_exitcode_name]
+        )
+        build_log_file = os.sep.join(
+            [target_dir, Defaults.result_log_name]
+        )
         self.kiwi_exit = 0
         if os.path.exists(exit_code_file):
             with open(exit_code_file) as exit_code:

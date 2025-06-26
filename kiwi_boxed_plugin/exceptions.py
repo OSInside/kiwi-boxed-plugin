@@ -65,3 +65,9 @@ class KiwiBoxPluginDownloadError(KiwiError):
     """
     Exception raised in case of a download issue
     """
+
+
+class KiwiBoxPluginTargetPathError(KiwiError):
+    """
+    Exception raised in case of an issue creating or accessing the target dir
+    """

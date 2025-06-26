@@ -28,9 +28,9 @@ class TestBoxContainerBuild:
     @patch('os.path.exists')
     @patch('os.environ')
     @patch('os.system')
-    @patch('kiwi_boxed_plugin.box_container_build.Path.create')
+    @patch('kiwi_boxed_plugin.box_build.Defaults.create_build_target_dir')
     def test_run_shared_path_does_not_exist(
-        self, mock_path_create, mock_os_system,
+        self, mock_create_build_target_dir, mock_os_system,
         mock_os_environ, mock_os_path_exists
     ):
         def exists(path):
@@ -53,9 +53,9 @@ class TestBoxContainerBuild:
     @patch('os.path.exists')
     @patch('os.environ')
     @patch('os.system')
-    @patch('kiwi_boxed_plugin.box_container_build.Path.create')
+    @patch('kiwi_boxed_plugin.box_build.Defaults.create_build_target_dir')
     def test_run_image_description_does_not_exist(
-        self, mock_path_create, mock_os_system,
+        self, mock_create_build_target_dir, mock_os_system,
         mock_os_environ, mock_os_path_exists
     ):
         def exists(path):
@@ -79,10 +79,10 @@ class TestBoxContainerBuild:
     @patch('os.path.exists')
     @patch('os.environ')
     @patch('os.system')
-    @patch('kiwi_boxed_plugin.box_container_build.Path.create')
+    @patch('kiwi_boxed_plugin.box_build.Defaults.create_build_target_dir')
     @patch('kiwi_boxed_plugin.box_container_build.NamedTemporaryFile')
     def test_run_build_failed(
-        self, mock_NamedTemporaryFile, mock_path_create,
+        self, mock_NamedTemporaryFile, mock_create_build_target_dir,
         mock_os_system, mock_os_environ, mock_os_path_exists,
         mock_os_path_isdir
     ):

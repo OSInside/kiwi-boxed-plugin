@@ -22,10 +22,10 @@ from tempfile import NamedTemporaryFile
 from typing import (
     List, Optional
 )
-from kiwi.path import Path
 from kiwi.command import Command
 from kiwi.defaults import Defaults as KiwiDefaults
 
+from kiwi_boxed_plugin.defaults import Defaults
 from kiwi_boxed_plugin.box_download import BoxDownload
 from kiwi_boxed_plugin.exceptions import (
     KiwiError
@@ -82,7 +82,7 @@ class BoxContainerBuild:
         target_dir = os.path.abspath(
             self._pop_arg_param('--target-dir')
         )
-        Path.create(target_dir)
+        Defaults.create_build_target_dir(target_dir)
 
         container_name = self.box.fetch_container()
 
@@ -145,8 +145,12 @@ class BoxContainerBuild:
             ' '.join(container_run)
         )
 
-        exit_code_file = os.sep.join([target_dir, 'result.code'])
-        build_log_file = os.sep.join([target_dir, 'result.log'])
+        exit_code_file = os.sep.join(
+            [target_dir, Defaults.result_exitcode_name]
+        )
+        build_log_file = os.sep.join(
+            [target_dir, Defaults.result_log_name]
+        )
         self.kiwi_exit = 0
         if os.path.exists(exit_code_file):
             with open(exit_code_file) as exit_code:

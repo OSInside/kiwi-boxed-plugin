@@ -48,10 +48,10 @@ class TestBoxBuild:
 
     @patch('os.environ')
     @patch('os.system')
-    @patch('kiwi_boxed_plugin.box_build.Path.create')
+    @patch('kiwi_boxed_plugin.box_build.Defaults.create_build_target_dir')
     @patch('kiwi_boxed_plugin.box_build.Path.which')
     def test_raises_on_kiwi_error(
-        self, mock_path_which, mock_path_create,
+        self, mock_path_which, mock_create_build_target_dir,
         mock_os_system, mock_os_environ
     ):
         mock_path_which.return_value = 'qemu-system-x86_64'
@@ -65,10 +65,10 @@ class TestBoxBuild:
 
     @patch('os.environ')
     @patch('os.system')
-    @patch('kiwi_boxed_plugin.box_build.Path.create')
+    @patch('kiwi_boxed_plugin.box_build.Defaults.create_build_target_dir')
     @patch('kiwi_boxed_plugin.box_build.Path.which')
     def test_raises_on_invalid_ssh_port(
-        self, mock_path_which, mock_path_create,
+        self, mock_path_which, mock_create_build_target_dir,
         mock_os_system, mock_os_environ
     ):
         mock_path_which.return_value = 'qemu-system-x86_64'
@@ -83,10 +83,10 @@ class TestBoxBuild:
 
     @patch('os.environ')
     @patch('os.system')
-    @patch('kiwi_boxed_plugin.box_build.Path.create')
+    @patch('kiwi_boxed_plugin.box_build.Defaults.create_build_target_dir')
     @patch('kiwi_boxed_plugin.box_build.Path.which')
     def test_raises_on_download_error(
-        self, mock_path_which, mock_path_create,
+        self, mock_path_which, mock_create_build_target_dir,
         mock_os_system, mock_os_environ
     ):
         mock_path_which.return_value = 'qemu-system-x86_64'
@@ -101,10 +101,10 @@ class TestBoxBuild:
 
     @patch('os.environ')
     @patch('os.system')
-    @patch('kiwi_boxed_plugin.box_build.Path.create')
+    @patch('kiwi_boxed_plugin.box_build.Defaults.create_build_target_dir')
     @patch('kiwi_boxed_plugin.box_build.Path.which')
     def test_run_with_9p_sharing(
-        self, mock_path_which, mock_path_create,
+        self, mock_path_which, mock_create_build_target_dir,
         mock_os_system, mock_os_environ
     ):
         mock_path_which.return_value = 'qemu-system-x86_64'
@@ -117,7 +117,7 @@ class TestBoxBuild:
             kiwi_version='9.22.1',
             custom_shared_path='/var/tmp/repos'
         )
-        mock_path_create.assert_called_once_with('target')
+        mock_create_build_target_dir.assert_called_once_with('target')
         mock_os_system.assert_called_once_with(
             'qemu-system-x86_64 '
             '-m 4096 '
@@ -151,10 +151,10 @@ class TestBoxBuild:
 
     @patch('os.environ')
     @patch('os.system')
-    @patch('kiwi_boxed_plugin.box_build.Path.create')
+    @patch('kiwi_boxed_plugin.box_build.Defaults.create_build_target_dir')
     @patch('kiwi_boxed_plugin.box_build.Path.which')
     def test_run_cross_arch_aarch64_on_x86_64(
-        self, mock_path_which, mock_path_create,
+        self, mock_path_which, mock_create_build_target_dir,
         mock_os_system, mock_os_environ
     ):
         mock_path_which.return_value = 'qemu-system-aarch64'
@@ -167,7 +167,7 @@ class TestBoxBuild:
             kiwi_version='9.22.1',
             custom_shared_path='/var/tmp/repos'
         )
-        mock_path_create.assert_called_once_with('target')
+        mock_create_build_target_dir.assert_called_once_with('target')
         mock_os_system.assert_called_once_with(
             'qemu-system-aarch64 '
             '-m 4096 '
@@ -202,10 +202,10 @@ class TestBoxBuild:
 
     @patch('os.environ')
     @patch('os.system')
-    @patch('kiwi_boxed_plugin.box_build.Path.create')
+    @patch('kiwi_boxed_plugin.box_build.Defaults.create_build_target_dir')
     @patch('kiwi_boxed_plugin.box_build.Path.which')
     def test_run_raises_no_qemu_binary_found(
-        self, mock_path_which, mock_path_create,
+        self, mock_path_which, mock_create_build_target_dir,
         mock_os_system, mock_os_environ
     ):
         mock_path_which.return_value = None
@@ -223,11 +223,11 @@ class TestBoxBuild:
     @patch('os.environ')
     @patch('os.system')
     @patch('subprocess.Popen')
-    @patch('kiwi_boxed_plugin.box_build.Path.create')
+    @patch('kiwi_boxed_plugin.box_build.Defaults.create_build_target_dir')
     @patch('kiwi_boxed_plugin.defaults.Path.which')
     def test_run_with_virtiofs_sharing_raises(
-        self, mock_path_which, mock_path_create, mock_subprocess_Popen,
-        mock_os_system, mock_os_environ
+        self, mock_path_which, mock_create_build_target_dir,
+        mock_subprocess_Popen, mock_os_system, mock_os_environ
     ):
         path_which_results = [None, 'qemu-system-x86_64']
 
@@ -259,11 +259,12 @@ class TestBoxBuild:
     @patch('os.system')
     @patch('os.path.abspath')
     @patch('subprocess.Popen')
-    @patch('kiwi_boxed_plugin.box_build.Path.create')
+    @patch('kiwi_boxed_plugin.box_build.Defaults.create_build_target_dir')
     @patch('kiwi_boxed_plugin.defaults.Path.which')
     def test_run_with_virtiofs_sharing(
-        self, mock_path_which, mock_path_create, mock_subprocess_Popen,
-        mock_os_path_abspath, mock_os_system, mock_os_environ
+        self, mock_path_which, mock_create_build_target_dir,
+        mock_subprocess_Popen, mock_os_path_abspath, mock_os_system,
+        mock_os_environ
     ):
         def abs_path(arg):
             return 'abspath/{0}'.format(arg)
@@ -290,7 +291,7 @@ class TestBoxBuild:
             kiwi_version='9.22.1',
             custom_shared_path='var/tmp/repos'
         )
-        mock_path_create.assert_called_once_with('target')
+        mock_create_build_target_dir.assert_called_once_with('target')
         mock_os_system.assert_called_once_with(
             'qemu-system-x86_64 '
             '-m 4096 '
@@ -370,10 +371,10 @@ class TestBoxBuild:
     @patch('os.path.isfile')
     @patch('os.system')
     @patch('kiwi_boxed_plugin.box_build.Command.run')
-    @patch('kiwi_boxed_plugin.box_build.Path.create')
+    @patch('kiwi_boxed_plugin.box_build.Defaults.create_build_target_dir')
     @patch('kiwi_boxed_plugin.defaults.Path.which')
     def test_run_with_sshfs_sharing(
-        self, mock_path_which, mock_path_create, mock_Command_run,
+        self, mock_path_which, mock_create_build_target_dir, mock_Command_run,
         mock_os_system, mock_os_path_isfile, mock_time_sleep,
         mock_pwd_getpwuid
     ):
@@ -407,7 +408,7 @@ class TestBoxBuild:
                     custom_shared_path='var/tmp/repos'
                 )
 
-        mock_path_create.assert_called_once_with('target')
+        mock_create_build_target_dir.assert_called_once_with('target')
         mock_os_system.assert_called_once_with(
             'qemu-system-x86_64 '
             '-m 4096 '

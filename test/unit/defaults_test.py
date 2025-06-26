@@ -1,6 +1,12 @@
-from pkg_resources import resource_filename
+import importlib
+from importlib.resources import as_file
 from kiwi_boxed_plugin.defaults import Defaults
-from unittest.mock import patch
+from kiwi_boxed_plugin.exceptions import KiwiBoxPluginTargetPathError
+from pytest import raises
+from unittest.mock import (
+    patch,
+    call
+)
 import os
 
 
@@ -25,9 +31,9 @@ class MockedPath:
 
 class TestDefaults:
     def test_get_plugin_config_file(self):
-        assert Defaults.get_plugin_config_file() == resource_filename(
-            'kiwi_boxed_plugin', 'config/kiwi_boxed_plugin.yml'
-        )
+        with as_file(importlib.resources.files('kiwi_boxed_plugin')) as path:
+            config_file = f'{path}/config/kiwi_boxed_plugin.yml'
+        assert Defaults.get_plugin_config_file() == config_file
 
     @patch("os.path.exists", lambda f: True)
     @patch.dict(os.environ, KIWI_BOXED_PLUGIN_CFG="aarchderwelt.conf")
@@ -50,3 +56,14 @@ class TestDefaults:
     def test_get_plugin_config_file_etc(self):
         assert Defaults.get_plugin_config_file() == "/etc/kiwi_boxed_plugin.yml", \
             "Should contain Kiwi Box config in /etc dir"
+
+    @patch('pathlib.Path')
+    def test_create_build_target_dir(self, mock_Path):
+        Defaults.create_build_target_dir('some')
+        assert mock_Path.call_args_list == [
+            call('some'),
+            call('some/result.log'),
+        ]
+        mock_Path.side_effect = Exception('some error')
+        with raises(KiwiBoxPluginTargetPathError):
+            Defaults.create_build_target_dir('some')

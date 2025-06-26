@@ -21,10 +21,14 @@ from typing import (
     List, Optional
 )
 from kiwi.path import Path
-from pkg_resources import resource_filename
+import importlib
+from importlib.resources import as_file
 import subprocess
 
-from kiwi_boxed_plugin.exceptions import KiwiBoxPluginVirtioFsError
+from kiwi_boxed_plugin.exceptions import (
+    KiwiBoxPluginVirtioFsError,
+    KiwiBoxPluginTargetPathError
+)
 
 VIRTIOFSD_PROCESS_LIST = []
 HOST_SSH_PORT_FORWARDED_TO_BOX = 10000
@@ -37,6 +41,8 @@ class Defaults:
     Provides static methods for default values and state information
     """
     box_ssh_port_forwarded_to_host = 10022
+    result_log_name = 'result.log'
+    result_exitcode_name = 'result.code'
 
     @staticmethod
     def get_plugin_config_file() -> str:
@@ -75,9 +81,8 @@ class Defaults:
             return config_path_system
 
         # 5.
-        return resource_filename(
-            'kiwi_boxed_plugin', f'config/{config_name}'
-        )
+        with as_file(importlib.resources.files('kiwi_boxed_plugin')) as path:
+            return f'{path}/config/{config_name}'
 
     @staticmethod
     def get_local_box_cache_dir() -> str:
@@ -192,3 +197,16 @@ class Defaults:
                 image_file, 'on' if snapshot else 'off'
             )
         ]
+
+    @staticmethod
+    def create_build_target_dir(target_dir: str) -> None:
+        try:
+            pathlib.Path(target_dir).mkdir(parents=True, exist_ok=True)
+            build_log_file = os.path.join(
+                target_dir, Defaults.result_log_name
+            )
+            pathlib.Path(build_log_file).touch()
+        except Exception as issue:
+            raise KiwiBoxPluginTargetPathError(
+                f'Failed to create/setup target path {target_dir}: {issue}'
+            )

@@ -260,6 +260,9 @@ class SystemBoxbuildTask(CliTask):
             for profile in sorted(set(self.global_args.get('--profile'))):
                 final_kiwi_build_command.append('--profile')
                 final_kiwi_build_command.append(profile)
+        if self.global_args.get('--kiwi-file'):
+            final_kiwi_build_command.append('--kiwi-file')
+            final_kiwi_build_command.append(self.global_args.get('--kiwi-file'))
         final_kiwi_build_command += kiwi_build_command
         log.info(
             'Building with:{0}    {1}'.format(

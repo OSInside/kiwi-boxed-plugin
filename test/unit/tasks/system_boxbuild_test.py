@@ -10,7 +10,10 @@ class TestSystemBoxbuildTask:
     def setup(self):
         sys.argv = [
             sys.argv[0],
-            '--debug', '--profile', 'foo', '--type', 'oem',
+            '--debug',
+            '--profile', 'foo',
+            '--type', 'oem',
+            '--kiwi-file', 'appliance.kiwi',
             'system', 'boxbuild',
             '--box', 'universal',
             '--box-memory', '4',
@@ -84,7 +87,10 @@ class TestSystemBoxbuildTask:
         )
         box_containerbuild.run.assert_called_once_with(
             [
-                '--debug', '--type', 'oem', '--profile', 'foo',
+                '--debug',
+                '--type', 'oem',
+                '--profile', 'foo',
+                '--kiwi-file', 'appliance.kiwi',
                 'system', 'build',
                 '--description', 'foo', '--target-dir', 'xxx',
                 '--allow-existing-root',
@@ -107,7 +113,10 @@ class TestSystemBoxbuildTask:
         )
         box_build.run.assert_called_once_with(
             [
-                '--debug', '--type', 'oem', '--profile', 'foo',
+                '--debug',
+                '--type', 'oem',
+                '--profile', 'foo',
+                '--kiwi-file', 'appliance.kiwi',
                 'system', 'build',
                 '--description', 'foo', '--target-dir', 'xxx',
                 '--allow-existing-root',

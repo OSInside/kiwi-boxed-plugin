@@ -25,10 +25,10 @@ box:
           - rd.plymouth=0
           - selinux=0
         source: obs://Virtualization:Appliances:SelfContained:tumbleweed/images
-        packages_file: TumbleWeed-Box.x86_64-System.json
+        packages_file: TumbleWeed-Box.aarch64-System.json
         boxfiles:
-          - TumbleWeed-Box.x86_64-Kernel.tar.xz
-          - TumbleWeed-Box.x86_64-System.qcow2
+          - TumbleWeed-Box.aarch64-Kernel.tar.xz
+          - TumbleWeed-Box.aarch64-System.qcow2
         container: registry.opensuse.org/virtualization/appliances/selfcontained/tumbleweed/images/tumbleweed:latest
         use_initrd: true
 

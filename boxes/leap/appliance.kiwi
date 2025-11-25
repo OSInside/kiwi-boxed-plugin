@@ -77,8 +77,7 @@
     </packages>
     <packages type="image" profiles="Kernel,System">
         <package name="plymouth-scripts"/>
-        <!-- seems to be part of systemd now -->
-        <!--<package name="systemd-network"/>-->
+        <package name="systemd-networkd"/>
         <package name="grub2"/>
         <package name="grub2-i386-pc"/>
         <package name="kernel-default"/>

@@ -59,6 +59,8 @@ system_boxbuild = "kiwi_boxed_plugin.tasks.system_boxbuild"
 
 [tool.poetry.group.test]
 [tool.poetry.group.test.dependencies]
+# for local plugin cli testing
+typer = ">=0.9.0"
 # python unit testing framework
 pytest = ">=6.2.0"
 pytest-cov = "*"

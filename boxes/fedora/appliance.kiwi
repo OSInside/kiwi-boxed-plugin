@@ -16,7 +16,7 @@
     </profiles>
     <preferences>
         <version>1.39.1</version>
-        <packagemanager>dnf</packagemanager>
+        <packagemanager>dnf5</packagemanager>
         <locale>en_US</locale>
         <keytable>us</keytable>
         <timezone>UTC</timezone>

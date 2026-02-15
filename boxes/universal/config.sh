@@ -16,14 +16,6 @@ systemctl mask systemd-user-sessions.service
 systemctl enable kiwi
 
 #======================================
-# lvmetad sucks for building lvm images
-#--------------------------------------
-systemctl disable lvm2-lvmetad
-systemctl mask lvm2-lvmetad
-systemctl disable lvm2-lvmetad.socket
-systemctl mask lvm2-lvmetad.socket
-
-#======================================
 # Setup for System/Kernel
 #--------------------------------------
 for profile in ${kiwi_profiles//,/ }; do

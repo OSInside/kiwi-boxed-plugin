@@ -99,6 +99,36 @@ class TestSystemBoxbuildTask:
         )
 
     @patch('kiwi_boxed_plugin.tasks.system_boxbuild.BoxBuild')
+    def test_process_system_boxbuild_typer_commandline(self, mock_BoxBuild):
+        self._init_command_args()
+        self.task.command_args['<kiwi_build_command_args>'] = None
+        self.task.command_args['system_build'] = {
+            '--description': 'foo',
+            '--target-dir': 'xxx',
+            '--allow-existing-root': True,
+            '--add-package': ['a', 'b']
+        }
+        self.task.command_args['boxbuild'] = True
+        self.task.command_args['--box'] = 'universal'
+        box_build = Mock()
+        mock_BoxBuild.return_value = box_build
+        self.task.process()
+        mock_BoxBuild.assert_called_once_with(
+            boxname='universal', ram=None, console=None, smp=None, arch='',
+            machine=None, cpu='host', sharing_backend='9p',
+            ssh_key='id_rsa', ssh_port='22', accel=True
+        )
+        box_build.run.assert_called_once_with(
+            [
+                '--debug', '--type', 'oem', '--profile', 'foo',
+                'system', 'build',
+                '--description', 'foo', '--target-dir', 'xxx',
+                '--allow-existing-root',
+                '--add-package', 'a', '--add-package', 'b'
+            ], True, True, False, None, None
+        )
+
+    @patch('kiwi_boxed_plugin.tasks.system_boxbuild.BoxBuild')
     def test_process_system_boxbuild(self, mock_BoxBuild):
         self._init_command_args()
         self.task.command_args['boxbuild'] = True

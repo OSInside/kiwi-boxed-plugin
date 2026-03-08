@@ -12,6 +12,7 @@ from kiwi_boxed_plugin.exceptions import (
     KiwiBoxPluginVirtioFsError,
     KiwiBoxPluginQEMUBinaryNotFound,
     KiwiBoxPluginSSHPortInvalid,
+    KiwiBoxPluginSSHKeyNotFound,
     KiwiError
 )
 
@@ -390,10 +391,23 @@ class TestBoxBuild:
         mock_Command_run.side_effect = command_run
 
         mock_pwd_getpwuid.return_value.pw_name = 'user'
-        mock_os_path_isfile.return_value = True
+        mock_os_path_isfile.return_value = False
         self.build.sharing_backend = 'sshfs'
         self.build.ssh_port = '10022'
 
+        with raises(KiwiBoxPluginSSHKeyNotFound):
+            self.build.run(
+                [
+                    '--type', 'oem', 'system', 'build',
+                    '--description', 'desc', '--target-dir', 'target'
+                ],
+                keep_open=True,
+                kiwi_version='9.22.1',
+                custom_shared_path='var/tmp/repos'
+            )
+
+        mock_create_build_target_dir.reset_mock()
+        mock_os_path_isfile.return_value = True
         with patch('builtins.open', create=True) as mock_open:
             with patch.dict('os.environ', {'HOME': '~'}):
                 file_handle = mock_open.return_value.__enter__.return_value

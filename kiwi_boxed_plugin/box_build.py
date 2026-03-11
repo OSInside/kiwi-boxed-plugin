@@ -36,6 +36,7 @@ from kiwi_boxed_plugin.exceptions import (
     KiwiBoxPluginDownloadError,
     KiwiBoxPluginQEMUBinaryNotFound,
     KiwiBoxPluginSSHPortInvalid,
+    KiwiBoxPluginSSHKeyNotFound,
     KiwiError
 )
 
@@ -133,13 +134,16 @@ class BoxBuild:
             ssh_key_file = os.sep.join(
                 [os.environ.get('HOME') or '~', '.ssh', f'{self.ssh_key}.pub']
             )
-            if os.path.isfile(ssh_key_file):
-                with open(ssh_key_file) as key_fd:
-                    ssh_key = key_fd.read().split()
-                    key_type = ssh_key[0]
-                    key_value = ssh_key[1]
-                    vm_append.append(f'ssh_key=_{key_value}_')
-                    vm_append.append(f'ssh_key_type=_{key_type}_')
+            if not os.path.isfile(ssh_key_file):
+                raise KiwiBoxPluginSSHKeyNotFound(
+                    f'SSH pkey file {ssh_key_file} not found, use --ssh-key'
+                )
+            with open(ssh_key_file) as key_fd:
+                ssh_key = key_fd.read().split()
+                key_type = ssh_key[0]
+                key_value = ssh_key[1]
+                vm_append.append(f'ssh_key=_{key_value}_')
+                vm_append.append(f'ssh_key_type=_{key_type}_')
             user = pwd.getpwuid(os.geteuid()).pw_name
             vm_append.append(
                 'host_kiwidescription=_{0}_'.format(

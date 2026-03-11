@@ -55,6 +55,12 @@ class KiwiBoxPluginSSHPortInvalid(KiwiError):
     """
 
 
+class KiwiBoxPluginSSHKeyNotFound(KiwiError):
+    """
+    Exception raised if the SSH pkey file could not be found
+    """
+
+
 class KiwiBoxPluginChecksumError(KiwiError):
     """
     Exception raised in case of a checksum error

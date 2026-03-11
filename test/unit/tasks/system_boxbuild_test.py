@@ -1,5 +1,5 @@
 import sys
-
+import os
 from unittest.mock import (
     Mock, patch
 )
@@ -92,7 +92,8 @@ class TestSystemBoxbuildTask:
                 '--profile', 'foo',
                 '--kiwi-file', 'appliance.kiwi',
                 'system', 'build',
-                '--description', 'foo', '--target-dir', 'xxx',
+                '--description', os.path.abspath(os.path.normpath('foo')),
+                '--target-dir', os.path.abspath(os.path.normpath('xxx')),
                 '--allow-existing-root',
                 '--add-package', 'a', '--add-package', 'b'
             ], False, None, None
@@ -118,7 +119,8 @@ class TestSystemBoxbuildTask:
                 '--profile', 'foo',
                 '--kiwi-file', 'appliance.kiwi',
                 'system', 'build',
-                '--description', 'foo', '--target-dir', 'xxx',
+                '--description', os.path.abspath(os.path.normpath('foo')),
+                '--target-dir', os.path.abspath(os.path.normpath('xxx')),
                 '--allow-existing-root',
                 '--add-package', 'a', '--add-package', 'b'
             ], True, True, False, None, None

@@ -246,6 +246,8 @@ class SystemBoxbuildTask(CliTask):
                 if isinstance(value, bool):
                     kiwi_build_command.append(option)
                 elif isinstance(value, str):
+                    if option == '--description' or option == '--target-dir':
+                        value = os.path.abspath(os.path.normpath(value))
                     kiwi_build_command.extend([option, value])
                 elif isinstance(value, list):
                     for element in value:

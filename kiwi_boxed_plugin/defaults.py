@@ -23,6 +23,7 @@ from typing import (
 from kiwi.path import Path
 import importlib
 from importlib.resources import as_file
+from subprocess import Popen
 import subprocess
 
 from kiwi_boxed_plugin.exceptions import (
@@ -30,7 +31,7 @@ from kiwi_boxed_plugin.exceptions import (
     KiwiBoxPluginTargetPathError
 )
 
-VIRTIOFSD_PROCESS_LIST = []
+VIRTIOFSD_PROCESS_LIST: List[Popen[bytes]] = []
 HOST_SSH_PORT_FORWARDED_TO_BOX = 10000
 
 

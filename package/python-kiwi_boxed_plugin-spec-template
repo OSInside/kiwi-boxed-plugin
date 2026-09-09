@@ -113,7 +113,12 @@ Requires:       kiwi >= 9.21.21
 Requires:       python%{python3_pkgversion}-kiwi >= 9.21.21
 %endif
 Requires:       python%{python3_pkgversion} >= 3.9
-Requires:       python%{python3_pkgversion}-docopt
+%if ! (0%{?fedora} >= 41 || 0%{?rhel} >= 10)
+Requires:       python%{python3_pkgversion}-docopt >= 0.6.2
+%else
+Requires:       python%{python3_pkgversion}-docopt-ng
+%endif
+Recommends:     python%{python3_pkgversion}-typer >= 0.9.0
 Requires:       python%{python3_pkgversion}-requests
 Requires:       python%{python3_pkgversion}-progressbar2
 %if 0%{?ubuntu} || 0%{?debian}

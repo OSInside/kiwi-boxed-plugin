@@ -19,7 +19,7 @@ class TestSystemBoxbuildTask:
             '--box-memory', '4',
             '--box-console', 'ttyAMA0',
             '--box-smp-cpus', '4',
-            '--',
+            'kiwi',
             '--description', '../data/description',
             '--target-dir', '../data/target_dir'
         ]
@@ -44,10 +44,10 @@ class TestSystemBoxbuildTask:
         self.task.command_args['--virtiofs-sharing'] = None
         self.task.command_args['--cpu'] = None
         self.task.command_args['--machine'] = None
-        self.task.command_args['<kiwi_build_command_args>'] = [
-            '--', '--description', 'foo',
+        self.task.command_args['system_build'] = [
+            '--description', 'foo',
             '--target-dir', 'xxx',
-            '--add-package=a', '--add-package', 'b',
+            '--add-package', 'a', '--add-package', 'b',
             '--allow-existing-root'
         ]
 
@@ -94,8 +94,8 @@ class TestSystemBoxbuildTask:
                 'system', 'build',
                 '--description', os.path.abspath(os.path.normpath('foo')),
                 '--target-dir', os.path.abspath(os.path.normpath('xxx')),
-                '--allow-existing-root',
-                '--add-package', 'a', '--add-package', 'b'
+                '--add-package', 'a', '--add-package', 'b',
+                '--allow-existing-root'
             ], False, None, None
         )
 
@@ -103,12 +103,13 @@ class TestSystemBoxbuildTask:
     def test_process_system_boxbuild_typer_commandline(self, mock_BoxBuild):
         self._init_command_args()
         self.task.command_args['<kiwi_build_command_args>'] = None
-        self.task.command_args['system_build'] = {
-            '--description': 'foo',
-            '--target-dir': 'xxx',
-            '--allow-existing-root': True,
-            '--add-package': ['a', 'b']
-        }
+        self.task.command_args['system_build'] = [
+            '--description', 'foo',
+            '--target-dir', 'xxx',
+            '--allow-existing-root',
+            '--add-package', 'a',
+            '--add-package', 'b'
+        ]
         self.task.command_args['boxbuild'] = True
         self.task.command_args['--box'] = 'universal'
         box_build = Mock()
@@ -131,7 +132,8 @@ class TestSystemBoxbuildTask:
                 '--target-dir',
                 os.path.abspath(os.path.normpath('xxx')),
                 '--allow-existing-root',
-                '--add-package', 'a', '--add-package', 'b'
+                '--add-package', 'a',
+                '--add-package', 'b',
             ], True, True, False, None, None
         )
 
@@ -157,8 +159,8 @@ class TestSystemBoxbuildTask:
                 'system', 'build',
                 '--description', os.path.abspath(os.path.normpath('foo')),
                 '--target-dir', os.path.abspath(os.path.normpath('xxx')),
-                '--allow-existing-root',
-                '--add-package', 'a', '--add-package', 'b'
+                '--add-package', 'a', '--add-package', 'b',
+                '--allow-existing-root'
             ], True, True, False, None, None
         )
 

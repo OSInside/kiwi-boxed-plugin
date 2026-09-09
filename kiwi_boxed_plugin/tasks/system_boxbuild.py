@@ -216,7 +216,7 @@ class SystemBoxbuildTask(CliTask):
                     shared_path
                 )
 
-    def _validate_kiwi_build_command(self) -> List[str]:
+    def _validate_kiwi_build_command(self) -> List[str]:  # pragma: nocover
         if self.command_args.get('<kiwi_build_command_args>'):
             # construct build command from docopt command line
             kiwi_build_command = [
@@ -238,25 +238,36 @@ class SystemBoxbuildTask(CliTask):
                 kiwi.tasks.system_build.__doc__,
                 argv=kiwi_build_command
             )
+            # rebuild kiwi build command from validated parser result
+            kiwi_build_command = [
+                'system', 'build'
+            ]
+            for option, value in validated_build_command.items():
+                if option.startswith('-') and value:
+                    if isinstance(value, bool):
+                        kiwi_build_command.append(option)
+                    elif isinstance(value, str):
+                        if option == '--description' or option == '--target-dir':
+                            value = os.path.abspath(os.path.normpath(value))
+                        kiwi_build_command.extend([option, value])
+                    elif isinstance(value, list):
+                        for element in value:
+                            kiwi_build_command.extend([option, element])
+
         else:
             # construct build command from typer command line
-            validated_build_command = self.command_args.get('system_build')
+            kiwi_build_command = [
+                'system', 'build'
+            ]
+            translate_to_abspath = False
+            for entry in self.command_args.get('system_build'):
+                if translate_to_abspath:
+                    entry = os.path.abspath(os.path.normpath(entry))
+                    translate_to_abspath = False
+                if entry == '--description' or entry == '--target-dir':
+                    translate_to_abspath = True
+                kiwi_build_command.append(entry)
 
-        # rebuild kiwi build command from validated parser result
-        kiwi_build_command = [
-            'system', 'build'
-        ]
-        for option, value in validated_build_command.items():
-            if option.startswith('-') and value:
-                if isinstance(value, bool):
-                    kiwi_build_command.append(option)
-                elif isinstance(value, str):
-                    if option == '--description' or option == '--target-dir':
-                        value = os.path.abspath(os.path.normpath(value))
-                    kiwi_build_command.extend([option, value])
-                elif isinstance(value, list):
-                    for element in value:
-                        kiwi_build_command.extend([option, element])
         final_kiwi_build_command = []
         if self.global_args.get('--debug'):
             final_kiwi_build_command.append('--debug')

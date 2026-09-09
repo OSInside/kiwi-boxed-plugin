@@ -16,10 +16,9 @@
 # along with kiwi-boxed-build.  If not, see <http://www.gnu.org/licenses/>
 #
 import typer
-import itertools
 from pathlib import Path
 from typing import (
-    Annotated, Optional, List, Union, no_type_check
+    Annotated, Optional, no_type_check
 )
 
 typers = {
@@ -48,23 +47,7 @@ def kiwi(
     the virtual machine or container.
     """
     Cli = ctx.obj
-    args = ctx.args
-    for option in list(set(args)):
-        if type(option) is not str or not option.startswith('-'):
-            continue
-        k: List[Union[str, List]] = [option]
-        v = []
-        indexes = [n for n, x in enumerate(args) if x == option]
-        if len(indexes) > 1:
-            for index in indexes:
-                v.append(args[index + 1])
-            for index in sorted(indexes, reverse=True):
-                del args[index + 1]
-                del args[index]
-            k.append(v)
-            args += k
-    Cli.subcommand_args['boxbuild']['system_build'] = \
-        dict(itertools.zip_longest(*[iter(args)] * 2))
+    Cli.subcommand_args['boxbuild']['system_build'] = ctx.args
     Cli.global_args['command'] = 'boxbuild'
     Cli.global_args['system'] = True
     Cli.cli_ok = True

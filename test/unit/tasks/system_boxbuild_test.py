@@ -1,8 +1,10 @@
 import sys
 import os
+from pytest import raises
 from unittest.mock import (
     Mock, patch
 )
+from kiwi.exceptions import KiwiError
 from kiwi_boxed_plugin.tasks.system_boxbuild import SystemBoxbuildTask
 
 
@@ -229,3 +231,33 @@ class TestSystemBoxbuildTask:
             machine=None, cpu='host', sharing_backend='sshfs',
             ssh_key='id_rsa', ssh_port='22', accel=True
         )
+
+    @patch('kiwi_boxed_plugin.tasks.system_boxbuild.BoxBuild')
+    def test_validate_kiwi_build_command_raises_if_description_missing(
+        self, mock_BoxBuild
+    ):
+        self._init_command_args()
+        self.task.command_args['--box'] = 'leap'
+        self.task.command_args['system_build'] = [
+            '--target-dir', 'xxx',
+            '--add-package', 'a'
+        ]
+        box_build = Mock()
+        mock_BoxBuild.return_value = box_build
+        with raises(KiwiError):
+            self.task.process()
+
+    @patch('kiwi_boxed_plugin.tasks.system_boxbuild.BoxBuild')
+    def test_validate_kiwi_build_command_raises_if_target_dir_missing(
+        self, mock_BoxBuild
+    ):
+        self._init_command_args()
+        self.task.command_args['--box'] = 'leap'
+        self.task.command_args['system_build'] = [
+            '--description', 'xxx',
+            '--add-package', 'a'
+        ]
+        box_build = Mock()
+        mock_BoxBuild.return_value = box_build
+        with raises(KiwiError):
+            self.task.process()

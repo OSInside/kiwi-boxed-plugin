@@ -152,6 +152,7 @@ from docopt import docopt
 from typing import List
 from kiwi.tasks.base import CliTask
 from kiwi.help import Help
+from kiwi.exceptions import KiwiError
 import kiwi.tasks.system_build
 
 from kiwi_boxed_plugin.box_build import BoxBuild
@@ -282,6 +283,16 @@ class SystemBoxbuildTask(CliTask):
             final_kiwi_build_command.append('--kiwi-file')
             final_kiwi_build_command.append(self.global_args.get('--kiwi-file'))
         final_kiwi_build_command += kiwi_build_command
+        missing_required_options = [
+            option for option in ['--description', '--target-dir']
+            if option not in final_kiwi_build_command
+        ]
+        if missing_required_options:
+            raise KiwiError(
+                'Required option(s) missing in kiwi build command: {0}'.format(
+                    ', '.join(missing_required_options)
+                )
+            )
         log.info(
             'Building with:{0}    {1}'.format(
                 os.linesep, final_kiwi_build_command

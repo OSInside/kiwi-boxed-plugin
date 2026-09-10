@@ -23,7 +23,7 @@ from typing import (
 
 typers = {
     'boxbuild': typer.Typer(
-        add_completion=False, invoke_without_command=True
+        add_completion=True, invoke_without_command=True
     )
 }
 
